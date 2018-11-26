@@ -1,0 +1,835 @@
+
+<html>
+   <head>
+      <link rel='stylesheet' type='text/css' href='Support/main.css' />
+      <title>Plugin SDK String Reference</title>
+      <head>
+	 <body>
+<div id='topicHeader'><h2><a name='REALBuildString'></a>REALBuildString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Allocates and copies "length" from "contents" into a REALbasic string object. If "contents" is NULL, then the returned string will have "length" bytes allocated for storage. This function does not assign an encoding, so the returned string object will have a nil encoding. To assign an encoding, either use REALSetStringEncoding, or call REALBuildStringWithEncoding. When you are done with the string, you must call REALUnlockString to free the memory allocated by this call.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALBuildString(const char *contents, int length);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>contents: a buffer of data to copy into the string object. This parameter can be NULL, and it can contain non-ASCII data.</p></p>
+<p style='margin-bottom: 9px'><p>length: the number of bytes (not characters) to allocate in the string object. If contents is non-NULL, this parameter also specifies the number of bytes to copy from contents into the string object.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>The newly created REALstring object, or NULL on failure</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALBuildStringWithEncoding'></a>REALBuildStringWithEncoding</h2></div>
+<div id='content'>
+<p id='briefDesc'>Allocates and copies "length" from "contents" into a REALbasic string object and then assigns "encoding" to the object. If "contents" is NULL, then the returned string will have "length" bytes allocated for storage. For more information about text encodings, see the entry for Text Encodings. When you are done with the string, you must call REALUnlockString to free the memory allocated by this call.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALBuildStringWithEncoding( const char *contents, int byteCount, unsigned long encoding );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>contents: a buffer of data to copy into the string object. This parameter can be NULL, and it can contain non-ASCII data.</p></p>
+<p style='margin-bottom: 9px'><p>length: the number of bytes (not characters) to allocate in the string object. If contents is non-NULL, this parameter also specifies the number of bytes to copy from contents into the string object.</p></p>
+<p style='margin-bottom: 9px'><p>encoding: the text encoding value to assign to the returned string object.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the newly created REALstring object, or NULL on failure</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetStringData'></a>REALGetStringData</h2></div>
+<div id='content'>
+<p id='briefDesc'>Retrieves the contents of the string in a known encoding. If it is not possible to convert the string (or the string is NULL), it will return false. The REALstringData structure filled in must be disposed of with REALDisposeStringData.
+<br><br>
+This function obsoletes REALGetCString and REALGetStringContents. It is highly recommended that you switch to this function as the older APIs will be removed in a future version.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Boolean REALGetStringData( REALstring str, unsigned long encoding, REALstringData *outData )</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the REALstring object to query</p></p>
+<p style='margin-bottom: 9px'><p>encoding: the requested encoding identifier</p></p>
+<p style='margin-bottom: 9px'><p>encoding: the requested encoding identifier</p></p>
+<p style='margin-bottom: 9px'><p>outData: the REALstringData structure to fill. Must not be NULL.</p></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>Whether or not the call succeeded. If it failed, outData is not filled in and REALDisposeStringData should not be called.</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDisposeStringData'></a>REALDisposeStringData</h2></div>
+<div id='content'>
+<p id='briefDesc'>Disposes a REALstringData structure obtained via REALGetStringData.
+</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALDisposeStringData( REALstringData *data )</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>data: the data to dispose of. Must not be NULL.</p></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetStringEncoding'></a>REALGetStringEncoding</h2></div>
+<div id='content'>
+<p id='briefDesc'>Retrieves the text encoding value associated with the given string. If a string does not have a text encoding value associated with it (commonly referred to as a nil encoding), then this function will return kREALTextEncodingUnknown (0xFFFF). For more information about possible return values, please see the entry for Text Encodings.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>unsigned long REALGetStringEncoding(REALstring str);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the REALstring object to query</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>an integer value corresponding to the string's Text Encoding.</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALSetStringEncoding'></a>REALSetStringEncoding</h2></div>
+<div id='content'>
+<p id='briefDesc'>Assigns the text encoding value with the given string object. This is akin to calling DefineEncoding in REALbasic code. For more information about encoding values, please see the entry for Text Encodings.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALSetStringEncoding(REALstring str, unsigned long encoding);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the REALstring object to assign the encoding to</p></p>
+<p style='margin-bottom: 9px'><p>encoding: the encoding value to assign to the string object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALConvertString'></a>REALConvertString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Converts the given string from its current encoding, to the new one specified by the "encoding" parameter (akin to the ConvertEncoding REALbasic function). Calling this function will allocate and return an entirely new string, which you should free with a call to REALUnlockString. For more information about encoding values, please see the entry for Text Encodings. String encoding conversion may not always succeed because some character information may not map from one encoding to another. For instance, if you attempted to convert the Latin letter wynn (U+01bf) from UTF-8 to ASCII, the conversion will fail because ASCII does not contain a code point for wynn. When the conversion process fails, the results are OS-dependant. For instance, the above conversion on Windows will result in a conversion of U+01bf to U+003f, more commonly known as the "question mark."</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALConvertString(REALstring str, unsigned long encoding);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the original REALstring object to convert</p></p>
+<p style='margin-bottom: 9px'><p>encoding: the encoding value the resulting string should have</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a REALstring object whose contents have been converted from the original encoding to the new encoding</p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'>Beware of inadverant memory leaks from code like the following:<br />
+<br />
+// Do not do this!  It leaks memory!<br />
+someStr = REALConvertString( someStr, someEncoding );<br />
+<br />
+Instead, your code should look like this:<br />
+// This is the correct way to convert encoding and write over the original string.<br />
+REALstring temp = REALConvertString( someStr, someEncoding );<br />
+REALUnlockString( someStr );<br />
+someStr = temp;</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALWin32CodePageToEncoding'></a>REALWin32CodePageToEncoding</h2></div>
+<div id='content'>
+<p id='briefDesc'>Converts a Windows "code page" identifier into a REALbasic encoding value. This encoding value can then be used in called to define or convert encodings. For instance, if you wanted to specify the ANSI Arabic (Windows-1256) encoding, you would call REALWin32CodePageToEncoding( 1256 ) to convert it into an encoding REALbasic can work with. A list of common Win32 code pages can be found on MSDN ().</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>unsigned long REALWin32CodePageToEncoding( unsigned long codePage );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>codePage: the Win32 code page identifier to convert</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the REALbasic encoding value based on the Win32 code page</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALWin32CodePageToEncoding'></a>REALGetSystemTextEncoding</h2></div>
+<div id='content'>
+<p id='briefDesc'>Returns the default system TextEncoding for the platform</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>unsigned long REALGetSystemTextEncoding();</p></th>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>The default system TextEncoding.  On OS X and Linux this is UTF-8. On Windows it can vary.</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALLockString'></a>REALLockString</h2></div>
+<div id='content'>
+<p id='briefDesc'>This method retains a reference to a REALbasic string object so that it will not be released by the framework's memory manager. You should lock a string any time your plugin holds a permanent reference to it. For instance, if you have a property setter which holds onto the string reference, then you should lock the string before exiting the method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALLockString( REALstring str );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the string to lock</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'>Beware of inadvertant memory leaks when "exchanging" locks on strings, like the following:<br />
+<br />
+// Wrong (forgets to unlock old string)<br />
+REALLockString( s );<br />
+mStoredStringRef = s;<br />
+<br />
+// Wrong (improper lock exchange order)<br />
+REALUnlockString( mStoredStringRef );<br />
+REALLockString( s );<br />
+mStoredStringRef = s;<br />
+<br />
+// Correct<br />
+REALLockString( s );<br />
+REALUnlockString( mStoredStringRef );<br />
+mStoredStringRef = s;</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALUnlockString'></a>REALUnlockString</h2></div>
+<div id='content'>
+<p id='briefDesc'>This method releases a reference to a REALbasic string object so that it can be released by the framework's memory manager if it's appropriate. You should unlock a string any time your plugin no longer needs to hold a reference to it. For instance, if you have a property setter while holds onto the string reference, then you should unlock the old stored reference since you no longer require it.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALUnlockString( REALstring str );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>str: the string to unlock</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'>Beware of inadvertant memory leaks when "exchanging" locks on strings, like the following:<br />
+<br />
+// Wrong (forgets to unlock old string)<br />
+REALLockString( s );<br />
+mStoredStringRef = s;<br />
+<br />
+// Wrong (improper lock exchange order)<br />
+REALUnlockString( mStoredStringRef );<br />
+REALLockString( s );<br />
+mStoredStringRef = s;<br />
+<br />
+// Correct<br />
+REALLockString( s );<br />
+REALUnlockString( mStoredStringRef );<br />
+mStoredStringRef = s;</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALLockText</h2></div>
+<div id='content'>
+<p id='briefDesc'>This method retains a reference to a Text object so that it will not be released by the framework's memory manager. You should lock a Text any time your plugin holds a permanent reference to it. For instance, if you have a property setter which holds onto the Text reference, then you should lock the Text before exiting the method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALLockText( REALtext value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the Text to lock</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALUnlockText</h2></div>
+<div id='content'>
+<p id='briefDesc'>This method releases a reference to a Text object so that it can be released by the framework's memory manager if it's appropriate. You should unlock a Text any time your plugin no longer needs to hold a reference to it. For instance, if you have a property setter while holds onto the Text reference, then you should unlock the old stored reference since you no longer require it.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALUnlockText( REALtext value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the Text to unlock</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALBuildText</h2></div>
+<div id='content'>
+<p id='briefDesc'>Allocates a Text object from the specified data. When you are done with the Text, you must call REALUnlockText to free the memory allocated by this call</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALtext REALBuildText( const void *data, size_t size, const char *encodingName );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>data: the data to add to Text</p></p>
+<p style='margin-bottom: 9px'><p>size: size (in bytes) of the data, do not count the NULL terminator</p></p>
+<p style='margin-bottom: 9px'><p>encodingName: the IANA encoding name of the data to convert as Text</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>REALtext</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALCompareText</h2></div>
+<div id='content'>
+<p id='briefDesc'>Compares the two Text objects for equality</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>RBInteger REALCompareText( REALtext value1, REALtext value2, RBInteger options );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value1: Text to compare with</p></p>
+<p style='margin-bottom: 9px'><p>value2: Text to compare against</p></p>
+<p style='margin-bottom: 9px'><p>options: 0 - case insensitive comparision, 1 - case sensitive comparison</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>Positive value if value1 is greater than value2, or 0 if value1 = value2, or negative if value1 less than value2</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALConcatenateText</h2></div>
+<div id='content'>
+<p id='briefDesc'>Concatenates two Text objects</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALtext REALConcatenateText( REALtext value1, REALtext value2 );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value1: Text to concat to</p></p>
+<p style='margin-bottom: 9px'><p>value2: Text to concat with</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>Concatenated Text, value1 and value2 remain untouched</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALNewVariantText</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new Variant object that holds a Text objects</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantText( REALtext value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: Text object</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>Variant object which holds the Text object</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALGetPropValueText</h2></div>
+<div id='content'>
+<p id='briefDesc'>Gets the Text value of a property on an object</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>RBBoolean REALGetPropValueText(REALobject value, const char *propName, REALtext *result);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: Ojject of interest</p></p>
+<p style='margin-bottom: 9px'><p>propname: Property name to get</p></p>
+<p style='margin-bottom: 9px'><p>result: Receives value</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>True if successful, false otherwise</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALGetTextData</h2></div>
+<div id='content'>
+<p id='briefDesc'>Converts the Text object to a more useful data form</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALtextData REALGetTextData(REALtext value, const char *encoding, RBBoolean allowLossyConversion);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: Text object of interest</p></p>
+<p style='margin-bottom: 9px'><p>encoding: The desired IANA encoding name to convert Text to</p></p>
+<p style='margin-bottom: 9px'><p>allowLossyConversion: Specifies whether or not to allow lossy conversion</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>A REALtextData object, dispose with a call to REALDisposeTextData</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALLockText'></a>REALDisposeTextData</h2></div>
+<div id='content'>
+<p id='briefDesc'>Immediately disposes of the TextData</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALDisposeTextData(REALtextData value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: The TextData object to dispose of</p></p>
+<p style='margin-bottom: 9px'></p>
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='Text_Encodings'></a>Text Encodings</h2></div>
+<div id='content'>
+<p id='briefDesc'>In REALbasic, text encodings are represented by a TextEncoding object. A string has an associated TextEncoding (or nil, if there is no associated encoding). However, REALbasic plugins do not deal with text encodings as objects. Instead, the encoding is specified by a 32-bit integer value, or "encoding value." When you query for an encoding, or assign one to a string, you generally use the encoding value instead of an object. These values are Mac OS TextEncoding (or CFStringEncoding) values, which can be found in the Apple header files. However, Win32 code page encodings can be converted into encoding values by way of REALWin32CodePageToEncoding. The plugin sdk does not document the complete list of text encoding values. Instead, it provides you with the most common encodings as constants, as follows:</p>
+<br/>
+<div class='parameters'><br />
+    * kREALTextEncodingUnknown (0xFFFF)<br />
+    * kREALTextEncodingASCII (0x0600)<br />
+    * kREALTextEncodingUTF8 (0x08000100)<br />
+    * kREALTextEncodingUTF16 (0x0100)<br />
+    * kREALTextEncodingUTF32 (0x0c000100) <br />
+</div>
+<br/>
+<p id='briefDesc'>However, a more complete list of encoding values is:</p>
+<br/>
+<div class='parameters'><br />
+    * MacRoman (0)<br />
+    * MacJapanese (1)<br />
+    * MacChineseTrad (2)<br />
+    * MacKorean (3)<br />
+    * MacArabic (4)<br />
+    * MacHebrew (5)<br />
+    * MacGreek (6)<br />
+    * MacCyrillic (7)<br />
+    * MacDevanagari (9)<br />
+    * MacGurmukhi (10)<br />
+    * MacGujarati (11)<br />
+    * MacOriya (12)<br />
+    * MacBengali (13)<br />
+    * MacTamil (14)<br />
+    * MacTelugu (15)<br />
+    * MacKannada (16)<br />
+    * MacMalayalam (17)<br />
+    * MacSinhalese (18)<br />
+    * MacBurmese (19)<br />
+    * MacKhmer (20)<br />
+    * MacThai (21)<br />
+    * MacLaotian (22)<br />
+    * MacGeorgian (23)<br />
+    * MacArmenian (24)<br />
+    * MacChineseSimp (25)<br />
+    * MacTibetan (26)<br />
+    * MacMongolian (27)<br />
+    * MacEthiopic (28)<br />
+    * MacCentralEurRoman (29)<br />
+    * MacVietnamese (30)<br />
+    * MacExtArabic (31) /* The following use script code 0) smRoman*/<br />
+    * MacSymbol (33)<br />
+    * MacDingbats (34)<br />
+    * MacTurkish (35)<br />
+    * MacCroatian (36)<br />
+    * MacIcelandic (37)<br />
+    * MacRomanian (38)<br />
+    * MacCeltic (39)<br />
+    * MacGaelic (40)<br />
+    * UnicodeDefault (0x0100) /* Meta-value) should never appear in a table.*/<br />
+    * ISOLatin1 (0x0201) /*<br />
+    * ISO 8859-1*/<br />
+    * ISOLatin2 (0x0202) /*<br />
+    * ISO 8859-2*/<br />
+    * ISOLatin3 (0x0203) /*<br />
+    * ISO 8859-3*/<br />
+    * ISOLatin4 (0x0204) /*<br />
+    * ISO 8859-4*/<br />
+    * ISOLatinCyrillic (0x0205) /*<br />
+    * ISO 8859-5*/<br />
+    * ISOLatinArabic (0x0206) /*<br />
+    * ISO 8859-6) (ASMO 708) =DOS CP 708*/<br />
+    * ISOLatinGreek (0x0207) /*<br />
+    * ISO 8859-7*/<br />
+    * ISOLatinHebrew (0x0208) /*<br />
+    * ISO 8859-8*/<br />
+    * ISOLatin5 (0x0209) /*<br />
+    * ISO 8859-9*/<br />
+    * ISOLatin6 (0x020A) /*<br />
+    * ISO 8859-10 */<br />
+    * ISOLatin7 (0x020D) /*<br />
+    * ISO 8859-13) Baltic Rim */<br />
+    * ISOLatin8 (0x020E) /*<br />
+    * ISO 8859-14) Celtic */<br />
+    * ISOLatin9 (0x020F) /*<br />
+    * ISO 8859-15) 8859-1 changed for EURO &amp; CP1252 letters */<br />
+    * DOSLatinUS (0x0400) /* code page 437*/<br />
+    * DOSGreek (0x0405) /* code page 737 (formerly code page 437G)*/<br />
+    * DOSBalticRim (0x0406) /* code page 775*/<br />
+    * DOSLatin1 (0x0410) /* code page 850) \"Multilingual\"*/<br />
+    * DOSGreek1 (0x0411) /* code page 851*/<br />
+    * DOSLatin2 (0x0412) /* code page 852) Slavic*/<br />
+    * DOSCyrillic (0x0413) /* code page 855) IBM Cyrillic*/<br />
+    * DOSTurkish (0x0414) /* code page 857) IBM Turkish*/<br />
+    * DOSPortuguese (0x0415) /* code page 860*/<br />
+    * DOSIcelandic (0x0416) /* code page 861*/<br />
+    * DOSHebrew (0x0417) /* code page 862*/<br />
+    * DOSCanadianFrench (0x0418) /* code page 863*/<br />
+    * DOSArabic (0x0419) /* code page 864*/<br />
+    * DOSNordic (0x041A) /* code page 865*/<br />
+    * DOSRussian (0x041B) /* code page 866*/<br />
+    * DOSGreek2 (0x041C) /* code page 869) IBM Modern Greek*/<br />
+    * DOSThai (0x041D) /* code page 874) also for Windows*/<br />
+    * DOSJapanese (0x0420) /* code page 932) also for Windows; Shift-JIS with additions*/<br />
+    * DOSChineseSimplif (0x0421) /* code page 936) also for Windows; was EUC-CN) now GBK (EUC-CN extended)*/<br />
+    * DOSKorean (0x0422) /* code page 949) also for Windows; Unified Hangul Code (EUC-KR extended)*/<br />
+    * DOSChineseTrad (0x0423) /* code page 950) also for Windows; Big-5*/<br />
+    * WindowsLatin1 (0x0500) /* code page 1252*/<br />
+    * WindowsANSI (0x0500) /* code page 1252 (alternate name)*/<br />
+    * WindowsLatin2 (0x0501) /* code page 1250) Central Europe*/<br />
+    * WindowsCyrillic (0x0502) /* code page 1251) Slavic Cyrillic*/<br />
+    * WindowsGreek (0x0503) /* code page 1253*/<br />
+    * WindowsLatin5 (0x0504) /* code page 1254) Turkish*/<br />
+    * WindowsHebrew (0x0505) /* code page 1255*/<br />
+    * WindowsArabic (0x0506) /* code page 1256*/<br />
+    * WindowsBalticRim (0x0507) /* code page 1257*/<br />
+    * WindowsVietnamese (0x0508) /* code page 1258*/<br />
+    * WindowsKoreanJohab (0x0510) /* code page 1361) for<br />
+    * Windows NT*/<br />
+    * US_ASCII (0x0600)<br />
+    * ShiftJIS (0x0A01) /* plain Shift-JIS*/<br />
+    * KOI8_R (0x0A02) /* Russian internet standard*/<br />
+    * MacRomanLatin1 (0x0A04) /* Mac OS Roman permuted to align with ISO Latin-1*/<br />
+</div>
+</div><br/>
+<br/>
+

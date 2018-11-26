@@ -1,0 +1,634 @@
+
+<html>
+   <head>
+      <link rel='stylesheet' type='text/css' href='Support/main.css' />
+      <title>Plugin SDK Variant Reference</title>
+      <head>
+	 <body>
+
+<div id='topicHeader'><h2><a name='About Variants'></a>About Variants</h2></div>
+<div id='content'>
+<p id='briefDesc'>
+In REALbasic, Variants are immutable objects much like Strings are.  To create a Variant, you call one of the REALNewVariant* methods to instantiate a wrapper around a value.  Once the Variant has been created, it's value can be retrieved by calling <a href='Plugin SDK Dynamic Access Reference.html#REALGetPropValue_Type_'>REALGetPropValue@Type@</a> and asking for the appropriate value.  The same variant conversion rules apply to a plugin as they do in REALbasic code itself.  However, instead of firing an exception, the REALGetPropValue call will return false.
+</p>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantPtr'></a>REALNewVariantPtr</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given Ptr.  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantPtr( void *value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the pointer the variant encapsulates</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the Ptr</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantCString'></a>REALNewVariantCString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given C string data.  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantCString( const char *value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the null terminated C string data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the null terminated string</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantWString'></a>REALNewVariantWString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given UTF-16 string data.  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantWString( const wchar_t *value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the null terminated UTF-16 string data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the null terminated string</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantPString'></a>REALNewVariantPString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given Pascal string data.  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantPString( const unsigned char *value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the Pascal string data to be encapsulated by the variant.  Note that strings longer than 255 characters are illegal.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the Pascal string</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantCFStringRef'></a>REALNewVariantCFStringRef</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given CFStringRef string data.  This API is available in REALbasic 2008 Release 1 and later, and only on Macintosh platforms.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantCFStringRef( CFStringRef value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the CFStringRef string data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the CFStringRef data</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALNewVariantOSType'></a>REALNewVariantOSType</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given OSType (four-char code).  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantOSType( unsigned long value );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the OSType, or four-char code, data to encapsulate</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the OSType</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+
+<div id='topicHeader'><h2><a name='REALGetVariantStructure'></a>REALGetVariantStructure</h2></div>
+<div id='content'>
+<p id='briefDesc'>Retrieves the structure data from a variant object.  This API is available in REALbasic 2008 Release 1 and later.  Note that if you want to retrieve the data from a variant, you usually would use <a href='Plugin SDK Dynamic Access Reference.html#REALGetPropValue_Type_'>REALGetPropValue@Type@</a> and pass in the type you are attempting to retrieve (such as "ColorValue" or "StringValue").  However, structures cannot use this mechanism due to the variable-sized nature of their data.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Boolean REALGetVariantStructure( REALobject variant, void *buffer, unsigned long length );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>variant: the variant object to interrogate</p></p>
+<p style='margin-bottom: 9px'><p>buffer: a buffer to hold the data.  Note that the data is copied into this buffer from the variant instead of retrieving a pointer directly to the data.</p></p>
+<p style='margin-bottom: 9px'><p>length: the number of bytes valid in the buffer.  This API will never copy more than <i>length</i> bytes from the variant object.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>If the data is copied from the variant, the return value will be true.  If the data could not be copied, then the return value will be false.</p>
+</td>
+</tr>
+</table>
+</div>
+<br />
+<div class='parameters'>The easiest way to retrieve a structure from a variant is:<br />
+<br />
+someStruct s = { 0 };<br />
+if (REALGetVariantStructure( someVariant, (void *)&s, sizeof( s ) )) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+}<br />
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantStructure'></a>REALNewVariantStructure</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given structure data.  This API is available in REALbasic 2008 Release 1 and later.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantStructure( const void *data, unsigned long len );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>data: the structure data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'><p>len: the number of bytes valid to be copied from the data pointer</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the structure</p>
+</td>
+</tr>
+</table>
+</div>
+<br />
+<div class='parameters'>The easiest way to create a variant wrapping a structure would be like so:<br />
+<br />
+// Convert the structure into a variant<br />
+REALobject someVariant = REALNewVariantStructure( (const void *)&someStruct, sizeof( someStruct ) );<br />
+<br />
+<br />
+If you find yourself doing this frequently, it may make more sense to use a macro to handle creation:<br />
+<br />
+#define REALCreateVariantFromStructure( someStruct )	REALNewVariantStructure( (const void *)&someStruct, sizeof( someStruct ) )<br />
+REALobject someVariant = REALCreateVariantFromStructure( someStruct );
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantString'></a>REALNewVariantString</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given string value.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantString(REALstring value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the string data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the string</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantInteger'></a>REALNewVariantInteger</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given integer value. This value can be any signed integer under 64 bits wide (Int32, Int16, Int8). REALbasic variants do not distinguish between the size of integers aside from 64-bit and not-64-bit.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantInteger(long value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the integer data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the signed integer</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantUInt32'></a>REALNewVariantUInt32</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given unsigned integer value. This value can be any unsigned integer under 64 bits wide (UInt32, UInt16, UInt8). REALbasic variants do not distinguish between the size of integers aside from 64-bit and not-64-bit.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantUInt32(unsigned long value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the integer data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the unsigned integer</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantInt64'></a>REALNewVariantInt64</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given integer value. This value can be any signed integer 64 bits wide or less (Int64, Int32, Int16, Int8). REALbasic variants do not distinguish between the size of integers aside from 64-bit and not-64-bit, so the variant you create with this function will report the variant's type as 64-bits. Note that it is feasible to store a Currency datatype into a variant using this function. However, that should be avoided as the REALNewVariantCurrency function is better suited for that purpose.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantInt64(RBInt64 value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the integer data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the 64-bit integer</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantUInt64'></a>REALNewVariantUInt64</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given integer value. This value can be any unsigned integer 64 bits wide or less (UInt64, UInt32, UInt16, UInt8). REALbasic variants do not distinguish between the size of integers aside from 64-bit and not-64-bit, so the variant you create with this function will report the variant's type as 64-bits. Note that it is feasible to store a Currency datatype into a variant using this function. However, that should be avoided as the REALNewVariantCurrency function is better suited for that purpose.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantUInt64(unsigned RBInt64 value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the integer data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the unsigned 64-bit integer</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantCurrency'></a>REALNewVariantCurrency</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given currency value. This value should be a signed 64-bit integer, that is expressed in mils. This means that if you would like to convert from a currency value into a regular Int64 value, you would simply divide by 10000. To convert an Int64 into a currency value, you would multiply by 10000. When dealing with currency datatypes, this function is preferred over the U/Int64 variant functions as it will properly reflect the format of the data in the variant's VarType property.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantCurrency(REALcurrency value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the currency data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the currency data</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantDouble'></a>REALNewVariantDouble</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given 64-bit floating-point value.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantDouble(double value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the 64-bit floating-point data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the double</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantSingle'></a>REALNewVariantSingle</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given 32-bit floating-point value.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantSingle(float value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the 32-bit floating-point data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the single</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantBoolean'></a>REALNewVariantBoolean</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given boolean value. Note that this function should be preferred over the Integer variant functions as it will properly reflect the format of the data in the variant's VarType property.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantBoolean(Boolean value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the boolean data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the boolean</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALNewVariantColor'></a>REALNewVariantColor</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new REALbasic Variant object from the given color value. Color values are expressed as a 32-bit integer in the form 0x00RRGGBB on all platforms. Note that this function should be preferred over the Integer variant functions as it will properly reflect the format of the data in the variant's VarType property.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALNewVariantColor(long value);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>value: the 32-bit color data to be encapsulated by the variant</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a new variant object wrapping the color</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+

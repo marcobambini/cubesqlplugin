@@ -1,0 +1,239 @@
+
+<html>
+   <head>
+      <link rel='stylesheet' type='text/css' href='Support/main.css' />
+      <title>Plugin SDK IDE Interaction Reference</title>
+      <head>
+	 <body>
+<div id='topicHeader'><h2><a name='REALinRuntime'></a>REALinRuntime</h2></div>
+<div id='content'>
+<p id='briefDesc'>Determines whether the plugin is executing at IDE design time version application runtime. If this method returns false, then the plugin is being interacted with using the REALbasic IDE. In this case, the plugin should avoid doing time-consuming or dangerous operations to preserve the integrity of the IDE. This function will not tell you whether the plugin is currently in a debug build of the user's application or not. If you are interested in that information, you should call REALInDebugMode.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Boolean REALinRuntime( void );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>true if the plugin is running in a compiled application, false if it is running within the IDE</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALInDebugMode'></a>REALInDebugMode</h2></div>
+<div id='content'>
+<p id='briefDesc'>Determines whether the plugin is executing within a debug application or not. If the plugin is executing code but the user's application is not currently running (in debug or release mode), this function will still return true. The only time when this function will return accurate results is if REALinRuntime returns true (meaning that the plugin is executing from a compiled application instead of from the IDE itself).</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Boolean REALInDebugMode( void );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>false if the application is executing from a release build, true otherwise</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALinRuntime'></a>REALinRuntime</h2></div>
+<div id='content'>
+<p id='briefDesc'>Returns version information about what version of REALbasic is using the plugin. This is true for both use within the IDE, as well as use within the runtime. The format of the value returned is major version.padded minor version as a double. For instance, REALbasic 2006 Release 1 would return 2006.01.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>double REALGetRBVersion( void );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the version of the REALbasic runtime in use</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetProjectFolder'></a>REALGetProjectFolder</h2></div>
+<div id='content'>
+<p id='briefDesc'>At IDE design time, retrieves the REALbasic FolderItem object where the user's project resides. If the user has multiple projects open, this function will return to you the location of the front-most project's folder. Because the user can have multiple files open, it is not advisable that you rely on this function to return static results. At application runtime, this function retrieves the FolderItem representing the folder where the executable is running from. It is akin to calling GetFolderItem( "" ) in REALbasic. Once you no longer need a reference to the project folder, you should call REALUnlockObject on it.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALobject REALGetProjectFolder(void);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a FolderItem object representing the front-most project's folder, or the executable's containing folder.</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALStripAmpersands'></a>REALStripAmpersands</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function takes a pointer to a REALstring object and strips ampersands from it in the same way that the IDE does. Namely, single ampersands are removed (as they represent a keyboard mnemonic in Windows and Linux user interfaces). Double ampersands remove just the first ampersand, leaving the second. This function is useful for stripping ampersands off a string for displaying in a user interface. Note that this function will release the reference to the string passed in, and replace it with another string reference.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALStripAmpersands(REALstring *ioString);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>ioString: (in, out) the string to strip ampersands from</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDefaultControlFont'></a>REALDefaultControlFont</h2></div>
+<div id='content'>
+<p id='briefDesc'>Returns the default control font based on the user's preferences when called from IDE design time. When called at runtime, it always returns "System" as the font name.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALDefaultControlFont(void);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the user's default control font</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDefaultControlFontSize'></a>REALDefaultControlFontSize</h2></div>
+<div id='content'>
+<p id='briefDesc'>Returns the default control font size based on the user's preference when called from IDE design time. When called at runtime, it always returns 12. Note that a control size of 12 isn't going to be correct on any platform except Mac Classic and older versions of Windows, so you should not call this function at runtime.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>unsigned long REALDefaultControlFontSize(void);</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the user's default control font size</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+

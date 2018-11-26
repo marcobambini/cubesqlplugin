@@ -1,0 +1,932 @@
+
+<html>
+   <head>
+      <link rel='stylesheet' type='text/css' href='Support/main.css' />
+      <title>Plugin SDK Registration Reference</title>
+      <head>
+	 <body>
+<div id='topicHeader'><h2><a name='REALRegisterClass'></a>REALRegisterClass</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function registers a plugin class for use within REALbasic based on the REALclassDefinition provided. This function must be called from within the PluginEntry method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterClass( REALclassDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: the class definition description to register</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterInterface'></a>REALRegisterInterface</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function registers a plugin interface for use within REALbasic based on the REALinterfaceDefinition provided. This function must be called from within the PluginEntry method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterInterface( REALinterfaceDefinition *defn )</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: the interface definition description to register</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterModule'></a>REALRegisterModule</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function registers a plugin module for use within REALbasic based on the REALmoduleDefinition provided. This function must be called from within the PluginEntry method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterModule( REALmoduleDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: the module definition description to register</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterControl'></a>REALRegisterControl</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function registers a plugin control for use within REALbasic based on the REALcontrol provided. This function must be called from within the PluginEntry method.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterControl( REALcontrol *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: the control definition description to register</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='SetClassConsoleSafe'></a>SetClassConsoleSafe</h2></div>
+<div id='content'>
+<p id='briefDesc'>Used to mark a class definition as being console safe. You must call this function before registering the class with REALRegisterClass, which means it must be called within the PluginEntry method. Note that this is a helper method which simply sets the REALconsoleSafe flag on the class definition.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void SetClassConsoleSafe( REALclassDefinition def );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>def: the class definition to mark as console safe</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterBackgroundTask'></a>REALRegisterBackgroundTask</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates a new background timer which fires around the given period. The period is expressed in milliseconds, and is used as an approximation. Optionally, you can pass extra data to the callback function via the "data" parameter. When you no longer require the background task, you can cancel it by calling REALUnregisterBackgroundTask.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>long REALRegisterBackgroundTask( BackgroundTaskProc proc, unsigned long period, void *data );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>proc: the callback procedure to call. This parameter cannot be null.</p></p>
+<p style='margin-bottom: 9px'><p>period: the approximate rate at which to fire the callback procedure, expressed in milliseconds</p></p>
+<p style='margin-bottom: 9px'><p>data: (optional) data to pass to the callback procedure. Note that it is the caller's responsibility to ensure this pointer remains valid.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the identifier to be used for removing the background task</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALUnregisterBackgroundTask'></a>REALUnregisterBackgroundTask</h2></div>
+<div id='content'>
+<p id='briefDesc'>Unregisters a background task which was previously created with REALRegisterBackgroundTask.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALUnregisterBackgroundTask( long id );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>id: the identifier of the background task to unregister</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='PluginEntry'></a>PluginEntry</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function must be present in your plugin as it is the entrypoint to the plugin. The Plugin SDK will automatically call the PluginEntry method, where the plugin should register any code items. Since the PluginEntry is called when the IDE is loaded, as well as when the user's application is launched, you should take care to avoid time-consuming operations.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void PluginEntry( void );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALclassDefinition'></a>REALclassDefinition</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to define a plugin class when passed into REALRegisterClass. Any optional fields can be set to NULL (or zero). For the array count fields, a common construct is to use the _countof macro. eg) _countof( someMethodDefArray )</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>version: the structure version number. This should always be set to kCurrentREALControlVersion.</p></p>
+<p style='margin-bottom: 9px'><p>name: the name of the class to define. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>superName: the name of the superclass for this class. Note that this string must be an ANSI string (not Unicode). This field can be NULL, in which case the superclass will be Object.</p></p>
+<p style='margin-bottom: 9px'><p>dataSize: the size to allocate for instance specific data, which can be retrieved with REALGetClassData or the ClassData macro.</p></p>
+<p style='margin-bottom: 9px'><p>forSystemUse: this field is reserved and must be set to zero</p></p>
+<p style='margin-bottom: 9px'><p>constructor: (optional) this field is a misnomer as it defines the class initializer (not the constructor). The initializer fires immediately after the object has been allocated, but before the user's constructor has fired. This REALproc's signature must be void Name( REALobject ) and the only parameter is an instance of the class object.</p></p>
+<p style='margin-bottom: 9px'><p>destructor: (optional) this field is a misnomer as it defines the class finalizer (not the destructor). The finalizer fires immediately before the object's memory is released, but after the user's destructor has fired. This REALproc's signature must be void Name( REALobject ) and the only parameter is an instance of the class object.</p></p>
+<p style='margin-bottom: 9px'><p>properties: (optional) an array of REALproperty definitions which specify a list of properties (and computed properties) for the class. Note that the first parameter to these properties is a REALobject representing the class instance itself (the implicit me parameter).</p></p>
+<p style='margin-bottom: 9px'><p>propertyCount: (optional) the number of properties defined in the "properties" array. If the "properties" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>methods: (optional) an array of REALmethodDefinitions which specify a list of methods for the class. Note that the first parameter to these methods is a REALobject representing the class instance itself (the implicit me parameter).</p></p>
+<p style='margin-bottom: 9px'><p>methodCount: (optional) the number of methods defined in the "methods" array. If the "methods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>events: (optional) an array of REALevent definitions which specify a list of events (event definitions in REALbasic parlance) for the class to expose.</p></p>
+<p style='margin-bottom: 9px'><p>eventCount: (optional) the number of events defined in the "events" array. If the "events" field is non-NULL. this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>eventInstances: (optional) an array of REALeventInstance definitions which specify a list of events this plugin class implements. Note that the class can only implement events which are defined by the superclass. Note that the first parameter to these event instance method definitions is a REALobject representing the class instance itself (the implicit me parameter).</p></p>
+<p style='margin-bottom: 9px'><p>eventInstanceCount: (optional) the number of event instances in the "eventInstances" array. If the "eventInstances" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>interfaces: (optional) a comma delimited string of interfaces which the plugin class implements. Note that this string must be an ANSI string (not unicode) and spaces are tolerated. Also note that it is the plugin author's responsibility to ensure that the plugin implements the interface's methods.</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>constants: (optional) an array of REALconstant definitions which specify a list of constants the plugin class defines</p></p>
+<p style='margin-bottom: 9px'><p>constantCount: (optional) the number of constants defined in the "constants" array. If the "constants" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>mFlags: (optional) a bitmask of flags describing extra information about the plugin class. Currently, the only flags supported are REALconsoleOnly (a console-only class which is not available to desktop projects) and REALconsoleSafe (a class which is available to both desktop and console projects). If this field is zero, then the plugin class is assumed to be console-unsafe (only available to desktop projects).</p></p>
+<p style='margin-bottom: 9px'><p>sharedProperties: (optional) an array of REALproperty definitions which specify a list of shared properties (and shared computed properties) for the class. Note that the first parameter to these properties is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>sharedPropertyCount: (optional) the number of properties defined in the "properties" array. If the "properties" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>sharedMethods: (optional) an array of REALmethodDefinitions which specify a list of shared methods for the class. Note that the first parameter to these methods is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>sharedMethodCount: (optional) the number of methods defined in the "methods" array. If the "methods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>delegates: (optional) an array of REALdelegates which specify a list of delegates for the control.</p></p>
+<p style='margin-bottom: 9px'><p>delegateCount: (optional) the number of delegates defined in the "delegates" array. If the "delegates" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>enums: (optional) an array of null-terminated strings describing possible "enumeration" names for this property which are displayed in the IDE. The value associated with the enumeration is based on the array index (so the first item in the enumeration name array has an integer value of 0). Note that these strings must be ANSI (not Unicode). Also note that this field (and the enumCount field) are ignored for any code item aside from a class definition.</p></p>
+<p style='margin-bottom: 9px'><p>enumCount: (optional) the number of entries in the "enumEntries" array. This field is not optional if the "enumEntries" field is non-NULL.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALmoduleDefinition'></a>REALmoduleDefinition</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to define a plugin module when passed into REALRegisterModule. Any optional fields can be set to NULL (or zero). For the array count fields, a common construct is to use the _countof macro. eg) _countof( someMethodDefArray )</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>version: the structure version number. This should always be set to kCurrentREALControlVersion.</p></p>
+<p style='margin-bottom: 9px'><p>name: the name of the module to define. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>methods: (optional) an array of REALmethodDefinitions which specify a list of methods for the module. Note that the first parameter to these methods is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>methodCount: (optional) the number of methods defined in the "methods" array. If the "methods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>constants: (optional) an array of REALconstant definitions which specify a list of constants the plugin module defines</p></p>
+<p style='margin-bottom: 9px'><p>constantCount: (optional) the number of constants defined in the "constants" array. If the "constants" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>properties: (optional) an array of REALproperty definitions which specify a list of properties (and computed properties) for the module. Note that the first parameter to these properties is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>propertyCount: (optional) the number of properties defined in the "properties" array. If the "properties" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>structures: (optional) an array of REALstructure definitions which specify a list of structures for the module.</p></p>
+<p style='margin-bottom: 9px'><p>structureCount: (optional) the number of structures defined in the "structures" array. If the "structures" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>enums: (optional) an array of REALenum definitions which specify a list of enumerations for the module.</p></p>
+<p style='margin-bottom: 9px'><p>enumCount: (optional) the number of enumerations defined in the "enums" array. If the "enums" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>delegates: (optional) an array of REALdelegates which specify a list of delegates for the module</p></p>
+<p style='margin-bottom: 9px'><p>delegateCount: (optional) the number of delegates defined in the "delegates" array. If the "delegates" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>classes: (optional) an array of REALclassDefinition pointers which specify a list of classes for the module</p></p>
+<p style='margin-bottom: 9px'><p>classesCount: (optional) the number of classes defined in the "classes" array. If the "classes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>interfaces: (optional) an array of REALinterfaceDefinitions which specify a list of class interfaces for the module</p></p>
+<p style='margin-bottom: 9px'><p>interfaceCount: (optional) the number of class interfaces defined in the "interfaces" array. If the "interfaces" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>modules: (optional) an array of REALmoduleDefinition pointers which specify a list of modules</p></p>
+<p style='margin-bottom: 9px'><p>moduleCount: (optional) the number of modules defined in the "modules" array. If the "modules" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>controls: (optional) an array of REALcontrol pointers which specify a list of controls for the module</p></p>
+<p style='margin-bottom: 9px'><p>controlCount: (optional) the number of controls defined in the "controls" array. If the "controls" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALinterfaceDefinition'></a>REALinterfaceDefinition</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to define a plugin interface when passed into REALRegisterInterface. Any optional fields can be set to NULL (or zero). For the array count fields, a common construct is to use the _countof macro. eg) _countof( someMethodDefArray )</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>version: the structure version number. This should always be set to kCurrentREALControlVersion.</p></p>
+<p style='margin-bottom: 9px'><p>name: the name of the interface to define. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>methods: (optional) an array of REALmethodDefinitions which specify a list of methods for the interface. These objects should not specify an implementation, just a declaration string.</p></p>
+<p style='margin-bottom: 9px'><p>methodCount: (optional) the number of methods defined in the "methods" array. If the "methods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALcontrol'></a>REALcontrol</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to define a plugin control when passed into REALRegisterControl. Any optional fields can be set to NULL (or zero). For the array count fields, a common construct is to use the _countof macro. eg) _countof( someMethodDefArray ) Note that controls automatically have a superclass of RectControl, or if the REALinvisibleControl flag is set, Control. If you wish for your control to have a different superclass, then you must declare them as a REALclassDefinition.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>version: the structure version number. This should always be set to kCurrentREALControlVersion.</p></p>
+<p style='margin-bottom: 9px'><p>name: the name of the control to define. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>dataSize: the size to allocate for instance specific data, which can be retrieved with REALGetControlData or the ControlData macro.</p></p>
+<p style='margin-bottom: 9px'><p>flags: a bitmask specifying additional information about the control. The following flags are supported:</p></p>
+<p style='margin-bottom: 9px'><p><ul></p>
+<p style='margin-bottom: 9px'><li> REALcontrolAcceptFocus -- this control can accept keyboard focus at any time.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolFocusRing -- tells REALbasic to automatically draw a focus ring around the control when it has focus (as appropriate). This flag only affects the Mac.</li></p>
+<p style='margin-bottom: 9px'><li> REALinvisibleControl -- if this flag is set, then the control is a subclass of Control (otherwise, it is a subclass of RectControl).</li></p>
+<p style='margin-bottom: 9px'><li> REALopaqueControl -- indicates a control with no transparent regions as an optimization for background redrawing. This flag only affects the Mac.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolOwnsCursor -- tells REALbasic that the control is managing its own cursor, so REALbasic will not set the cursor automatically.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolIsHIViewCompatible -- indicates that the plugin author assures RB that this control will work 100% on REALbasic Window objects with compositing turned on (running Mac OS 10.2 and beyond). It draws all of its content inside its Redraw event, or methods called by the redraw event, does not call Draw1Control, and doesn't do anything that Apple specifically forbids an HIView control to do. This flag only affects the Mac.</li></p>
+<p style='margin-bottom: 9px'><li> REALdontTryHIViewize -- indicates that REALbasic is not to try to turn this control into a custom HIView. Use this if your plugin contains an OS control, and is already an HIView, or you explicitly write code to make your control an HIView. This flag only affects the Mac.</li></p>
+<p style='margin-bottom: 9px'><li> REALdontEraseBackground -- when set, tells the REALbasic framework not to automatically erase the control when it is resized. This flag only affects Windows.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolRequiresComposite -- indicates that this control requires a composite window to function properly. This flag only affects the Mac.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolHandlesKeyboardNavigation -- indicates that this control overrides the default keyboard navigation on Windows.  This means that pressing the arrow keys or pressing a modifier-less keyboard mnemonic no longer moves the focus to another control.  It does
+not override/affect handling of menu based shortcuts or those that are triggered with a modifier key.  Useful when writing your own text editor for example.</li></p>
+<p style='margin-bottom: 9px'><li> REALcontrolHandlesTabKey -- indicates that this control wants to handle the Tab key, useful if a control contains subcontrols and you want to handle the focus for that</li></p>
+<p style='margin-bottom: 9px'></ul></p></p>
+<p style='margin-bottom: 9px'><p>toolbarPICT: this field is deprecated and should not be used in new plugins. Instead, you should specify the icon in the RBX plugin format manually. This field should be zero.</p></p>
+<p style='margin-bottom: 9px'><p>toolbarDownPICT: this field is deprecated and should not be used in new plugins. This field should be zero.</p></p>
+<p style='margin-bottom: 9px'><p>defaultWidth: specifies the default width of the control. This is the initial width of the control when the user drags one into the window editor. This value should always be non-zero.</p></p>
+<p style='margin-bottom: 9px'><p>defaultHeight: specifies the default height of the control. This is the initial height of the control when the user drags one into the window editor. This value should always be non-zero.</p></p>
+<p style='margin-bottom: 9px'><p>properties: (optional) an array of REALproperty definitions which specify a list of properties (and computed properties) for the control. Note that the first parameter to these properties is always a REALobject specifying the control instance.</p></p>
+<p style='margin-bottom: 9px'><p>propertyCount: (optional) the number of properties defined in the "properties" array. If the "properties" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>methods: (optional) an array of REALmethodDefinitions which specify a list of methods for the control. Note that the first parameter to these methods is a REALobject representing the control instance itself (the implicit me parameter).</p></p>
+<p style='margin-bottom: 9px'><p>methodCount: (optional) the number of methods defined in the "methods" array. If the "methods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>events: (optional) an array of REALevent definitions which specify a list of events (event definitions in REALbasic parlance) for the control to expose.</p></p>
+<p style='margin-bottom: 9px'><p>eventCount: (optional) the number of events defined in the "events" array. If the "events" field is non-NULL. this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>behaviour: (optional) a pointer to a REALcontrolBehaviour structure describing the "behavior" of the control. Essentially, this structure is a set of callback functions which are called when the IDE or framework needs to query the plugin for more information.</p></p>
+<p style='margin-bottom: 9px'><p>forSystemUse: reserved, must be zero</p></p>
+<p style='margin-bottom: 9px'><p>eventInstances: (optional) an array of REALeventInstance definitions which specify a list of events this plugin control implements. Note that the control can only implement events which are defined by the superclass. Note that the first parameter to these event instance method definitions is a REALobject representing the control instance itself (the implicit me parameter).</p></p>
+<p style='margin-bottom: 9px'><p>eventInstanceCount: (optional) the number of event instances in the "eventInstances" array. If the "eventInstances" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>interfaces: (optional) a comma delimited string of interfaces which the plugin control implements. Note that this string must be an ANSI string (not unicode) and spaces are tolerated. Also note that it is the plugin author's responsibility to ensure that the plugin implements the interface's methods.</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>constants: (optional) an array of REALconstant definitions which specify a list of constants the plugin control defines</p></p>
+<p style='margin-bottom: 9px'><p>constantCount: (optional) the number of constants defined in the "constants" array. If the "constants" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>sharedProperties: (optional) an array of REALproperty definitions which specify a list of shared properties (and shared computed properties) for the class. Note that the first parameter to these properties is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>sharedPropertyCount: (optional) the number of properties defined in the "properties" array. If the "properties" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>sharedMethods: (optional) an array of REALmethodDefinitions which specify a list of shared methods for the class. Note that the first parameter to these methods is always NULL.</p></p>
+<p style='margin-bottom: 9px'><p>sharedMethodCount: (optional) the number of methods defined in the "sharedMethods" array. If the "sharedMethods" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>delegates: (optional) an array of REALdelegates which specify a list of delegates for the control.</p></p>
+<p style='margin-bottom: 9px'><p>delegateCount: (optional) the number of delegates defined in the "delegates" array. If the "delegates" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>enums: (optional) an array of null-terminated strings describing possible "enumeration" names for this property which are displayed in the IDE. The value associated with the enumeration is based on the array index (so the first item in the enumeration name array has an integer value of 0). Note that these strings must be ANSI (not Unicode). Also note that this field (and the enumCount field) are ignored for any code item aside from a class definition.</p></p>
+<p style='margin-bottom: 9px'><p>enumCount: (optional) the number of entries in the "enumEntries" array. This field is not optional if the "enumEntries" field is non-NULL.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALbasic_Types_To_Plugin_Types'></a>REALbasic Types To Plugin Types</h2></div>
+<div id='content'>
+<p id='briefDesc'>There are times when a plugin must use REALbasic syntax to describe a code item (such as a method or a property), but use a C type to actually interact with the user (such as a function implementation). During these times, you must map REALbasic type information onto C type information. The following chart provides you with the most common type mappings.</p>
+<div id='classEntityGroup'>
+<table class='memberTableNW' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALbasic Type</p></th>
+<th colspan='1'><p>C Type</p></th>
+</tr>
+<tr valign='top'>
+<td>
+<p>String</p>
+</td>
+<td>
+<p>REALstring</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Any Object Type</p>
+</td>
+<td>
+<p>REALobject</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Integer, Int32, Color</p>
+</td>
+<td>
+<p>long</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>UInt32</p>
+</td>
+<td>
+<p>unsigned long</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Int64</p>
+</td>
+<td>
+<p>RBInt64</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>UInt64</p>
+</td>
+<td>
+<p>unsigned RBInt64</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Currency</p>
+</td>
+<td>
+<p>REALcurrency</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Int16, Short</p>
+</td>
+<td>
+<p>short</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>UInt16</p>
+</td>
+<td>
+<p>unsigned short</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Int8</p>
+</td>
+<td>
+<p>char</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>UInt8, Byte</p>
+</td>
+<td>
+<p>unsigned char</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Single</p>
+</td>
+<td>
+<p>float</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Double</p>
+</td>
+<td>
+<p>double</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>WindowPtr</p>
+</td>
+<td>
+<p>The appropriate OS-specific window pointer type (such as HWND on Windows)</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Ptr</p>
+</td>
+<td>
+<p>void *</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>REALbasic Array Type</p>
+</td>
+<td>
+<p>REALarray</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Structure Array Type</p>
+</td>
+<td>
+<p>A C array of the appropriate type</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>CString</p>
+</td>
+<td>
+<p>const char *</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>WString</p>
+</td>
+<td>
+<p>const wchar_t *</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>CFStringRef</p>
+</td>
+<td>
+<p>CFStringRef</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>PString</p>
+</td>
+<td>
+<p>const unsigned char *</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Variant</p>
+</td>
+<td>
+<p>REALobject</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Boolean</p>
+</td>
+<td>
+<p>Boolean</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Any Structure Type</p>
+</td>
+<td>
+<p>The appropriate C structure type</p>
+</td>
+</tr>
+<tr valign='top'>
+<td>
+<p>Any Enumeration Type</p>
+</td>
+<td>
+<p>Based on the enumeration's "Type" field, but generally a long</p>
+</td>
+</tr>
+</table>
+</div>
+<br />
+<p id='briefDesc'>If any of the REALbasic types are defined as ByRef, then the C Type should be considered as a pointer to the appropriate type. For instance, a ByRef String would map to a REALstring *. If a declaration describes a ParamArray, then you will receive a REALarray object with an element type based on the declared REALbasic type of the array.</p>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALmethodDefinition'></a>REALmethodDefinition</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used by a plugin to describe a method. The data which is pertinent in this structure varies depending on what is making use of it. For instance, when defining an interface, the "function" field is ignored. However, when defining a class, the "function" field is required.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>function: A REALproc to be called, when appropriate. The REALproc's signature should match that of the declaration (substituting REALbasic types for plugin SDK types as appropriate. See the REALbasic Types To Plugin Types excerpt). The first parameter should always be a REALobject which represents the implicit \"me\" parameter, however, this parameter may be NULL depending on the method definition usage. If this definition is for use with an interface declaration, then this field is optional.</p></p>
+<p style='margin-bottom: 9px'><p>setter Function: this field is deprecated and should not be used in new plugins. Instead, the \"declaration\" field should specify an assigns parameter (though you may want to consider making a computed property instead). This field should always be NULL.</p></p>
+<p style='margin-bottom: 9px'><p>declaration: the method's declaration using REALbasic syntax. This declaration should not include scope information, and must use legal syntax and identifiers. Note that this string must be an ANSI string, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>mFlags: (optional) a bitmask of flags which describes extra information about the method. Valid flags include:</p></p>
+<p style='margin-bottom: 9px'><p><ul></p>
+<p style='margin-bottom: 9px'><li>REALconsoleSafe -- this method is safe to call in console projects as well as desktop projects.</li></p>
+<p style='margin-bottom: 9px'><li>REALconsoleOnly -- this method is safe to call in console projects only</li></p>
+<p style='margin-bottom: 9px'><li>REALScopeGlobal -- this method is global when defined in a module, or public otherwise</li></p>
+<p style='margin-bottom: 9px'><li>REALScopePublic -- this method is public (both in a module, as well as a class)</li></p>
+<p style='margin-bottom: 9px'><li>REALScopeProtected -- this method is protected when defined in a class, or public when defined in a module</li></p>
+<p style='margin-bottom: 9px'><li>REALScopePrivate -- this method is private</li></p>
+<p style='margin-bottom: 9px'></ul></p></p>
+<p style='margin-bottom: 9px'><p>Note that the scope flags are only useful for methods which are not defined in an interface (as interface methods are always public methods). Also note that if a scope flag is not set, then the default scoping rules apply based on how the method is used. In all cases, the default scope is Public (note that this includes Modules, where Public is not the same as Global).</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALproperty'></a>REALproperty</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used by a plugin to define a property or a computed property. The difference between the two fundamental types is that a computed property defines a REALproc for the getter and/or setter, while the non-computed property specifies REALstandardGetter and/or REALstandardSetter.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>group: the "group" to which the property belongs when it is displayed in the properties listbox in the IDE. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>name: the name of the property, which must be a legal REALbasic identifier. Note that this string must be an ANSI string (not Unicode).</p></p>
+<p style='margin-bottom: 9px'><p>type: the property's type. See the REALbasic Types to Plugin Types excerpt for more information about type mapping. This string must be an ANSI string, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>flags: a bitmask of flags to describe the property. Valid flags include:</p></p>
+<p style='margin-bottom: 9px'><p><ul></p>
+<p style='margin-bottom: 9px'><li> REALpropRuntimeOnly -- this property can only be assigned to at runtime; it is not displayed in the IDE at design time</li></p>
+<p style='margin-bottom: 9px'><li> REALconsoleSafe -- this property is safe to call in console projects as well as desktop projects.</li></p>
+<p style='margin-bottom: 9px'><li> REALconsoleOnly -- this property is safe to call in console projects only</li></p>
+<p style='margin-bottom: 9px'><li> REALScopeGlobal -- this property is global when defined in a module, or public otherwise</li></p>
+<p style='margin-bottom: 9px'><li> REALScopePublic -- this property is public (both in a module, as well as a class)</li></p>
+<p style='margin-bottom: 9px'><li> REALScopeProtected -- this property is protected when defined in a class, or public when defined in a module</li></p>
+<p style='margin-bottom: 9px'><li> REALScopePrivate -- this property is private</li></p>
+<p style='margin-bottom: 9px'></ul></p></p>
+<p style='margin-bottom: 9px'><p>Note that if a scope flag is not set, then the default scoping rules apply based on how the property is used. In all cases, the default scope is Public (note that this includes Modules, where Public is not the same as Global).</p></p>
+<p style='margin-bottom: 9px'><p>getter: a REALproc for a computed property's getter, which should be declared as @Type@ GetterName( REALobject, long ). The second parameter is the value specified in the "param" field. Use REALstandardGetter and the "param" field to create a non-computed property (see "param" field for more information).</p></p>
+<p style='margin-bottom: 9px'><p>setter: a REALproc for a computed property's setter, which should be declared as void SetterName( REALobject, long, @Type@ ). The second parameter is the value specified in the "param" field. Use REALstandardSetter and the "param" field to create a non-computed property (see "param" field for more information).</p></p>
+<p style='margin-bottom: 9px'><p>param: (optional) when defining a computed property, this is a general-purpose field used to pass extra information into the getter and setter procedures. When defining a non-computed property, this field specifies the offset in the class' instance data to the property's value. In this case, it is recommended that you use the FieldOffset macro to fill out this field. For instance, FieldOffset( ClassData, mInstanceMember ). When defining a non-computed property, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'><p>editor: this field is deprecated and should be set to NULL</p></p>
+<p style='margin-bottom: 9px'><p>enums: (optional) an array of null-terminated strings describing possible "enumeration" names for this property which are displayed in the IDE. The value associated with the enumeration is based on the array index (so the first item in the enumeration name array has an integer value of 0). Note that these strings must be ANSI (not Unicode). Also note that this field (and the enumCount field) are ignored for any code item aside from a class definition.</p></p>
+<p style='margin-bottom: 9px'><p>enumCount: (optional) the number of entries in the "enumEntries" array. This field is not optional if the "enumEntries" field is non-NULL.</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALevent'></a>REALevent</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to declare an event for a class to expose (also known as an event definition in REALbasic parlance).</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>declaration: the events's declaration using REALbasic syntax. This declaration must use legal syntax and identifiers. Note, this string must be ANSI, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>forSystemUse: reserved, must be zero.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALeventInstance'></a>REALeventInstance</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to define an event for a class to implement (also known as an event handler in REALbasic parlance).</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>declaration: the event's declaration using REALbasic syntax. This declaration must use legal syntax and identifiers, and must also match an event definition from the class' superclass. Note, this string must be ANSI, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>implementation: a REALproc to handle the event once it is fired. Note that the first parameter of this function must be a REALobject for the implicit "me" parameter for the class. See the REALbasic Types to Plugin Types section for more information about type mapping.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALconstant'></a>REALconstant</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to delcare a constant for a class or module. All constant type information is derived from the constant's declaration, which means that constant values must be valid REALbasic values (ie -- the same rules apply to plugins defining constants as apply to REALbasic users making constants in the IDE).</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>declaration: a legal REALbasic constant declaration, without the Const keyword, in the form "name = value". For string values, the the value field must be quoted according to REALbasic syntax. Note that this string must be ANSI, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>reserved1: reserved, must be zero</p></p>
+<p style='margin-bottom: 9px'><p>mFlags: (optional) a bitmask of flags which describes extra information about the constant. Valid flags include:</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeGlobal -- this constant is global when defined in a module, or public otherwise</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePublic -- this constant is public (both in a module, as well as a class)</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeProtected -- this constant is protected when defined in a class, or public when defined in a module</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePrivate -- this constant is private</p></p>
+<p style='margin-bottom: 9px'><p>Note that if a scope flag is not set, then the default scoping rules apply based on how the constant is used. In all cases, the default scope is Public (note that this includes Modules, where Public is not the same as Global).</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALstructure'></a>REALstructure</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to declare a REALbasic structure code item.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>name: the name of the structure, which must be a legal REALbasic identifier. Note that this string must be an ANSI string, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>mFlags: (optional) a bitmask of flags which describes extra information about the structure. Valid flags include:</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeGlobal -- this structure is global when defined in a module, or public otherwise</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePublic -- this structure is public (both in a module, as well as a class)</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeProtected -- this structure is protected when defined in a class, or public when defined in a module</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePrivate -- this structure is private</p></p>
+<p style='margin-bottom: 9px'><p>Note that if a scope flag is not set, then the default scope is Public.</p></p>
+<p style='margin-bottom: 9px'><p>fields: an array of fields that the structure declares. These fields must be legal REALbasic structure declarations, in the form "Name as StructureType." Note that some REALbasic types are not legal in structures (such as objects, or unbounded arrays). See the REALbasic Types to Plugin Types section for more information about type mapping. These strings must be an ANSI string, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>numFields: the number of items in the "fields" array</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALenum'></a>REALenum</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is used to declare a REALbasic enumeration.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>name: the name of the enumeration, which must be a legal REALbasic identifier. Note this string must be ANSI, not Unicode.</p></p>
+<p style='margin-bottom: 9px'><p>type: (optional) the type of the enumeration. Currently, only integer types are supported (such as Integer, Int8, etc). If this field is NULL, then the type is assumed to be an Int32.</p></p>
+<p style='margin-bottom: 9px'><p>mFlags: (optional) a bitmask of flags which describes extra information about the enumeration. Valid flags include:</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeGlobal -- this enumeration is global when defined in a module, or public otherwise</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePublic -- this enumeration is public (both in a module, as well as a class)</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopeProtected -- this enumeration is protected when defined in a class, or public when defined in a module</p></p>
+<p style='margin-bottom: 9px'><p>o REALScopePrivate -- this enumeration is private</p></p>
+<p style='margin-bottom: 9px'><p>Note that if a scope flag is not set, then the default scope is Public.</p></p>
+<p style='margin-bottom: 9px'><p>fields: an array of fields that the enumeration declares. These fields must be legal REALbasic enumeration declarations, in the form "Name = Value" or "Name." If a value is not specified, then the value is determined based on the standard REALbasic enumeration rules.</p></p>
+<p style='margin-bottom: 9px'><p>numFields: the number of items in the "fields" array</p></p>
+<p style='margin-bottom: 9px'><p>attributes: (optional) an array of REALattribute definitions which specify the name/value pair for each attribute.</p></p>
+<p style='margin-bottom: 9px'><p>attributeCount: (optional) the number of attributes in the attributes array.  If the "attributes" field is non-NULL, this field is not optional.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALcontrolBehaviour'></a>REALcontrolBehaviour</h2></div>
+<div id='content'>
+<p id='briefDesc'>This structure is a set of callback functions which are called when the IDE or framework needs to query the plugin for more information about a REALcontrol. It is the preferred way to implement many control events instead of using REALeventInstance and REALevent arrays.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p></p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>constructorFunction: called when the control is first created and provides a place for you to setup initial values for the control. Called at design time as well as at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>destructorFunction: called before the control is destroyed and provides a place for you to release memory for the control's internal data. Called at design time as well as runtime.</p></p>
+<p style='margin-bottom: 9px'><p>redrawFunction: called when the control needs to be redrawn. Called at design time as well as runtime.</p></p>
+<p style='margin-bottom: 9px'><p>clickFunction: called when the control has been clicked on. This is akin to the MouseDown event in REALbasic. Called only at runtime. Return true from this function will allow REALbasic to fire the "mouseDragFunction" and "mouseUpFunction" when appropriate.</p></p>
+<p style='margin-bottom: 9px'><p>mouseDragFunction: called during a mouse drag operation where the control has captured the mouse. Called only at runtime. Note that this function will be called only if you return true from the "clickFunction."</p></p>
+<p style='margin-bottom: 9px'><p>mouseUpFunction: called when the mouse button has been released. Called only at runtime. Note that this function will be called only if you return true from the "clickFunction."</p></p>
+<p style='margin-bottom: 9px'><p>gainedFocusFunction: this callback is fired when the control has gained focus. Note that this function will only be called if your control can accept focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>lostFocusFunction: this callback is fired when the control has lost focus. Note that this function will only be called if you control can accept focus, and already has the focus. Called only at rumtime.</p></p>
+<p style='margin-bottom: 9px'><p>keyDownFunction: called when the user has pressed a key while you control has focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>openFunction: this function is called after the control's underlying pane has been opened and is akin to the Open event in REALbasic. Called at design time (immediately after the "constructorFunction") as well as at runtime (once the pane has been created).</p></p>
+<p style='margin-bottom: 9px'><p>closeFunction: this function is called before the control's underlying pane has been destroyed and is akin to the "Close" event in REALbasic. Called at design time (immediately before the "destructorFunction" ) as well as at runtime (just before the pane is destroyed).</p></p>
+<p style='margin-bottom: 9px'><p>backgroundIdleFunction: this callback is called at periodic intervals as a way for a plugin control to update itself. For instance, a progress wheel indicator could use this event in place of a custom timer as a way to update its view. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>drawOffscreenFunction: called as a way to draw the control into an offscreen buffer, such as a call to RectControl.DrawInto would require. Called at design time as well as at runtime. Note that the IDE prefers this callback over the "redrawFunction" when displaying your control in the IDE.</p></p>
+<p style='margin-bottom: 9px'><p>setSpecialBackground: this callback is called when the runtime needs to determine whether a control has a special background to allow the control the chance to draw it. Called only at runtime, and only affects the Mac and Linux.</p></p>
+<p style='margin-bottom: 9px'><p>constantChanging: deprecated and should be set to NULL</p></p>
+<p style='margin-bottom: 9px'><p>droppedNewInstance: deprecated and should be set to NULL</p></p>
+<p style='margin-bottom: 9px'><p>mouseEnterFunction: this function is called when the mouse enters the control area. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>mouseExitFunction: this function is called when the mouse leaves the control area. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>mouseMoveFunction: this function is called when the mouse moves within the control's area. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>stateChangedFunction: called when the control's state has changed. This callback is passed a bitmask of information describing the change. Called only at runtime. Possible bitmask values are:</p></p>
+<p style='margin-bottom: 9px'><p><ul></p>
+<p style='margin-bottom: 9px'><li>kActivationChanged -- the control has been activated or deactivated</li></p>
+<p style='margin-bottom: 9px'><li>kEnabledChanged -- the control has been enabled or disabled</li></p>
+<p style='margin-bottom: 9px'><li>kVisibilityChanged -- the control has been shown or hidden</li></p>
+<p style='margin-bottom: 9px'><li>kBoundsChanged -- the control has been moved or resized</li></p>
+<p style='margin-bottom: 9px'></ul></p></p>
+<p style='margin-bottom: 9px'><p>actionEventFunction: an "action" has occurred that the control should be aware of. For instance, a button has been clicked, or a popup menu's selection has changed. This event is generally only fired for a plugin when a 'RCtl' Carbon event has fired, and so only affects the Mac.</p></p>
+<p style='margin-bottom: 9px'><p>controlHandleGetter: used to get the OS control handle for the plugin control, and is akin to the "Handle as Integer" property on REALbasic controls and windows. Called at design time as well as runtime.</p></p>
+<p style='margin-bottom: 9px'><p>mouseWheelFunction: called when the mouse wheel has been scrolled. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>enableMenuItemsFunction: called to allow a plugin to enable or disable menu items the plugin controls. This callback is only called when the plugin control has focus, or is a parent of a control which has focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>menuItemActionFunction: allows a plugin to handle menu actions. This callback is only called when the plugin control has focus, or is a parent of a control which has focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>controlAcceptFocus: This callback is called whenever the framework wishes to know whether your control can accept focus or not. If you have the REALcontrolAcceptFocus flag specified in the control definition, then this method is never called since it is assumed the control can always accept focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>keyUpFunction: called when the user has released a key while the control has focus. Called only at runtime.</p></p>
+<p style='margin-bottom: 9px'><p>redrawWithRectsFunction: preferred over the redrawFunction because it exposes the array of rectangles that need to be redrawn. If there are no rectangles passed, the control must redraw all of its contents. (Added in 2012r2)</p></p>
+<p style='margin-bottom: 9px'><p>unfilteredKeyDownFunction: called when the user presses a key before any filtering/translation of the key takes place. (Added in 2013r3)</p></p>
+<p style='margin-bottom: 9px'><p>scaleFactorChangedFunction: called when the scale factor changes, the plugin should invalidate its caches or change what bitmap an OS control references. (Added in 2016r1)</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+

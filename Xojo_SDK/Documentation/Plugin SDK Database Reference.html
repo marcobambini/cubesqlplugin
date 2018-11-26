@@ -1,0 +1,1134 @@
+
+<html>
+   <head>
+      <link rel='stylesheet' type='text/css' href='Support/main.css' />
+      <title>Plugin SDK Array Reference</title>
+      <head>
+	 <body>
+<div id='topicHeader'><h2><a name='REALConstructDBDatabase'></a>REALConstructDBDatabase</h2></div>
+<div id='content'>
+<p id='briefDesc'>Populates the Database object with the necessary information from the user.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALConstructDBDatabase( REALdbDatabase db, dbDatabase *mydb, REALdbEngineDefinition engine );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: RB's database object</p></p>
+<p style='margin-bottom: 9px'><p>mydb: User's database object</p></p>
+<p style='margin-bottom: 9px'><p>engine: Pointer to database engine definition</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDBConnectionDialogAddField'></a>REALDBConnectionDialogAddField</h2></div>
+<div id='content'>
+<p id='briefDesc'>Adds a new field to the database connection dialog. This function serves no purpose at runtime.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALDBConnectionDialogAddField( REALDBConnectionDialogRef dialogRef, REALstring label, REALstring defaultText, Boolean maskField );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>dialogRef: The reference returned when creating a new connection dialog</p></p>
+<p style='margin-bottom: 9px'><p>label: The text label displayed beside the input editfield</p></p>
+<p style='margin-bottom: 9px'><p>defaultText: The default text to be displayed in the input editfield</p></p>
+<p style='margin-bottom: 9px'><p>maskField: Specifies whether or not the editfield is masked (usually for passwords)</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDBConnectionDialogCreate'></a>REALDBConnectionDialogCreate</h2></div>
+<div id='content'>
+<p id='briefDesc'>Creates and initializes a new Database Connection Dialog window for the IDE. This serves no purpose at runtime. When a user is adding a data source item to thier project, you can create your own customized connection dialog with this API. Use the ref value that this function returns to add fields to your dialog using REALDBConnectionDialogAddField.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALDBConnectionDialogRef REALDBConnectionDialogCreate( void );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>parameters: none</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>a reference to the newly created database connection dialog</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDBConnectionDialogDelete'></a>REALDBConnectionDialogDelete</h2></div>
+<div id='content'>
+<p id='briefDesc'>Disposes of the database connection dialog. This function serves no purpose at runtime.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALDBConnectionDialogDelete( REALDBConnectionDialogRef dialogRef );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>dialogRef: The reference returned from REALDBConnectionDialogCreate</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none </p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDBConnectionDialogShow'></a>REALDBConnectionDialogShow</h2></div>
+<div id='content'>
+<p id='briefDesc'>Displays the database connection dialog in the IDE. This function serves no purpose at runtime. Show the dialog after creating it and adding all the necessary fields. If the user clicks the OK button, then the values of the fields are concatenated (separated by nulls) and returned as a REALstring. If the user clicks Cancel, then a null REALstring is returned instead.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALDBConnectionDialogShow( REALDBConnectionDialogRef dialogRef, REALstring title );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>dialogRef: The reference returned from REALDBConnectionDialogCreate</p></p>
+<p style='margin-bottom: 9px'><p>title: Title for the connection dialog</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>null-delimited string that contains the connection information</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALdbCursorFromDBCursor'></a>REALdbCursorFromDBCursor</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function is used by database plugins to convert an internal dbCursor structure into a REALbasic RecordSet object. Note that the dbCursor pointer you pass is simply stored in the RecordSet object; however you allocated it, you must deallocate it accordingly in your cursor close callback.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALdbCursor REALdbCursorFromDBCursor( dbCursor *cursor, REALdbCursorDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>cursor: dbCursor object to wrap in a REALdbCursor (i.e. RecordSet)</p></p>
+<p style='margin-bottom: 9px'><p>defn: structure defining callbacks for this cursor</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>newly created RecordSet object</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALdbDatabaseFromDBDatabase'></a>REALdbDatabaseFromDBDatabase</h2></div>
+<div id='content'>
+<p id='briefDesc'>Constructs a new REALbasic Database object</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALdbDatabase REALdbDatabaseFromDBDatabase( dbDatabase *database, REALdbEngineDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>database: user's database object</p></p>
+<p style='margin-bottom: 9px'><p>defn: Pointer to database engine definition</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>newly created Database object</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALDesignAddDataSource'></a>REALDesignAddDataSource</h2></div>
+<div id='content'>
+<p id='briefDesc'>Database plugins use this method to add a data source. Generally this is done within the callback registered via REALRegisterDataSourceInterface. Pass in a string containing whatever data you need to relocate the database; you'll get this same string back when your REALRegisterDataSource callback is invoked.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALDesignAddDataSource( const char *baseName, const char *szDataSourceName, Ptr data, int dataLen );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>baseName: name of the database as it should appear in the Project window</p></p>
+<p style='margin-bottom: 9px'><p>szDataSourceName: string constant identifying the database type</p></p>
+<p style='margin-bottom: 9px'><p>data: arbitrary data to be passed back to your data source getter</p></p>
+<p style='margin-bottom: 9px'><p>dataLen: length of the arbitrary data</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetCursorFromREALdbCursor'></a>REALGetCursorFromREALdbCursor</h2></div>
+<div id='content'>
+<p id='briefDesc'>Get the user's database cursor object structure from the REALdbCursor structure.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>dbCursor *REALGetCursorFromREALdbCursor( REALdbCursor cursor );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>cursor: the REAL database cursor object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>pointer to the user's cursor object</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetDBDatabaseName'></a>REALGetDBDatabaseName</h2></div>
+<div id='content'>
+<p id='briefDesc'>Gets the database name.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALGetDBDatabaseName( REALdbDatabase db );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: the database object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the database name</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetDBFromREALdbDatabase'></a>REALGetDBFromREALdbDatabase</h2></div>
+<div id='content'>
+<p id='briefDesc'>Get the user's database object structure from the REALdbDatabase structure.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>dbDatabase *REALGetDBFromREALdbDatabase( REALdbDatabase db );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: the Database object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>pointer to the user's database object</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetDBHost'></a>REALGetDBHost</h2></div>
+<div id='content'>
+<p id='briefDesc'>Gets the hostname of the database.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALGetDBHost( REALdbDatabase db );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: Database object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>hostname of the database</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetDBPassword'></a>REALGetDBPassword</h2></div>
+<div id='content'>
+<p id='briefDesc'>Gets the password to be used to open the database.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALGetDBPassword( REALdbDatabase db );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: the Database object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the password</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALGetDBUserName'></a>REALGetDBUserName</h2></div>
+<div id='content'>
+<p id='briefDesc'>Gets the user name with which to access the database.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALstring REALGetDBUserName( REALdbDatabase db );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>db: the Database object</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>the user name</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterDataSource'></a>REALRegisterDataSource</h2></div>
+<div id='content'>
+<p id='briefDesc'>Used by database plugins to register a callback to be invoked when the system needs to load a database. The string passed in is whatever arbitrary data was given to RB via the call to REALDesignAddDataSource. The callback function takes parameters "Ptr data, int dataLen" and returns a newly created REALdbDatabase.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterDataSource( const char *szDatasourceName, REALDataSourceProc proc );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>szDatasourceName: string constant identifying the database type</p></p>
+<p style='margin-bottom: 9px'><p>proc: callback function</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none </p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterDataSourceInterface'></a>REALRegisterDataSourceInterface</h2></div>
+<div id='content'>
+<p id='briefDesc'>Used by database plugins to add an appropriate entry to the "Add Data Source" submenu in the IDE. The callback function should provide UI to locate the database, and then package whatever data is needed to relocate it and pass that to REALDesignAddDataSource.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterDataSourceInterface( const char *szMenuName, REALDataSourceInterfaceProc proc );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>szMenuName: text to appear in the Add Data Source submenu</p></p>
+<p style='margin-bottom: 9px'><p>proc: callback function</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterDBCursor'></a>REALRegisterDBCursor</h2></div>
+<div id='content'>
+<p id='briefDesc'>Call this method to register a database cursor.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterDBCursor( REALdbCursorDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: pointer to a database cursor definition</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterDBEngine'></a>REALRegisterDBEngine</h2></div>
+<div id='content'>
+<p id='briefDesc'>Call this method to register a database engine.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterDBEngine( REALdbEngineDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: pointer to a database engine definition</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALRegisterDBTable'></a>REALRegisterDBTable</h2></div>
+<div id='content'>
+<p id='briefDesc'>Call this method to register a database table.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALRegisterDBTable( REALdbTableDefinition *defn );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>defn: pointer to a DB table definition</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='REALSetDBIsConnected'></a>REALSetDBIsConnected</h2></div>
+<div id='content'>
+<p id='briefDesc'>This function is used by database plug-ins to let the runtime know then a database object connects or disconnects from its source (whether that's a network server, a file, or whatever). The database is assumed to be open after a call to REALdbDatabaseFromDBDatabase or REALConstructDBDatabase; if that's not true, call this function to let the runtime know. Similarly, if you open a connection later through some custom method on your database class, call this function to let RB know the database is open.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>void REALSetDBIsConnected( REALdbDatabase database, Boolean connected );</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>database: database to mark as open or closed</p></p>
+<p style='margin-bottom: 9px'><p>connected: true if DB connection is open, false if it's closed</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Return Value</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'>none</p>
+
+</td>
+</tr>
+</table>
+</div>
+</div>
+<br/>
+<br/>
+<div id='topicHeader'><h2><a name='Writing_REALbasic_Database_Plug_Ins'></a>Writing REALbasic Database Plug-Ins</h2></div>
+<div id='content'>
+<p id='briefDesc'>Database plugins are a bit more complex than most other types of REALbasic plug-ins. The database plugin API is described here. All the general plugin comments in the Plugin SDK Documentation apply here as well.<br />
+
+<br />
+
+A database plugin may register the following entities:<br />
+
+Database Engine<br />
+
+Database Cursor<br />
+
+Database Source<br />
+
+Database Source Interface</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Required Data Structures</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>The plugin header files make use of three data structures which are not defined. You must define these as appropriate for your own particular database; RB doesn't care what you put in them. The three structures you must define are:<br />
+</p>
+<p style='margin-bottom: 9px'><ul>
+</p>
+<p style='margin-bottom: 9px'>    <li> struct dbDatabase</li>
+</p>
+<p style='margin-bottom: 9px'>    <li> struct dbTable</li>
+</p>
+<p style='margin-bottom: 9px'>    <li> struct dbCursor</li>
+</p>
+<p style='margin-bottom: 9px'></ul></p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Registering a Database Engine</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>The REALRegisterDBEngine function passes a reference to a REALdbEngineDefinition structure. This is the set of functions which operate primarily on a dbDatabase object, and make up the core of the database functionality.</p></p>
+<p style='margin-bottom: 9px'><p></p></p>
+<p style='margin-bottom: 9px'><p>The fields of the REALdbEngineDefinition structure are as follows:</p></p>
+<p style='margin-bottom: 9px'><p></p></p>
+<p style='margin-bottom: 9px'><p>version: the version of the plugin architecture that the control was built under; just pass the constant kCurrentREALControlVersion</p></p>
+<p style='margin-bottom: 9px'><p>forSystemUse: just pass 0 (zero)</p></p>
+<p style='margin-bottom: 9px'><p>flags1:</p></p>
+<p style='margin-bottom: 9px'><p>flags2:</p></p>
+<p style='margin-bottom: 9px'><p>flags3:</p></p>
+<p style='margin-bottom: 9px'><p>closeFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>closeDB( dbDatabase* database );</p></p>
+<p style='margin-bottom: 9px'><p>getTableSchemaCursorFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor getTableCursor(dbDatabase *database, REALstring tableName, REALgetColumn *columns, REALcolumnConstraints *constraints);</p></p>
+<p style='margin-bottom: 9px'><p>getFieldSchemaCursorFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor getFieldSchema(dbDatabase *database, REALstring tableName);</p></p>
+<p style='margin-bottom: 9px'><p>directSQLSelectFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor directSQLSelect(dbDatabase *, REALstring selectString);</p></p>
+<p style='margin-bottom: 9px'><p>directSQLExecuteFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void directSQLExecute(dbDatabase *, REALstring executeString);</p></p>
+<p style='margin-bottom: 9px'><p>createTableFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void createTable(dbDatabase *database, REALstring name, REALnewColumn *columns, unsigned char *primaryKey, int primaryKeyCount);</p></p>
+<p style='margin-bottom: 9px'><p>addTableRecordFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void addRecord(dbDatabase *database, REALstring tableName, REALcolumnValue *values);</p></p>
+<p style='margin-bottom: 9px'><p></p></p>
+<p style='margin-bottom: 9px'><p>This function gets called when the InsertRecord method of the Database class is invoked. Note that this is different from calling the SQL statement "INSERT INTO ..." since the InsertRecord method is now responsible for correctly formatting the SQL string. If no implementation is provided, a default SQL INSERT string is passed to SQLExecute, however, some databases cannot handle our default formatting, so you can implement this function to override that feature.</p></p>
+<p style='margin-bottom: 9px'><p>getTableCursorFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor getTableCursor(dbDatabase *database, REALstring tableName, REALgetColumn *columns, REALcolumnConstraints *constraints);</p></p>
+<p style='margin-bottom: 9px'><p>updateFieldsFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void updateFields(dbDatabase *, REALfieldUpdate *fields);</p></p>
+<p style='margin-bottom: 9px'><p>addTableColumnFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void addTableColumn(dbDatabase *, REALstring, REALnewColumn *);</p></p>
+<p style='margin-bottom: 9px'><p>getDatabaseIndexesFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor getDatabaseIndexes(dbDatabase *database, REALstring tableName);</p></p>
+<p style='margin-bottom: 9px'><p>getLastErrorCodeFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>long (*getLastErrorCode)(dbDatabase *);</p></p>
+<p style='margin-bottom: 9px'><p>getLastErrorStringFunc: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>REALstring getLastErrorString(dbDatabase *);</p></p>
+<p style='margin-bottom: 9px'><p>commitFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void commitTransaction(dbDatabase *database);</p></p>
+<p style='margin-bottom: 9px'><p>rollbackFunc: pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void rollbackTransaction(dbDatabase *database);</p></p>
+<p style='margin-bottom: 9px'><p>getSupportedTypes: nil, or a pointer to a function with prototype:</p></p>
+<p style='margin-bottom: 9px'><p>void supportedTypes(long **dataTypes, char **dataNames, long *count);</p></p>
+<p style='margin-bottom: 9px'><p></p></p>
+<p style='margin-bottom: 9px'><p>This function is used in the table schema editor of the IDE. The popupmenu will be populated with the names of the datatypes you provide it, else it will default to the datatypes support by the REALdb.</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+For Example:<br/>
+<br/>
+<div class='parameters'>static long sPostgreSQLTypes[] = {  dbTypeChar, dbTypeText, dbTypeShort,<br />
+
+                                        dbTypeLong, dbTypeFloat, dbTypeDouble,<br />
+
+                                        dbTypeBoolean, dbTypeCurrency, dbTypeDate,<br />
+
+                                        dbTypeTime, dbTypeTimeStamp };<br />
+
+    static char sPostgreSQLDataNames[] = {"char,varchar,smallint,"<br />
+
+                                         "integer,float4,float8,"<br />
+
+                                         "boolean,money,date,"<br />
+
+                                         "time,timestamp" };<br />
+
+    static long sPostgreSQLTypesCount = 11;<br />
+
+<br />
+
+    static void supportedTypes(long **dataTypes, char **dataNames, long *count)<br />
+
+    {<br />
+
+        *dataTypes = (long *) sPostgreSQLTypes;<br />
+
+        *dataNames = (char *) sPostgreSQLDataNames;<br />
+
+        *count = sPostgreSQLTypesCount;<br />
+
+    }</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Registering a Database Cursor</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>The REALRegisterDBCursor function passes a reference to a REALdbCursorDefinition structure.  This is the set of functions which operate on a database cursor, which is essentially a set of records from a database query.  You may register more than one type of cursor, e.g., one for normal queries and one for table schema.<br/><br/></p></p>
+<p style='margin-bottom: 9px'><p>The fields of the REALdbCursorDefinition structure are as follows:</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'><br />
+
+version the version of the plugin architecture that the control was built under; just pass the constant kCurrentREALControlVersion<br />
+
+<br />
+
+forSystemUse: just pass 0 (zero)<br />
+
+<br />
+
+closeCursorFunc: pointer to a function with prototype:<br />
+
+	void closeCursor(dbCursor *);<br />
+
+<br />
+
+cursorColumnCountFunc: pointer to a function with prototype:<br />
+
+	int cursorColumnCount(dbCursor *);<br />
+
+<br />
+
+cursorColumnNameFunc: pointer to a function with prototype:<br />
+
+	REALstring cursorColumnName(dbCursor *, int column);<br />
+
+<br />
+
+cursorRowCountFunc: nil, or a pointer to a function with prototype:<br />
+
+	int cursorRowCount(dbCursor *);<br />
+
+<br />
+
+cursorColumnValueFunc: pointer to a function with prototype:<br />
+
+	void cursorColumnValue(dbCursor *, int column, Ptr *outData, unsigned char *outType, int *outLength);<br />
+
+This is called when the RB code does "recordset.field("column")" or "recordset.idxfield(1)".<br />
+
+column -- a 0-based index of a column whose value we want<br />
+
+outData -- pointer to the column's value<br />
+
+outType -- a dbFieldType indicating the type of data to expect from outData<br />
+
+outLength -- specifies the size of outData<br />
+
+<br />
+
+cursorReleaseValueFunc: nil, or a pointer to a function with prototype:<br />
+
+	void cursorReleaseValue(dbCursor *);<br />
+
+<br />
+
+cursorNextRow: pointer to a function with prototype:<br />
+
+	Boolean cursorNextRow(dbCursor *);<br />
+
+<br />
+
+cursorDeleteFunc: nil, or a pointer to a function delete the current record; prototype:<br />
+
+	void cursorDelete(dbCursor *);<br />
+
+<br />
+
+cursorDeleteAllFunc: nil, or a pointer to a function to delete all records in the set; prototype:<br />
+
+	void cursorDeleteAll(dbCursor *);<br />
+
+<br />
+
+cursorFieldKeyFunc: nil, or a pointer to a mysterious function with prototype:<br />
+
+	Boolean cursorFieldKey(dbCursor *, int, Ptr *, int *, Ptr *, int *);<br />
+
+<br />
+
+cursorUpdateFunc: nil, or a pointer to a function with prototype:<br />
+
+	void cursorUpdate(dbCursor *cursor, REALcursorUpdate *fields);<br />
+
+<br />
+
+cursorEditFunc: nil, or a pointer to a function with prototype:<br />
+
+	void cursorEdit(dbCursor *cursor);<br />
+
+This is called when the RB code does "cursor.Edit".<br />
+
+<br />
+
+cursorPrevRow: pointer to a function with prototype:<br />
+
+	void cursorPrevRow(dbCursor *);<br />
+
+Moves the cursor to the previous record.<br />
+
+<br />
+
+cursorFirstRow: pointer to a function with prototype:<br />
+
+	void cursorFirstRow(dbCursor *);<br />
+
+Moves the cursor to the first record.<br />
+
+<br />
+
+cursorLastRow: pointer to a function with prototype:<br />
+
+	void cursorLastRow(dbCursor *);<br />
+
+Moves the cursor to the last record.<br />
+
+<br />
+
+cursorColumnType: pointer to a function with prototype:<br />
+
+	int cursorColumnType(dbCursor *, int index);<br />
+
+Gets the column type of a specified column (index is 0 based).<br />
+
+<br />
+
+CursorIsBOF: pointer to a function with prototype:<br />
+
+	Boolean CursorIsBOF(dbCursor *);<br />
+
+Determines whether or not the cursor is at the beginning of the selection<br />
+
+<br />
+
+CursorIsEOF: pointer to a function with prototype:<br />
+
+	Boolean CursorIsEOF(dbCursor *);<br />
+
+Determines whether or not the cursor is at the end of the selection<br />
+
+</div>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>REALcursorUpdate structure</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>When the user modifies field values in a cursor, the changes are stored in a REALcursorUpdate struct.  This is then passed to your cursorUpdate function.  The update data is actually a linked list, defined as:</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'><br />
+
+struct REALcursorUpdate<br />
+
+{<br />
+
+	REALcursorUpdate *next;<br />
+
+	int fieldIndex;<br />
+
+	REALstring columnValue;<br />
+
+};<br />
+
+</div>
+<p id='briefDesc'>Your code is responsible for converting the given string data to the appropriate datatype for the backend database.</p>
+<div id='classEntityGroup'>
+<table class='memberTable' id='classProperties'>
+<tr valign='top'>
+<th colspan='1'><p>Subclassing the database class</p></th>
+</tr>
+<tr valign='top'>
+<td width='100%'>
+<p style='margin-bottom: 9px'><p>Since REALbasic 4.5, you can now subclass the database class and provide your own Connection implementation.<br/>
+</p>
+<p style='margin-bottom: 9px'><br/>
+</p>
+<p style='margin-bottom: 9px'>For example:</p></p>
+<p style='margin-bottom: 9px'></p>
+
+</td>
+</tr>
+</table>
+</div>
+<br/>
+<div class='parameters'><br />
+
+REALclassDefinition MyNewDatabaseClass = {<br />
+
+	kCurrentREALControlVersion,<br />
+
+	"MyNewDatabase",<br />
+
+	"Database",<br />
+
+	sizeof(dbDatabase),<br />
+
+	0,<br />
+
+	(REALproc) MyNewDatabaseConstructor,<br />
+
+	(REALproc) MyNewDatabaseDestructor,<br />
+
+	MyNewDatabaseProperties,<br />
+
+	sizeof(MyNewDatabaseProperties) / sizeof(REALproperty),<br />
+
+	MyNewDatabaseMethods,<br />
+
+	sizeof(MyNewDatabaseMethods) / sizeof(REALmethodDefinition),<br />
+
+	nil,	// no events<br />
+
+	0<br />
+
+};<br />
+
+<br />
+
+// You will want to override Database classes' Connect method<br />
+
+REALmethodDefinition MyNewDatabaseMethods[] = {<br />
+
+	{ (REALproc) MyNewDatabaseConnect, REALnoImplementation, "Connect() as boolean"},<br />
+
+};<br />
+
+<br />
+
+<br />
+
+// you need to construct the DB in your constructor method so<br />
+
+// that RB knows about its REALdbEngineDefinition<br />
+
+static void MyNewDatabaseConstructor(REALobject instance)<br />
+
+{<br />
+
+	ClassData (MyNewDatabaseClass, instance, dbDatabase, db);<br />
+
+	db-&gt;mSomeValue = 1;		// initialize your data<br />
+
+	REALConstructDBDatabase((REALdbDatabase) instance, db, &amp;myNewDBEngine);<br />
+
+}<br />
+
+<br />
+
+static Boolean MyNewDatabaseConnect(REALdbDatabase dbObject)<br />
+
+{<br />
+
+<br />
+
+	// the host, database, user and password properties are<br />
+
+	// stored within RB, unless you override them of course.<br />
+
+	REALstring host = REALGetDBHost(dbObject);<br />
+
+	REALstring database = REALGetDBDatabaseName(dbObject);<br />
+
+	REALstring user = REALGetDBUserName(dbObject);<br />
+
+	REALstring password = REALGetDBPassword(dbObject);<br />
+
+<br />
+
+<br />
+
+	// You can get back your dbDatabase object with this call<br />
+
+	dbDatabase *db = REALGetDBFromREALdbDatabase(dbObject);<br />
+
+<br />
+
+<br />
+
+	// stuff back in the proper connection stuff...<br />
+
+	db-&gt;mConnection = whatever_connection;<br />
+
+	db-&gt;mErrorMessage = nillywilly;<br />
+
+	db-&gt;mTransactionOpen = false;<br />
+
+	db-&gt;mUsingConnect = true;<br />
+
+<br />
+
+<br />
+
+	// remember to unlock your strings<br />
+
+<br />
+
+}<br />
+
+</div>
