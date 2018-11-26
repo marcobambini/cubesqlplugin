@@ -19,6 +19,7 @@ PROG = CubeSQLPlugin.so
 all:	${PROG}
 
 bit32:	CFLAGS += -m32
+bit32:	LDFLAGS += -L/usr/lib32
 bit32:	${PROG}
 
 ${PROG}:	${OBJS}
