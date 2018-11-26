@@ -5,76 +5,52 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="SDK">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\sources\CubeSQLPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\cubesql.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\aescrypt.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\aeskey.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\aestab.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\base64.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\pseudorandom.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\crypt\sha1.c">
-      <Filter>SDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\RBPlugins_SDK\Glue Code\PluginMain.cpp">
+    <ClCompile Include="..\..\Xojo_SDK\Glue Code\PluginMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sdk\zlib\zlib.c">
-      <Filter>SDK</Filter>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\aescrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\aeskey.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\aestab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\base64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\pseudorandom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\crypt\sha1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\cubesql.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CubeSQL_SDK\zlib\zlib.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\sources\CubeSQLPlugin.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\csql.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\cubesql.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\aes.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\aesopt.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\aestab.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\base64.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\pseudorandom.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\crypt\sha1.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\zlib\zconf.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sdk\zlib\zlib.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\aes.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\aesopt.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\aestab.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\base64.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\pseudorandom.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\crypt\sha1.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\csql.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\cubesql.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\zlib\zconf.h" />
+    <ClInclude Include="..\..\CubeSQL_SDK\zlib\zlib.h" />
   </ItemGroup>
 </Project>

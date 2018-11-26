@@ -12,7 +12,11 @@
 #ifndef __CUBESQL_H__
 #define __CUBESQL_H__
 
-//#define CUBESQL_ENABLE_MEMDEBUG
+#ifdef WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -22,6 +26,7 @@
 #include <ctype.h>
 #include <fcntl.h>
 #ifdef __APPLE__
+//#define CUBESQL_ENABLE_MEMDEBUG
 #ifdef CUBESQL_ENABLE_MEMDEBUG
 #include </usr/include/malloc/malloc.h>
 #include "debugmem.h"
@@ -29,7 +34,6 @@
 #endif
 
 #ifdef WIN32
-#include <windows.h>
 #include <Shlwapi.h>
 #include <io.h>
 #include <float.h>
@@ -69,7 +73,7 @@ extern "C"
 // WINDOWS
 #define SSL_LIB		"ssleay32.dll"
 #define CRYPTO_LIB	"libeay32.dll"
-	
+
 #pragma warning (disable: 4005)
 #pragma warning (disable: 4068)
 #define snprintf		_snprintf
@@ -86,9 +90,8 @@ extern "C"
 #define EWOULDBLOCK 	WSAEWOULDBLOCK
 #define ECONNRESET 		WSAECONNRESET
 #define EINPROGRESS 	WSAEINPROGRESS
-	
-const char *inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
-	
+#define IPV6_V6ONLY		27
+		
 #define ioctl ioctlsocket
 #define bsd_h_errno() h_errno
 #define bsd_setsockopt	setsockopt
@@ -210,7 +213,7 @@ typedef int SOCKET;
 #if !ENABLE_SSL_ENCRYPTION
 #define STATIC_SSL_LIBRARY              0
 #define EXTERN_SSL_LIBRARY              0
-#define DYNAMIC_SSL_LIBRAY              0
+#define DYNAMIC_SSL_LIBRARY             0
 #endif
 
 #if STATIC_SSL_LIBRARY
@@ -221,7 +224,7 @@ typedef int SOCKET;
 #define X509_CERT_SSL       X509
 #define X509_NAME_SSL       X509_NAME
 #else
-// common part between EXTERN_SSL_LIBRARY and DYNAMIC_SSL_LIBRAY
+// common part between EXTERN_SSL_LIBRARY and DYNAMIC_SSL_LIBRARY
     
 // Snatched from OpenSSL includes. I put the prototypes here to be independent
 // from the OpenSSL source installation. Having this, mongoose + SSL can be

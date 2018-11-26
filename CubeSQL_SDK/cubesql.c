@@ -9,7 +9,7 @@
 #include "cubesql.h"
 #include "csql.h"
 
-#if DYNAMIC_SSL_LIBRAY
+#if DYNAMIC_SSL_LIBRARY
 static char     *ssl_library;                           // SSL shared library path
 static char     *crypto_library;                        // Crypto shared library path
 static void     *ssl_func[SSL_NUM_FUNCS];               // SSL functions pointers
@@ -2216,7 +2216,7 @@ int csql_cursor_close (csqlc *c) {
 // MARK: - SSL -
 
 void cubesql_setpath (int type, char *path) {
-    #if DYNAMIC_SSL_LIBRAY
+    #if DYNAMIC_SSL_LIBRARY
     switch (type) {
         case CUBESQL_SSL_LIBRARY_PATH:
             if (path) ssl_library = strdup(path);
@@ -2241,7 +2241,7 @@ const char *cubesql_sslversion (void) {
 }
 
 int csql_load_ssl (void) {
-    #if DYNAMIC_SSL_LIBRAY
+    #if DYNAMIC_SSL_LIBRARY
 	char *ssl_func_name[] = {"SSL_free", "SSL_accept", "SSL_connect", "SSL_read", "SSL_write", "SSL_get_error", "SSL_set_fd", "SSL_new", "SSL_CTX_new", "SSLv23_client_method", "SSL_library_init", "SSL_CTX_use_PrivateKey_file", "SSL_CTX_use_certificate_file", "SSL_CTX_set_default_passwd_cb", "SSL_CTX_free", "SSL_load_error_strings", "SSL_CTX_use_certificate_chain_file", "SSL_CTX_load_verify_locations", "SSL_CTX_set_default_verify_paths", "SSL_CTX_set_verify", "SSL_CTX_set_verify_depth", "SSL_shutdown", "SSL_load_client_CA_file", "SSL_CTX_set_client_CA_list", "SSL_get_peer_certificate", "SSL_get_verify_result", "SSL_CTX_set_cipher_list", "SSL_CTX_ctrl", "SSL_CTX_set_default_passwd_cb_userdata", "TLSv1_1_client_method", "TLSv1_2_client_method", NULL};
 	
 	char *crypto_func_name[] = {"CRYPTO_num_locks",  "CRYPTO_set_locking_callback", "CRYPTO_set_id_callback", "ERR_get_error", "ERR_error_string", "ERR_print_errors_fp", "ERR_error_string_n", "ERR_free_strings", "ERR_lib_error_string", "ERR_func_error_string", "ERR_reason_error_string",
