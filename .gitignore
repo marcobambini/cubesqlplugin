@@ -5,3 +5,4 @@
 *.xcscheme
 XCode/CubeSQL.xcodeproj/project.xcworkspace/xcuserdata/marco.xcuserdatad/UserInterfaceState.xcuserstate
 XCode/CubeSQL.xcodeproj/xcuserdata/marco.xcuserdatad/xcschemes/xcschememanagement.plist
+*.xcuserstate
