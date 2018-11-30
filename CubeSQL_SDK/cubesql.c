@@ -9,6 +9,9 @@
 #include "cubesql.h"
 #include "csql.h"
 
+#define MAX_SOCK_LIST       6                           // maximum number of socket descriptor to try to connect to
+                                                        // this change is required to support IPv4/IPv6 connections
+
 #if DYNAMIC_SSL_LIBRARY
 static char     *ssl_library;                           // SSL shared library path
 static char     *crypto_library;                        // Crypto shared library path
@@ -1003,29 +1006,14 @@ void csql_socketclose (csqldb *db) {
 	closesocket(db->sockfd);
 }
 
-int csql_socketinit (csqldb *db) {
-	int sockfd, rc;
-	
+int csql_socketconnect (csqldb *db) {
+    // apparently a listening IPv4 socket can accept incoming connections from only IPv4 clients
+    // so I must explicitly connect using IPv4 if I want to be able to connect with older cubeSQL versions
+    // https://stackoverflow.com/questions/16480729/connecting-ipv4-client-to-ipv6-server-connection-refused
+    
     // ipv4/ipv6 specific variables
-    struct in6_addr serveraddr;
-    struct addrinfo hints, *res = NULL;
-	char ports[256];
-    
-    // socket options variables
-    int len;
-    unsigned long ioctl_blocking;
-    #ifdef WIN32
-    DWORD ipv6only = 0;
-    #else
-    int   ipv6only = 0;
-    #endif
-    
-    // connection timeout loop variables
-    int connect_timeout, socket_err = 0;
-    fd_set write_fds;
-    fd_set except_fds;
-    time_t start, now;
-    struct timeval tv;
+    struct sockaddr_storage serveraddr;
+    struct addrinfo hints, *addr_list = NULL, *addr;
 	
 	// ipv6 code from https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/rzab6/xip6client.htm
     memset(&hints, 0x00, sizeof(hints));
@@ -1036,7 +1024,7 @@ int csql_socketinit (csqldb *db) {
     // check if we were provided the address of the server using
     // inet_pton() to convert the text form of the address to binary form.
     // If it is numeric then we want to prevent getaddrinfo() from doing any name resolution.
-    rc = inet_pton(AF_INET, (const char *) db->host, &serveraddr);
+    int rc = inet_pton(AF_INET, (const char *) db->host, &serveraddr);
     if (rc == 1) { /* valid IPv4 text address? */
         hints.ai_family = AF_INET;
         hints.ai_flags |= AI_NUMERICHOST;
@@ -1050,108 +1038,152 @@ int csql_socketinit (csqldb *db) {
     }
     
     // get the address information for the server using getaddrinfo()
-    snprintf(ports, sizeof(ports), "%d", db->port);
-    rc = getaddrinfo((const char *) db->host, ports, &hints, &res);
-    if (rc != 0 || res == NULL) {
-        csql_seterror(db, ERR_SOCKET, "Error while resolving hostname (host not found)");
-        // printf("Host not found --> %s\n", gai_strerror(rc));
-        // if (rc == EAI_SYSTEM) perror("getaddrinfo() failed");
+    char port_string[256];
+    snprintf(port_string, sizeof(port_string), "%d", db->port);
+    rc = getaddrinfo((const char *) db->host, port_string, &hints, &addr_list);
+    if (rc != 0 || addr_list == NULL) {
+        csql_seterror(db, ERR_SOCKET, "Error while resolving getaddrinfo (host not found)");
         return -1;
     }
-	
-    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-	if (sockfd < 0) {
-		csql_seterror(db, ERR_SOCKET, "Error initializing the socket function");
-        freeaddrinfo(res);
-		return -1;
-	}
-	
-	// set socket options
-	len = 1;
-	bsd_setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, (const char *) &len, sizeof(len));
-	len = 1;
-	bsd_setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char *) &len, sizeof(len));
-	#ifdef SO_NOSIGPIPE
-	len = 1;
-	bsd_setsockopt(sockfd, SOL_SOCKET, SO_NOSIGPIPE, (const char *) &len, sizeof(len));
-	#endif
     
-    // by default, an IPv6 socket created on Windows Vista and later only operates over the IPv6 protocol
-    // in order to make an IPv6 socket into a dual-stack socket, the setsockopt function must be called
-    bsd_setsockopt(sockfd, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&ipv6only, sizeof(ipv6only));
-
-	// turn on non-blocking
-	ioctl_blocking = 1;	/* ~0; //TRUE; */
-	ioctl(sockfd, FIONBIO, &ioctl_blocking);
-	
-	// reset time
-	start = time(NULL);
-	
-	// try to connect
-    rc = connect(sockfd, res->ai_addr, res->ai_addrlen);
-    freeaddrinfo(res);
+    int sock_index = 0;
+    int sock_current = 0;
+    int sock_list[MAX_SOCK_LIST] = {0};
+    for (addr = addr_list; addr != NULL; addr = addr->ai_next, ++sock_index) {
+        if (sock_index >= MAX_SOCK_LIST) break;
+        
+        // display protocol specific formatted address
+        // char szHost[256], szPort[16];
+        // getnameinfo(addr->ai_addr, addr->ai_addrlen, szHost, sizeof(szHost), szPort, sizeof(szPort), NI_NUMERICHOST | NI_NUMERICSERV);
+        // printf("getnameinfo(): host=%s, port=%s, family=%d\n", szHost, szPort, addr->ai_family);
+        
+        sock_current = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+        if (sock_current < 0) continue;
+        
+        // set socket options
+        int len = 1;
+        bsd_setsockopt(sock_current, SOL_SOCKET, SO_KEEPALIVE, (const char *) &len, sizeof(len));
+        len = 1;
+        bsd_setsockopt(sock_current, IPPROTO_TCP, TCP_NODELAY, (const char *) &len, sizeof(len));
+        #ifdef SO_NOSIGPIPE
+        len = 1;
+        bsd_setsockopt(sock_current, SOL_SOCKET, SO_NOSIGPIPE, (const char *) &len, sizeof(len));
+        #endif
+        
+        // by default, an IPv6 socket created on Windows Vista and later only operates over the IPv6 protocol
+        // in order to make an IPv6 socket into a dual-stack socket, the setsockopt function must be called
+        if (addr->ai_family == AF_INET6) {
+            #ifdef WIN32
+            DWORD ipv6only = 0;
+            #else
+            int   ipv6only = 0;
+            #endif
+            bsd_setsockopt(sock_current, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&ipv6only, sizeof(ipv6only));
+        }
+        
+        // turn on non-blocking
+        unsigned long ioctl_blocking = 1;    /* ~0; //TRUE; */
+        ioctl(sock_current, FIONBIO, &ioctl_blocking);
+        
+        // initiate non-blocking connect ignoring return code
+        connect(sock_current, addr->ai_addr, addr->ai_addrlen);
+        
+        // add sock_current to internal list of trying to connect sockets
+        sock_list[sock_index] = sock_current;
+    }
     
-	// we don't block, so we need to distinguish between a real
-	// error and just returning because the operation didn't complete
-	if (rc < 0) rc = csql_socketerror(sockfd);
+    // free not more needed memory
+    freeaddrinfo(addr_list);
 	
-	// if it was a real error, bail
-	if (rc != 0) {
-		csql_seterror(db, rc, "An error occured while executing the connect function");
-		return -1;
-	}
-	
-	// calculate the connection timeout
-	connect_timeout = (db->timeout > 0) ? db->timeout : CUBESQL_DEFAULT_TIMEOUT;
-	
-	// need to wait until we really do connect
-	now = start;
+	// calculate the connection timeout and reset timers
+	int connect_timeout = (db->timeout > 0) ? db->timeout : CUBESQL_DEFAULT_TIMEOUT;
+	time_t start = time(NULL);
+    time_t now = start;
+    rc = 0;
+    
+    int socket_err = 0;
+    int sockfd = 0;
+    fd_set write_fds;
+    fd_set except_fds;
+    struct timeval tv;
+    
 	while (rc == 0 && ((now - start) < connect_timeout)) {
 		FD_ZERO(&write_fds);
-		FD_SET(sockfd, &write_fds);
-		FD_ZERO(&except_fds);
-		FD_SET(sockfd, &except_fds);
-		
+        FD_ZERO(&except_fds);
+        
+        int nfds = 0;
+        for (int i=0; i<MAX_SOCK_LIST; ++i) {
+            if (sock_list[i]) {
+                FD_SET(sock_list[i], &write_fds);
+                FD_SET(sock_list[i], &except_fds);
+                if (nfds < sock_list[i]) nfds = sock_list[i];
+            }
+        }
+        
 		tv.tv_sec = connect_timeout;
 		tv.tv_usec = 0;
 		
-		rc = bsd_select(sockfd + 1, NULL, &write_fds, &except_fds, &tv);
-		socket_err = csql_socketerror(sockfd);
+		rc = bsd_select(nfds + 1, NULL, &write_fds, &except_fds, &tv);
+        
+        if (rc == 0) break;     // timeout
+        else if (rc == -1) {
+            if (errno == EINTR || errno == EAGAIN || errno == EINPROGRESS) continue;
+            break; // handle error
+        }
+        
+        // check for error first
+        for (int i=0; i<MAX_SOCK_LIST; ++i) {
+            if (sock_list[i]) {
+                if (FD_ISSET(sock_list[i], &except_fds)) {
+                    close(sock_list[i]);
+                    sock_list[i] = 0;
+                }
+            }
+        }
+        
+        // check which file descriptor is ready (need to check for socket error also)
+        for (int i=0; i<MAX_SOCK_LIST; ++i) {
+            if (sock_list[i]) {
+                if (FD_ISSET(sock_list[i], &write_fds)) {
+                    int err = csql_socketerror(sock_list[i]);
+                    if (err > 0) {
+                        close(sock_list[i]);
+                        sock_list[i] = 0;
+                    } else {
+                        sockfd = sock_list[i];
+                        break;
+                    }
+                }
+            }
+        }
+        // check if a valid descriptor has been found
+        if (sockfd != 0) break;
 		
-		if (FD_ISSET(sockfd, &except_fds)) {
-			// Windows indicates an error with except_fds
-			rc = -1;
-			break;
-		}
-		
-		if (rc > 0 && socket_err != 0) {
-			// this means write_fds is ready, but there was an error
-			rc = -1;
-			break;
-		}
-		
-		if (rc < 0 && socket_err == 0) {
-			// this just means the socket isn't ready yet
-			rc = 0;
-		}
-		
+        // no socket ready yet
 		now = time(NULL);
+        rc = 0;
 	}
-	
+    
+    // close still opened sockets
+    for (int i=0; i<MAX_SOCK_LIST; ++i) {
+        if (sock_list[i] && sock_list[i] != sockfd) close(sock_list[i]);
+    }
+    
 	// bail if there was an error
 	if (rc < 0) {
-		csql_seterror(db, socket_err, "An error occured while trying to connect");
+        char *s = strerror(errno);
+        csql_seterror(db, socket_err, (s) ? (s) : "An error occured while trying to connect");
 		return -1;
 	}
 	
 	// bail if there was a timeout
-	if ((now - start) >= connect_timeout) {
+	if ((time(NULL) - start) >= connect_timeout) {
 		csql_seterror(db, ERR_SOCKET_TIMEOUT, "Connection timeout while trying to connect");
 		return -1;
 	}
 	
 	// turn off non-blocking
-	ioctl_blocking = 0;	/* ~0; //TRUE; */
+	int ioctl_blocking = 0;	/* ~0; //TRUE; */
 	ioctl(sockfd, FIONBIO, &ioctl_blocking);
 	
 	// socket is connected now check for SSL
@@ -1200,7 +1232,10 @@ int csql_bind_value (csqldb *db, int index, int bindtype, char *value, int len) 
 		datasize = len;
 		packet_size = datasize + nsizedim;
 		field_size[0] = htonl(datasize);
-	}
+    } else {
+        bindtype = CUBESQL_BIND_NULL;
+        len = 0;
+    }
 	
 	// prepare BIND command
 	csql_initrequest(db, packet_size, nfields, kVM_BIND, kNO_SELECTOR);
@@ -1627,7 +1662,7 @@ int csql_connect (csqldb *db, int encryption) {
 	char	hash[SHA1_DIGEST_SIZE*2+2];
 	char	*token = NULL, *p = NULL;
 	
-	db->sockfd = csql_socketinit(db);
+	db->sockfd = csql_socketconnect(db);
 	if (db->sockfd <= 0) goto abort_connect;
 	
 	if (encryption_is_ssl(encryption)) encryption -= CUBESQL_ENCRYPTION_SSL;

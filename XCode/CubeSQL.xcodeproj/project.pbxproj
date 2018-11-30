@@ -134,10 +134,10 @@
 		A9A2ADD121ABF4600026AA00 /* CubeSQL_SDK */ = {
 			isa = PBXGroup;
 			children = (
-				A9A2ADD221ABF4600026AA00 /* cubesql.c */,
 				A9A2ADD321ABF4600026AA00 /* crypt */,
-				A9A2ADE021ABF4610026AA00 /* csql.h */,
+				A9A2ADD221ABF4600026AA00 /* cubesql.c */,
 				A9A2ADE621ABF4610026AA00 /* cubesql.h */,
+				A9A2ADE021ABF4610026AA00 /* csql.h */,
 			);
 			name = CubeSQL_SDK;
 			path = ../CubeSQL_SDK;
