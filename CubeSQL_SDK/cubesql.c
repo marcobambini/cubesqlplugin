@@ -788,7 +788,7 @@ int cubesql_cursor_addrow (csqlc *cursor, char **row, int *len) {
 	return kTRUE;
 }
 
-void cubesql_seterror(csqldb *db, int errcode, char *errmsg) {
+void cubesql_seterror(csqldb *db, int errcode, const char *errmsg) {
 	csql_seterror(db, errcode, errmsg);
 }
 
@@ -1171,7 +1171,7 @@ int csql_socketconnect (csqldb *db) {
     
 	// bail if there was an error
 	if (rc < 0) {
-        char *s = strerror(errno);
+        const char *s = strerror(errno);
         csql_seterror(db, socket_err, (s) ? (s) : "An error occured while trying to connect");
 		return -1;
 	}
@@ -2051,7 +2051,7 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
 	return CUBESQL_NOERR;
 }
 
-void csql_seterror(csqldb *db, int errcode, char *errmsg) {
+void csql_seterror(csqldb *db, int errcode, const char *errmsg) {
 	db->errcode = errcode;
 	strncpy(db->errmsg, errmsg, sizeof(db->errmsg));
 }

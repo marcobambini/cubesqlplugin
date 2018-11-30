@@ -180,7 +180,7 @@ void	*cubesql_getuserptr (csqldb *db);
 void	cubesql_settoken (csqldb *db, char *token);
 void	cubesql_sethostverification (csqldb *db, char *hostverification);
 char	*cubesql_gettoken (csqldb *db);
-void	cubesql_seterror (csqldb *db, int errcode, char *errmsg);
+void	cubesql_seterror (csqldb *db, int errcode, const char *errmsg);
 const char *cubesql_sslversion (void);
 	
 #ifdef __cplusplus

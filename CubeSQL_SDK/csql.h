@@ -556,7 +556,7 @@ int		csql_sendchunk (csqldb *db, char *buffer, int bufferlen, int buffertype, in
 char	*csql_receivechunk (csqldb *db, int *len, int *is_end_chunk);
 void	csql_initrequest (csqldb *db, int packetsize, int nfields, char command, char selector);
 void	random_hash_field (unsigned char hval[], const char *randpoll, const char *field);
-void	csql_seterror(csqldb *db, int errcode, char *errmsg);
+void	csql_seterror(csqldb *db, int errcode, const char *errmsg);
 int		csql_send_statement (csqldb *db, int command_type, const char *sql, int is_partial, int server_side);	
 void	hash_field (unsigned char hval[], const char *field, int len, int times);
 void	hex_hash_field (char result[], const char *field, int len);
