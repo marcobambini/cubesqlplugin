@@ -1234,7 +1234,6 @@ int csql_bind_value (csqldb *db, int index, int bindtype, char *value, int len) 
 		field_size[0] = htonl(datasize);
     } else {
         bindtype = CUBESQL_BIND_NULL;
-        len = 0;
     }
 	
 	// prepare BIND command
@@ -1244,8 +1243,10 @@ int csql_bind_value (csqldb *db, int index, int bindtype, char *value, int len) 
 	if (bindtype == CUBESQL_BIND_ZEROBLOB) db->request.expandedSize = htonl(len);
 	
 	// send request
-	csql_netwrite(db, (char *) field_size, nsizedim, (char *)value, datasize);
-	
+    if ((bindtype != CUBESQL_BIND_NULL) && (bindtype != CUBESQL_BIND_ZEROBLOB)) {
+        csql_netwrite(db, (char *) field_size, nsizedim, (char *)value, datasize);
+    }
+    
 	// read reply
 	return csql_netread(db, -1, -1, kFALSE, NULL, NO_TIMEOUT);
 }
