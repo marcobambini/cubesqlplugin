@@ -34,6 +34,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -105,8 +106,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marco\Desktop\cubesql\dev\sdk;C:\Users\marco\Desktop\cubesql\dev\sdk\crypt;C:\Users\marco\Desktop\cubesql\dev\sdk\zlib;C:\Users\marco\Desktop\cubesql\dev\internal\REALbasic\RBPlugins_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;ENABLE_SSL_ENCRYPTION=1;DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\crypt;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\zlib;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>WinHeader++.h</ForcedIncludeFiles>
       <CompileAs>Default</CompileAs>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
