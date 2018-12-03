@@ -8,3 +8,5 @@ XCode/CubeSQL.xcodeproj/xcuserdata/marco.xcuserdatad/xcschemes/xcschememanagemen
 *.xcuserstate
 *.xcuserstate
 XCode/CubeSQL.xcodeproj/project.xcworkspace/xcuserdata/marco.xcuserdatad/UserInterfaceState.xcuserstate
+VisualC/CubeSQLPlugin/Release/*
+VisualC/CubeSQLPlugin/x64/*
