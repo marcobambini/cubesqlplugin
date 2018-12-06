@@ -1133,9 +1133,9 @@ int csql_socketconnect (csqldb *db) {
         
         // check for error first
         for (int i=0; i<MAX_SOCK_LIST; ++i) {
-            if (sock_list[i]) {
+            if (sock_list[i] > 0) {
                 if (FD_ISSET(sock_list[i], &except_fds)) {
-                    close(sock_list[i]);
+                    closesocket(sock_list[i]);
                     sock_list[i] = 0;
                 }
             }
@@ -1143,11 +1143,11 @@ int csql_socketconnect (csqldb *db) {
         
         // check which file descriptor is ready (need to check for socket error also)
         for (int i=0; i<MAX_SOCK_LIST; ++i) {
-            if (sock_list[i]) {
+            if (sock_list[i] > 0) {
                 if (FD_ISSET(sock_list[i], &write_fds)) {
                     int err = csql_socketerror(sock_list[i]);
                     if (err > 0) {
-                        close(sock_list[i]);
+                        closesocket(sock_list[i]);
                         sock_list[i] = 0;
                     } else {
                         sockfd = sock_list[i];
@@ -1166,7 +1166,7 @@ int csql_socketconnect (csqldb *db) {
     
     // close still opened sockets
     for (int i=0; i<MAX_SOCK_LIST; ++i) {
-        if (sock_list[i] && sock_list[i] != sockfd) close(sock_list[i]);
+        if ((sock_list[i] > 0) && (sock_list[i] != sockfd)) closesocket(sock_list[i]);
     }
     
 	// bail if there was an error
@@ -1234,6 +1234,7 @@ int csql_bind_value (csqldb *db, int index, int bindtype, char *value, int len) 
 		field_size[0] = htonl(datasize);
     } else {
         bindtype = CUBESQL_BIND_NULL;
+        value = "";
     }
 	
 	// prepare BIND command
@@ -1824,11 +1825,11 @@ int csql_netwrite (csqldb *db, char *size_array, int nsize_array, char *buffer, 
 	}
 	
 	// case buffer is NULL
-	if ((buffer == NULL) || (nbuffer == 0)) return CUBESQL_NOERR;
+	if (buffer == NULL) return CUBESQL_NOERR;
 	
 	// generate random pool and encrypt buffer
 	rand_fill(rand1);
-	encbuffer = (char *) malloc (nbuffer);
+	encbuffer = (char *) malloc (nbuffer+1);
 	if (encbuffer == NULL) {
 		csql_seterror(db, CUBESQL_MEMORY_ERROR, "Unable to allocate encbuffer");
 		return CUBESQL_ERR;
