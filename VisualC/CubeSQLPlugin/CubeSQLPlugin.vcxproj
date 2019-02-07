@@ -128,7 +128,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;ENABLE_SSL_ENCRYPTION=1;DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;CUBESQL_ENABLE_SSL_ENCRYPTION=1;CUBESQL_DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\zlib;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\crypt;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ForcedIncludeFiles>
@@ -150,7 +150,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;ENABLE_SSL_ENCRYPTION=1;DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;CUBESQL_ENABLE_SSL_ENCRYPTION=1;CUBESQL_DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\zlib;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\CubeSQL_SDK\crypt;C:\Users\Marco Bambini\Desktop\GitHub\cubesqlplugin\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ForcedIncludeFiles>
