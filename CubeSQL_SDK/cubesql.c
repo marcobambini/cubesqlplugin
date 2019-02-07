@@ -12,7 +12,7 @@
 #define MAX_SOCK_LIST       6                           // maximum number of socket descriptor to try to connect to
                                                         // this change is required to support IPv4/IPv6 connections
 
-#if DYNAMIC_SSL_LIBRARY
+#if CUBESQL_DYNAMIC_SSL_LIBRARY
 static char     *ssl_library;                           // SSL shared library path
 static char     *crypto_library;                        // Crypto shared library path
 static void     *ssl_func[SSL_NUM_FUNCS];               // SSL functions pointers
@@ -20,11 +20,21 @@ static void     *crypto_func[CRYPTO_NUM_FUNCS];         // Crypto functions poin
 static int      ssl_loaded = kFALSE;
 static int      TLSv1_1_client_method_loaded = kFALSE;
 static int      TLSv1_2_client_method_loaded = kFALSE;
+static int      TSL_client_method_loaded = kFALSE;
+static int      SSLv3_client_method_loaded = kFALSE;
+static int      OpenSSL_version_loaded = kFALSE;
+static int      SSLeay_version_loaded = kFALSE;
+static int      SSL_library_init_loaded = kFALSE;
 #else
 static int      ssl_loaded = kTRUE;
-#if ENABLE_SSL_ENCRYPTION
+#if CUBESQL_ENABLE_SSL_ENCRYPTION
 static int      TLSv1_1_client_method_loaded = kTRUE;
 static int      TLSv1_2_client_method_loaded = kTRUE;
+static int      TSL_client_method_loaded = kTRUE;
+static int      SSLv3_client_method_loaded = kTRUE;
+static int      OpenSSL_version_loaded = kTRUE;
+static int      SSLeay_version_loaded = kTRUE;
+static int      SSL_library_init_loaded = kTRUE;
 #endif
 #endif
 
@@ -51,7 +61,7 @@ int cubesql_connect_token (csqldb **db, const char *host, int port, const char *
 	else if (encryption == 256) encryption = CUBESQL_ENCRYPTION_AES256;
 	else if (is_ssl) useOldProtocol = kFALSE;
 	
-    #if !ENABLE_SSL_ENCRYPTION
+    #if !CUBESQL_ENABLE_SSL_ENCRYPTION
     if (is_ssl) return CUBESQL_SSL_DISABLED_ERROR;
     #endif
     
@@ -843,17 +853,19 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 	snprintf((char *) db->username, sizeof(db->username),  "%s", username);
 	snprintf((char *) db->password, sizeof(db->password),  "%s", password);
 	
-    #if ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
 	if ((encryption_is_ssl(encryption) == kTRUE) && (ssl_loaded)) {
 		// allocate CTX opaque datatype
 		db->ssl_ctx = NULL;
 		
-		if (TLSv1_2_client_method_loaded == kTRUE)
+        if (TLSv1_2_client_method_loaded == kTRUE) {
 			db->ssl_ctx = SSL_CTX_new(TLSv1_2_client_method());
-		else if (TLSv1_1_client_method_loaded == kTRUE)
+        } else if (TLSv1_1_client_method_loaded == kTRUE) {
 			db->ssl_ctx = SSL_CTX_new(TLSv1_1_client_method());
-		else // switch back to default SSLv3 method
-			db->ssl_ctx = SSL_CTX_new(SSLv23_client_method());
+        } else { // switch back to default TSL/SSLv3 method
+            if (TSL_client_method_loaded) db->ssl_ctx = SSL_CTX_new(TLS_client_method());
+            else if (SSLv3_client_method_loaded) db->ssl_ctx = SSL_CTX_new(SSLv3_client_method());
+        }
 		
 		if (db->ssl_ctx == NULL)
 			goto load_ssl_abort;
@@ -903,14 +915,14 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 
 	return db;
 	
-    #if ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
 load_ssl_abort:
     ERR_print_errors_fp (stderr);
 	return NULL;
     #endif
 }
 
-#if ENABLE_SSL_ENCRYPTION
+#if CUBESQL_ENABLE_SSL_ENCRYPTION
 int ssl_verify_callback (int ok, X509_STORE_CTX *store) {
 	if (!ok) {
 		// get detailed information about the results of the verification
@@ -997,7 +1009,7 @@ void csql_dbfree (csqldb *db) {
 void csql_socketclose (csqldb *db) {
 	if (db->sockfd <= 0) return;
 	
-    #if ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
 	if (db->ssl) SSL_free(db->ssl);
 	db->ssl = NULL;
     #endif
@@ -1187,7 +1199,7 @@ int csql_socketconnect (csqldb *db) {
 	ioctl(sockfd, FIONBIO, &ioctl_blocking);
 	
 	// socket is connected now check for SSL
-    #if ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
 	if (encryption_is_ssl(db->encryption)) {
 		if (db->ssl_ctx == NULL) {
 			csql_seterror(db, ERR_SSL, "Unable to initialize SSL socket because main ssl_ctx handle is NULL.");
@@ -1202,6 +1214,7 @@ int csql_socketconnect (csqldb *db) {
 			if ((r1 != 1) || (r2 != 1)) {SSL_free(db->ssl); db->ssl = NULL;}
 		}
 		if (db->ssl == NULL) {
+            ERR_print_errors_fp (stderr);
 			csql_seterror(db, ERR_SSL, "An SSL error occured while trying to connect");
 			return -1;
 		}
@@ -1964,7 +1977,7 @@ int csql_socketwrite (csqldb *db, const char *buffer, int nbuffer) {
 		if (FD_ISSET(fd, &write_fds)) {
 			FD_CLR(fd, &write_fds);
 			
-            #if ENABLE_SSL_ENCRYPTION
+            #if CUBESQL_ENABLE_SSL_ENCRYPTION
             nwritten = (db->ssl) ? (int)SSL_write(db->ssl, ptr, nleft) : (int)sock_write(fd, ptr, nleft);
             #else
             nwritten = (int)sock_write(fd, ptr, nleft);
@@ -2032,7 +2045,7 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
 			return CUBESQL_ERR;
 		}
 		
-        #if ENABLE_SSL_ENCRYPTION
+        #if CUBESQL_ENABLE_SSL_ENCRYPTION
         nread = (db->ssl) ? (int)SSL_read(db->ssl, ptr, nleft) : (int)sock_read(fd, ptr, nleft);
         #else
         nread = (int)sock_read(fd, ptr, nleft);
@@ -2253,7 +2266,7 @@ int csql_cursor_close (csqlc *c) {
 // MARK: - SSL -
 
 void cubesql_setpath (int type, char *path) {
-    #if DYNAMIC_SSL_LIBRARY
+    #if CUBESQL_DYNAMIC_SSL_LIBRARY
     switch (type) {
         case CUBESQL_SSL_LIBRARY_PATH:
             if (path) ssl_library = strdup(path);
@@ -2269,20 +2282,31 @@ void cubesql_setpath (int type, char *path) {
 }
 
 const char *cubesql_sslversion (void) {
-	if (csql_load_ssl() == kFALSE) return NULL;
-    #if ENABLE_SSL_ENCRYPTION
-	return SSLeay_version(0); // 0 should be SSLEAY_VERSION
+	if (ssl_loaded == kFALSE) return NULL;
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    if (OpenSSL_version_loaded) return OpenSSL_version(OPENSSL_VERSION);
+    if (SSLeay_version_loaded) return SSLeay_version(SSLEAY_VERSION);
+    return "N/A";
     #else
     return NULL;
     #endif
 }
 
+void csql_init_ssl (void) {
+    // initialize SSL crap
+    if (SSL_library_init_loaded) {
+        SSL_library_init();
+        SSL_load_error_strings();
+        SSL_library_init_loaded = kFALSE;
+    }
+    // printf("%s", cubesql_sslversion());
+}
+
 int csql_load_ssl (void) {
-    #if DYNAMIC_SSL_LIBRARY
-	char *ssl_func_name[] = {"SSL_free", "SSL_accept", "SSL_connect", "SSL_read", "SSL_write", "SSL_get_error", "SSL_set_fd", "SSL_new", "SSL_CTX_new", "SSLv23_client_method", "SSL_library_init", "SSL_CTX_use_PrivateKey_file", "SSL_CTX_use_certificate_file", "SSL_CTX_set_default_passwd_cb", "SSL_CTX_free", "SSL_load_error_strings", "SSL_CTX_use_certificate_chain_file", "SSL_CTX_load_verify_locations", "SSL_CTX_set_default_verify_paths", "SSL_CTX_set_verify", "SSL_CTX_set_verify_depth", "SSL_shutdown", "SSL_load_client_CA_file", "SSL_CTX_set_client_CA_list", "SSL_get_peer_certificate", "SSL_get_verify_result", "SSL_CTX_set_cipher_list", "SSL_CTX_ctrl", "SSL_CTX_set_default_passwd_cb_userdata", "TLSv1_1_client_method", "TLSv1_2_client_method", NULL};
+    #if CUBESQL_DYNAMIC_SSL_LIBRARY
+	char *ssl_func_name[] = {"SSL_free", "SSL_accept", "SSL_connect", "SSL_read", "SSL_write", "SSL_get_error", "SSL_set_fd", "SSL_new", "SSL_CTX_new", "SSLv3_client_method", "SSL_library_init", "SSL_CTX_use_PrivateKey_file", "SSL_CTX_use_certificate_file", "SSL_CTX_set_default_passwd_cb", "SSL_CTX_free", "SSL_load_error_strings", "SSL_CTX_use_certificate_chain_file", "SSL_CTX_load_verify_locations", "SSL_CTX_set_default_verify_paths", "SSL_CTX_set_verify", "SSL_CTX_set_verify_depth", "SSL_shutdown", "SSL_load_client_CA_file", "SSL_CTX_set_client_CA_list", "SSL_get_peer_certificate", "SSL_get_verify_result", "SSL_CTX_set_cipher_list", "SSL_CTX_ctrl", "SSL_CTX_set_default_passwd_cb_userdata", "TLSv1_1_client_method", "TLSv1_2_client_method", "SSLv23_server_method", "SSL_get_version", "SSL_get_current_cipher", "SSL_CIPHER_get_name", "SSL_CIPHER_get_version", "SSL_CIPHER_get_bits", "DH_new", "DH_generate_parameters_ex", "DH_check", "DH_generate_key", "RAND_seed", "TLSv1_1_server_method", "TLSv1_2_server_method", "SSL_CTX_set_info_callback", "SSL_set_ex_data", "SSL_get_ex_data", "TLS_server_method", "OpenSSL_version", "TLS_client_method", NULL};
 	
-	char *crypto_func_name[] = {"CRYPTO_num_locks",  "CRYPTO_set_locking_callback", "CRYPTO_set_id_callback", "ERR_get_error", "ERR_error_string", "ERR_print_errors_fp", "ERR_error_string_n", "ERR_free_strings", "ERR_lib_error_string", "ERR_func_error_string", "ERR_reason_error_string",
-		"ERR_load_crypto_strings", "X509_get_subject_name", "X509_NAME_get_text_by_NID", "X509_free", "SSLeay_version", NULL};
+	char *crypto_func_name[] = {"CRYPTO_num_locks",  "CRYPTO_set_locking_callback", "CRYPTO_set_id_callback", "ERR_get_error", "ERR_error_string", "ERR_print_errors_fp", "ERR_error_string_n", "ERR_free_strings", "ERR_lib_error_string", "ERR_func_error_string", "ERR_reason_error_string", "ERR_load_crypto_strings", "X509_get_subject_name", "X509_NAME_get_text_by_NID", "X509_free", "SSLeay_version", NULL};
 	
 	char *fname = NULL;
 	void *p = NULL;
@@ -2322,10 +2346,26 @@ int csql_load_ssl (void) {
 		#else
 		p = dlsym (crypto_handle, fname);
 		#endif
+        
+        if (p != NULL) {
+            if (strcmp(fname, "SSLeay_version") == 0) SSLeay_version_loaded = kTRUE;
+        }
 		
 		if (p == NULL) {
-			printf("Unable to load CRYPTO function: %s\n", fname);
+            // OpenSSL 1.1
+            if (strcmp(fname, "CRYPTO_num_locks") == 0) continue;
+            if (strcmp(fname, "CRYPTO_set_locking_callback") == 0) continue;
+            if (strcmp(fname, "CRYPTO_set_id_callback") == 0) continue;
+            if (strcmp(fname, "ERR_free_strings") == 0) continue;
+            if (strcmp(fname, "ERR_load_crypto_strings") == 0) continue;
+            if (strcmp(fname, "SSLeay_version") == 0) continue;
+            
+            printf("Unable to load CRYPTO function: %s\n", fname);
+            #if CUBESQL_LOG_LOADSSL_ISSUES
+            continue;
+            #else
 			goto abort_load_ssl;
+            #endif
 		}
 		
 		crypto_func[idx] = p;
@@ -2352,43 +2392,60 @@ int csql_load_ssl (void) {
 		#else
 		p = dlsym (ssl_handle, fname);
 		#endif
-		
-		// special cases for TLSv1_1_client_method and TLSv1_2_client_method
-		if ((idx == 29) || (idx == 30)) {
-			if (p != NULL) {
-				ssl_func[idx] = p;
-				if (idx == 29) TLSv1_1_client_method_loaded = kTRUE;
-				if (idx == 30) TLSv1_2_client_method_loaded = kTRUE;
-			}
-			continue;
-		}
+        
+        // special flags used in the CUBESQL_DYNAMIC_SSL_LIBRARY case
+        if (p != NULL) {
+            if (strcmp(fname, "TLSv1_1_client_method") == 0) TLSv1_1_client_method_loaded = kTRUE;
+            else if (strcmp(fname, "TLSv1_2_client_method") == 0) TLSv1_2_client_method_loaded = kTRUE;
+            else if (strcmp(fname, "TSL_client_method") == 0) TSL_client_method_loaded = kTRUE;
+            else if (strcmp(fname, "SSLv3_client_method") == 0) SSLv3_client_method_loaded = kTRUE;
+            else if (strcmp(fname, "OpenSSL_version") == 0) OpenSSL_version_loaded = kTRUE;
+            else if (strcmp(fname, "SSL_library_init") == 0) SSL_library_init_loaded = kTRUE;
+        }
 		
 		if (p == NULL) {
+            if (strcmp(fname, "TLSv1_1_client_method") == 0) continue;
+            if (strcmp(fname, "TLSv1_2_client_method") == 0) continue;
+            if (strcmp(fname, "TLSv1_1_server_method") == 0) continue;
+            if (strcmp(fname, "TLSv1_2_server_method") == 0) continue;
+            if (strcmp(fname, "SSLv3_client_method") == 0) continue;
+            // OpenSSL 1.1
+            if (strcmp(fname, "SSL_library_init") == 0) continue;
+            if (strcmp(fname, "SSL_load_error_strings") == 0) continue;
+            if (strcmp(fname, "SSLv23_server_method") == 0) continue;
+            if (strcmp(fname, "TLS_server_method") == 0) continue;
+            if (strcmp(fname, "TLS_client_method") == 0) continue;
+            
+            if (strcmp(fname, "OpenSSL_version") == 0) continue;
+            
 			printf("Unable to load SSL function: %s\n", fname);
+            #if CUBESQL_LOG_LOADSSL_ISSUES
+            continue;
+            #else
 			goto abort_load_ssl;
+            #endif
 		}
 		
 		ssl_func[idx] = p;
 	}
 	
-	// initialize SSL crap
-	SSL_library_init();
-	SSL_load_error_strings();
-	
+    csql_init_ssl();
 	return kTRUE;
 	
 abort_load_ssl:
-	// DEBUG CODE
-	// if ((!crypto_handle) || (!ssl_handle)) printf("Load shared library error: %s\n", dlerror());
+    #if CUBESQL_LOG_LOADSSL_ISSUES
+	if ((!crypto_handle) || (!ssl_handle)) printf("Load shared library error: %s\n", dlerror());
+    #endif
 	
 	return kFALSE;
     #else
+    csql_init_ssl();
     return kTRUE;
     #endif
 }
 
 const char *ssl_error(void) {
-    #if ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
 	unsigned long err;
 	err = ERR_get_error();
 	return err == 0 ? "" : ERR_error_string(err, NULL);

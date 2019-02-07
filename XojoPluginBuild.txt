@@ -4,3 +4,12 @@ find . -name ".DS_Store" -exec rm -rf {} \;
 find . -name "._DS_Store" -exec rm -rf {} \;
 cd ..
 zip -r CubeSQLPlugin.xojo_plugin CubeSQLPlugin
+
+
+
+Linux Cross Compiling for ARM32
+https://raspberrypi.stackexchange.com/questions/64273/installing-raspberry-pi-cross-compiler
+https://www.cnx-software.com/2011/10/06/cross-comping-zlib-for-arm-target/
+
+
+http://jensd.be/800/linux/cross-compiling-for-arm-with-ubuntu-16-04-lts

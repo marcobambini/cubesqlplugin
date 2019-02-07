@@ -160,7 +160,7 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
 	
 	if (database->useREALServerProtocol == false) {
 		// try to set client type
-		snprintf(cmd, sizeof(cmd), "SET CLIENT TYPE TO 'REAL Studio %f';", REALGetRBVersion());
+		snprintf(cmd, sizeof(cmd), "SET CLIENT TYPE TO 'Xojo %f';", REALGetRBVersion());
 		cubesql_execute(database->db, cmd);
 		
 		// check PingFrequency
