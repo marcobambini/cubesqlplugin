@@ -2435,6 +2435,17 @@ void csql_load_ssl (void) {
             if (strcmp(fname, "TLS_client_method") == 0) continue;
             
             if (strcmp(fname, "OpenSSL_version") == 0) continue;
+
+			if (strcmp(fname, "DH_new") == 0) continue;
+			if (strcmp(fname, "DH_generate_parameters_ex") == 0) continue;
+			if (strcmp(fname, "DH_check") == 0) continue;
+			if (strcmp(fname, "DH_generate_key") == 0) continue;
+			if (strcmp(fname, "RAND_seed") == 0) continue;
+			if (strcmp(fname, "TLSv1_1_server_method") == 0) continue;
+			if (strcmp(fname, "TLSv1_2_server_method") == 0) continue;
+			if (strcmp(fname, "SSL_CTX_set_info_callback") == 0) continue;
+			if (strcmp(fname, "SSL_set_ex_data") == 0) continue;
+			if (strcmp(fname, "SSL_get_ex_data") == 0) continue;
             
 			printf("Unable to load SSL function: %s\n", fname);
             #if CUBESQL_LOG_LOADSSL_ISSUES
