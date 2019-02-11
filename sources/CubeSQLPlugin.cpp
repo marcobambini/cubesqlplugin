@@ -1161,6 +1161,11 @@ REALstring OpenSSLVersionGetter(void) {
 	return REALBuildStringWithEncoding(version, (int)strlen(version), kREALTextEncodingUTF8);
 }
 
+int OpenSSLVersionNumGetter(void) {
+    DEBUG_WRITE("OpenSSLVersionNumGetter");
+    return cubesql_sslversion_num();
+}
+
 Boolean BLOBAsStringGetter(void) {
 	DEBUG_WRITE("BLOBAsStringGetter");
 	return blobAsString;

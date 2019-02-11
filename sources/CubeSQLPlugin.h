@@ -172,6 +172,7 @@ REALstring		TokenGetter(REALobject instance, long param);
 
 REALstring		PluginVersionGetter(void);
 REALstring		OpenSSLVersionGetter(void);
+int             OpenSSLVersionNumGetter(void);
 Boolean			NULLAsStringGetter(void);
 void			NULLAsStringSetter(Boolean value);
 Boolean			BLOBAsStringGetter(void);
@@ -228,7 +229,8 @@ REALproperty CubeSQLModuleProperties[] = {
 	{ NULL, "SSLLibrary", "FolderItem", REALconsoleSafe, NULL, (REALproc) SSLLibrarySetter },
 	{ NULL, "CryptoLibrary", "FolderItem", REALconsoleSafe, NULL, (REALproc) CryptoLibrarySetter },
 	{ NULL, "Version", "String", REALconsoleSafe, (REALproc) PluginVersionGetter, NULL },
-	{ NULL, "OpenSSLVersion", "String", REALconsoleSafe, (REALproc) OpenSSLVersionGetter, NULL }
+	{ NULL, "OpenSSLVersion", "String", REALconsoleSafe, (REALproc) OpenSSLVersionGetter, NULL },
+    { NULL, "OpenSSLVersionNum", "Integer", REALconsoleSafe, (REALproc) OpenSSLVersionNumGetter, NULL },
 };
 
 REALconstant CubeSQLConstants[] = {
