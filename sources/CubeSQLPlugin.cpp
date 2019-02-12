@@ -1166,7 +1166,7 @@ REALstring OpenSSLVersionGetter(void) {
 
 int OpenSSLVersionNumGetter(void) {
     DEBUG_WRITE("OpenSSLVersionNumGetter");
-    return cubesql_sslversion_num();
+    return (int)cubesql_sslversion_num();
 }
 
 Boolean BLOBAsStringGetter(void) {
