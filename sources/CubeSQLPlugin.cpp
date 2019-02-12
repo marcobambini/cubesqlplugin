@@ -18,10 +18,13 @@ using namespace std;
 
 
 #if !TARGET_COCOA
-#define REALBuildStringWithEncoding	REALBuildString
-#define REALGetPropValueString		REALGetPropValue
-#define REALnewInstanceWithClass	REALnewInstance
+#define REALBuildStringWithEncoding	    REALBuildString
+#define REALGetPropValueString		    REALGetPropValue
+#define REALnewInstanceWithClass	    REALnewInstance
 #endif
+
+// https://www.mail-archive.com/realbasic-plugins@lists.realsoftware.com/msg01029.html
+#define REALGetCString(_s)              (const char *)REALGetStringContents(_s, NULL)
 
 // Data types and their names when running in versions of REALbasic 2006.04 or higher
 static long sDataTypes[]		= {	dbTypeText, dbTypeText, dbTypeLong, dbTypeInt64, dbTypeDouble, 
@@ -104,9 +107,9 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
         return false;
     }
     
-	const char *s1 = REALCString(dbHost);
-	const char *s2 = REALCString(dbUser);
-	const char *s3 = REALCString(dbPassword);
+	const char *s1 = REALGetCString(dbHost);
+	const char *s2 = REALGetCString(dbUser);
+	const char *s3 = REALGetCString(dbPassword);
 	
 	char *token = NULL;
 	const char *sslCertificate = NULL;
@@ -118,24 +121,24 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
 	REALstring path1 = NULL;
 	REALstring path2 = NULL;
 	
-	if (database->token != nil) token = (char *)REALCString(database->token);
+	if (database->token != nil) token = (char *)REALGetCString(database->token);
 	if (database->useREALServerProtocol) useREALServerProtocol = kTRUE;
 	
 	if (database->sslCertificate != NULL) {
 		path1 = REALbasicPathFromFolderItem(database->sslCertificate);
-		if (path1) sslCertificate = (const char*) REALCString(path1);
+		if (path1) sslCertificate = (const char*) REALGetCString(path1);
 	}
 	
 	if (database->rootCertificate != NULL) {
 		path2 = REALbasicPathFromFolderItem(database->rootCertificate);
-		if (path2) rootCertificate = (const char*) REALCString(path2);
+		if (path2) rootCertificate = (const char*) REALGetCString(path2);
 	}
 	
 	if (database->sslCertificatePassword)
-		sslCertificatePassword = REALCString(database->sslCertificatePassword);
+		sslCertificatePassword = REALGetCString(database->sslCertificatePassword);
 	
 	if (database->sslCipherList)
-		sslCipherList = REALCString(database->sslCipherList);
+		sslCipherList = REALGetCString(database->sslCipherList);
 	
 	// try to connecto to the server (sslCertificate can be NULL even if encryption is set to kSSL)
 	int err = cubesql_connect_token(&database->db, s1, database->port, s2, s3, database->timeout, database->encryption, token,
@@ -151,7 +154,7 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
 	// try to execute the USE DATABASE command if the user set the DatabaseName property
 	char cmd[512];
 	if (dbDatabaseName != NULL) {
-		const char *s4 = REALCString(dbDatabaseName);
+		const char *s4 = REALGetCString(dbDatabaseName);
 		if (strlen(s4) != 0) {
 			snprintf(cmd, sizeof(cmd), "USE DATABASE '%s';", s4);
 			if (cubesql_execute(database->db, cmd) != CUBESQL_NOERR) return false;
@@ -258,7 +261,7 @@ REALdbCursor DatabaseIndexSchema(dbDatabase *database, REALstring tableName) {
 	DEBUG_WRITE("DatabaseIndexSchema");
 	if (database->isConnected == false) return NULL;
 	char sql[512];
-	snprintf(sql, sizeof(sql), "SELECT name as IndexName FROM sqlite_master WHERE type='index' AND tbl_name='%s';", REALCString(tableName));
+	snprintf(sql, sizeof(sql), "SELECT name as IndexName FROM sqlite_master WHERE type='index' AND tbl_name='%s';", REALGetCString(tableName));
 	csqlc *c = cubesql_select(database->db, sql, kFALSE);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLFieldSchemaCursor);
@@ -270,9 +273,9 @@ REALdbCursor DatabaseFieldSchema(dbDatabase *database, REALstring tableName) {
 	char sql[512];
 	
 	if (database->useREALServerProtocol)
-		snprintf(sql, sizeof(sql), "PRAGMA table_info(%s);", REALCString(tableName));
+		snprintf(sql, sizeof(sql), "PRAGMA table_info(%s);", REALGetCString(tableName));
 	else
-		snprintf(sql, sizeof(sql), "SHOW TABLE INFO REALBASIC '%s';", REALCString(tableName));
+		snprintf(sql, sizeof(sql), "SHOW TABLE INFO REALBASIC '%s';", REALGetCString(tableName));
 	
 	csqlc *c = cubesql_select(database->db, sql, kFALSE);
 	if (c == NULL) return NULL;
@@ -282,23 +285,23 @@ REALdbCursor DatabaseFieldSchema(dbDatabase *database, REALstring tableName) {
 }
 
 void DatabaseSQLExecute(dbDatabase *database, REALstring sql) {
-	DEBUG_WRITE("DatabaseSQLExecute %s", REALCString(sql));
+	DEBUG_WRITE("DatabaseSQLExecute %s", REALGetCString(sql));
 	if (database->isConnected == false) return;
 	database->endChunkReceived = false;
-	cubesql_execute(database->db, REALCString(sql));
+	cubesql_execute(database->db, REALGetCString(sql));
 }
 
 REALdbCursor DatabaseSQLSelect(dbDatabase *database, REALstring sql) {
 	DEBUG_WRITE("DatabaseSQLSelect");
 	if (database->isConnected == false) return NULL;
 	database->endChunkReceived = false;
-	csqlc *c = cubesql_select(database->db, REALCString(sql), kFALSE);
+	csqlc *c = cubesql_select(database->db, REALGetCString(sql), kFALSE);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLCursor);
 }
 
 void DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolumnValue *values) {
-	DEBUG_WRITE("DatabaseAddTableRecord %s", REALCString(tableName));
+	DEBUG_WRITE("DatabaseAddTableRecord %s", REALGetCString(tableName));
 	
 	// retrieve information about the DatabaseRecord
 	int		ncols = 0;
@@ -307,7 +310,7 @@ void DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolu
  	string  vals = "";
 	
 	for (REALcolumnValue *value = values; value != NULL; value = value->nextColumn) {
-		cols += REALCString(value->columnName);
+		cols += REALGetCString(value->columnName);
 		stringstream temp;
 		temp<<index;
 		vals += "?" + temp.str();
@@ -323,7 +326,7 @@ void DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolu
 	
 	// build sql bind string
 	std::string sql = "INSERT INTO ";
-	sql += REALCString(tableName);
+	sql += REALGetCString(tableName);
 	sql += " (";
 	sql += cols;
 	sql += ") VALUES (";
@@ -344,7 +347,7 @@ void DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolu
 	
 	index = 0;
 	for (REALcolumnValue *value = values; value != NULL; value = value->nextColumn) {
-		realvalue = (char *)REALCString(value->columnValue);
+		realvalue = (char *)REALGetCString(value->columnValue);
 		if ((value->columnType == dbTypeBoolean) && (booleanAsInteger)) realvalue = REALbasicBoolean2Integer(realvalue);
 		colvalue[index] = realvalue;
 		colsize[index] = (int)REALStringLength(value->columnValue);
@@ -668,7 +671,7 @@ void CursorUpdate(dbCursor *cursor, REALcursorUpdate *updates) {
 	
 	index = 0;
 	for (REALcursorUpdate *update = updates; update; update = update->next) {
-		realvalue = (char *)REALCString(update->columnValue);
+		realvalue = (char *)REALGetCString(update->columnValue);
 		bindtype = cubesql_cursor_columntypebind(cursor->c, (update->fieldIndex+1));
 		if ((cubesql_cursor_columntype(cursor->c, (update->fieldIndex+1)) == CUBESQL_Type_Boolean) && (booleanAsInteger)) {
 			realvalue = REALbasicBoolean2Integer(realvalue);
@@ -820,7 +823,7 @@ REALobject DatabasePrepare (REALobject instance, REALstring sql) {
 	if (data == NULL) return NULL;
 	if (data->isConnected == false) return NULL;
 	
-	cvm = cubesql_vmprepare(data->db, REALCString(sql));
+	cvm = cubesql_vmprepare(data->db, REALGetCString(sql));
 	if (cvm == NULL) return NULL;
 	
 	result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLVM"));
@@ -1190,7 +1193,7 @@ void SSLLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
 	
 	REALstring path = REALbasicPathFromFolderItem(value);
-	if (path) cubesql_setpath(CUBESQL_SSL_LIBRARY_PATH, (char*)REALCString(path));
+	if (path) cubesql_setpath(CUBESQL_SSL_LIBRARY_PATH, (char*)REALGetCString(path));
 	if (path) REALUnlockString(path);
 }
 
@@ -1198,7 +1201,7 @@ void CryptoLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
 	
 	REALstring path = REALbasicPathFromFolderItem(value);
-	if (path) cubesql_setpath(CUBESQL_CRYPTO_LIBRARY_PATH, (char*)REALCString(path));
+	if (path) cubesql_setpath(CUBESQL_CRYPTO_LIBRARY_PATH, (char*)REALGetCString(path));
 	if (path) REALUnlockString(path);
 }
 
@@ -1279,7 +1282,7 @@ int REALbasic2CubeSQLColumnType (int rbtype) {
 }
 
 REALstring CheckFixEscapedStringPath (REALstring s) {
-	const char *path = REALCString(s);
+	const char *path = REALGetCString(s);
 	int len = (int)strlen(path);
 	int flag = 0;
 	
@@ -1350,7 +1353,7 @@ void debug_fileopen (REALfolderItem value) {
 	if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return;
 	#endif
 	
-	debugFile = fopen (REALCString(path), "ab+");
+	debugFile = fopen (REALGetCString(path), "ab+");
 	if (debugFile == NULL) {
 		printf("Unable to open debug file!");
 		return;

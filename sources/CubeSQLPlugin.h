@@ -230,7 +230,7 @@ REALproperty CubeSQLModuleProperties[] = {
 	{ NULL, "CryptoLibrary", "FolderItem", REALconsoleSafe, NULL, (REALproc) CryptoLibrarySetter },
 	{ NULL, "Version", "String", REALconsoleSafe, (REALproc) PluginVersionGetter, NULL },
 	{ NULL, "OpenSSLVersion", "String", REALconsoleSafe, (REALproc) OpenSSLVersionGetter, NULL },
-    { NULL, "OpenSSLVersionNum", "Integer", REALconsoleSafe, (REALproc) OpenSSLVersionNumGetter, NULL },
+    { NULL, "OpenSSLVersionNumber", "Integer", REALconsoleSafe, (REALproc) OpenSSLVersionNumGetter, NULL },
 };
 
 REALconstant CubeSQLConstants[] = {
