@@ -677,9 +677,14 @@ void CursorUpdate(dbCursor *cursor, REALcursorUpdate *updates) {
 			realvalue = REALbasicBoolean2Integer(realvalue);
 			bindtype = CUBESQL_BIND_INTEGER;
 		}
+        
+        int vlength = (int)REALStringLength(update->columnValue);
 		colvalue[index] = realvalue;
-		colsize[index] = (int)REALStringLength(update->columnValue);
+        colsize[index] = vlength;
+        // sanity check for NULL values
+        if ((realvalue == NULL) || (vlength == 0)) bindtype = CUBESQL_BIND_NULL;
 		coltype[index] = bindtype;
+        
 		index++;
 	}
 	

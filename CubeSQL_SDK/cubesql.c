@@ -314,7 +314,7 @@ int cubesql_cursor_columntypebind (csqlc *c, int index) {
 	
 	if (type == CUBESQL_Type_Integer) return CUBESQL_BIND_INTEGER;
 	if (type == CUBESQL_Type_Float) return CUBESQL_BIND_DOUBLE;
-	if (type == CUBESQL_Type_Text) return CUBESQL_BIND_BLOB;
+	if (type == CUBESQL_Type_Blob) return CUBESQL_BIND_BLOB;
     
 	return CUBESQL_BIND_TEXT;
 }
@@ -2314,12 +2314,14 @@ unsigned long cubesql_sslversion_num (void) {
 }
 
 void csql_init_ssl (void) {
+    #if CUBESQL_ENABLE_SSL_ENCRYPTION
     // initialize SSL crap
     if (SSL_library_init_loaded) {
         SSL_library_init();
         SSL_load_error_strings();
         SSL_library_init_loaded = kFALSE;
     }
+    #endif
 }
 
 #if CUBESQL_DYNAMIC_SSL_LIBRARY

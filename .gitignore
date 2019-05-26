@@ -17,3 +17,9 @@ VisualC/CubeSQLPlugin/CubeSQLPlugin.v12.suo
 XCode/CubeSQL.xcodeproj/xcuserdata/marco.xcuserdatad/xcschemes/xcschememanagement.plist
 *.xcuserstate
 VisualC/CubeSQLPlugin/CubeSQLPlugin.v12.suo
+*.xcuserstate
+*.xcworkspacedata
+XCode/CubeSQL_64bit.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcbkptlist
+*.plist
+XCode/CubeSQL.xcodeproj/project.xcworkspace/xcuserdata/marco.xcuserdatad/UserInterfaceState.xcuserstate

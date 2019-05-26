@@ -241,6 +241,12 @@
 
 #endif
 
+/* FIX FOR IOS ENDIANNESS DETECTION */
+#if defined(__APPLE__) || defined(__ARMEL__) || defined(__ANDROID__)
+// force little endian on MacOS / iOS ARM / iOS simulator / Rasberry Pi / Android
+#define PLATFORM_BYTE_ORDER BRG_LITTLE_ENDIAN
+#endif
+
 /*  SOME LOCAL DEFINITIONS  */
 
 #define NO_TABLES              0

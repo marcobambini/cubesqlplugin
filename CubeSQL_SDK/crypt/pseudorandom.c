@@ -69,7 +69,7 @@ void rand_fill (char *buf)
 	times = 20 / sizeof(unsigned int);
 	for (i=0; i<times; i++)
 	{
-		randint = rand_get();
+        randint = rand_get();
 		memcpy(buf + (i*sizeof(unsigned int)), &randint, sizeof(unsigned int));
 	}
 }
