@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>387D4E29-F78C-40D8-8AFE-DEDB172C22DD</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CubeSQL</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B74CCB684C399FA0CF47A3E33796BB363C6C3443</key>
+		<string>https://github.com/marcobambini/cubesqlplugin.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>XCode/CubeSQL.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B74CCB684C399FA0CF47A3E33796BB363C6C3443</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/marcobambini/cubesqlplugin.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B74CCB684C399FA0CF47A3E33796BB363C6C3443</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B74CCB684C399FA0CF47A3E33796BB363C6C3443</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cubesqlplugin</string>
+		</dict>
+	</array>
+</dict>
+</plist>
