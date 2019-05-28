@@ -254,6 +254,24 @@ int64 cubesql_last_inserted_rowID (csqldb *db) {
     return value;
 }
 
+// MARK: - Binary Data -
+
+int cubesql_send_data (csqldb *db, const char *buffer, int len) {
+    int err = csql_sendchunk(db, (char *)buffer, len, 0, kFALSE);
+    if (err != CUBESQL_NOERR) return err;
+    return csql_netread(db, -1, -1, kTRUE, NULL, NO_TIMEOUT);
+}
+
+int cubesql_send_enddata (csqldb *db) {
+    return csql_ack(db, kCOMMAND_ENDCHUNK);
+}
+
+char *cubesql_receive_data (csqldb *db, int *len, int *is_end_chunk) {
+    char *data = csql_receivechunk (db, len, is_end_chunk);
+    csql_ack(db, 0);
+    return data;
+}
+
 // MARK: - Cursor -
 
 int cubesql_cursor_numrows (csqlc *c) {
