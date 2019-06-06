@@ -13,7 +13,7 @@
 
 #define	PING_FREQUENCY		300 // on the server it is specified as 300
 #define DEBUG_WRITE(...)	if (debugFile != NULL) debug_write(__VA_ARGS__)
-#define PLUGIN_VERSION		"2.0.1"
+#define PLUGIN_VERSION		"2.0.2"
 #define SSL_NOVERSION		"N/A"
 
 #define kTempError1			100
