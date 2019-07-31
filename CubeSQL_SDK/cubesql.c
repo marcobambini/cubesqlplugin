@@ -2083,7 +2083,7 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
         #endif
 		
 		if (nread == -1 || nread == 0) {
-			csql_seterror(db, ERR_SOCKET_READ, "An error occured while executing sock_read");
+			csql_seterror(db, ERR_SOCKET_READ, "An error occurred while executing sock_read");
 			return CUBESQL_ERR;
 		}
 		

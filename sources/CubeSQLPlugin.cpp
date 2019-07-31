@@ -1198,16 +1198,20 @@ void SSLLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
 	
 	REALstring path = REALbasicPathFromFolderItem(value);
-	if (path) cubesql_setpath(CUBESQL_SSL_LIBRARY_PATH, (char*)REALGetCString(path));
-	if (path) REALUnlockString(path);
+    if (!path) return;
+	
+    cubesql_setpath(CUBESQL_SSL_LIBRARY_PATH, (char*)REALGetCString(path));
+	REALUnlockString(path);
 }
 
 void CryptoLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
 	
 	REALstring path = REALbasicPathFromFolderItem(value);
-	if (path) cubesql_setpath(CUBESQL_CRYPTO_LIBRARY_PATH, (char*)REALGetCString(path));
-	if (path) REALUnlockString(path);
+    if (!path) return;
+    
+	cubesql_setpath(CUBESQL_CRYPTO_LIBRARY_PATH, (char*)REALGetCString(path));
+	REALUnlockString(path);
 }
 
 Boolean BooleanAsIntegerGetter(void) {
@@ -1319,19 +1323,19 @@ REALstring CheckFixEscapedStringPath (REALstring s) {
 REALstring REALbasicPathFromFolderItem (REALfolderItem value) {
 	REALstring path = NULL;
 	DEBUG_WRITE("REALbasicPathFromFolderItem");
-		
-	#if WIN32
-	if (REALGetPropValueString((REALobject)value, "AbsolutePath", &path) == false) return NULL;
-	#else
-	// NativePath property is supported only on Xojo
-	double v = REALGetRBVersion();
-	if (v <= 2012.021) { // 2012R2.1 is the latest Real Studio edition
-		if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return NULL;
-		path = CheckFixEscapedStringPath(path);
-	} else {
-		if (REALGetPropValueString((REALobject)value, "NativePath", &path) == false) return NULL;
-	}
-	#endif
+    
+    double v = REALGetRBVersion();
+    if (v <= 2012.021) { // 2012R2.1 is the latest Real Studio edition
+        #if WIN32
+        if (REALGetPropValueString((REALobject)value, "AbsolutePath", &path) == false) return NULL;
+        #else
+        if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return NULL;
+        path = CheckFixEscapedStringPath(path);
+        #endif
+    } else {
+        // NativePath property is supported only on Xojo and it is the recommended way to get path from FolderItem
+        if (REALGetPropValueString((REALobject)value, "NativePath", &path) == false) return NULL;
+    }
 	
 	REALLockString(path);
 	return path;
@@ -1350,13 +1354,8 @@ void debug_write (const char *format, ...) {
 }
 
 void debug_fileopen (REALfolderItem value) {
-	REALstring path = NULL;
-	
-	#if WIN32
-	if (REALGetPropValueString((REALobject)value, "AbsolutePath", &path) == false) return;
-	#else
-	if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return;
-	#endif
+	REALstring path = REALbasicPathFromFolderItem(value);
+    if (!path) return;
 	
 	debugFile = fopen (REALGetCString(path), "ab+");
 	if (debugFile == NULL) {
