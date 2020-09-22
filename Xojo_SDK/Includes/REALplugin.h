@@ -469,7 +469,8 @@ struct REALmoduleDefinition {
 };
 typedef struct REALmoduleDefinition REALmoduleDefinition;
 
-#define kCurrentREALDatabaseVersion 1
+#define kCurrentREALDatabaseVersion 2
+#define kDatabaseWithRowSetVersion 2
 
 typedef void (*REALDataSourceInterfaceProc)(void);
 typedef REALdbDatabase (*REALDataSourceProc)(void *data, int dataLen);
@@ -626,7 +627,11 @@ typedef struct
 
 	void (*createTable)(dbDatabase *, REALstring, REALnewColumn *, unsigned char *, int); // void (*createTable)(dbDatabase *, REALstring name, REALnewColumn *columns, unsigned char *primaryKey, int primaryKeyCount);
 	void (*addTableRecord)(dbDatabase *, REALstring, REALcolumnValue *); // void (*addTableRecord)(dbDatabase *, REALstring tableName, REALcolumnValue *values);
-	REALproc unused1;	// Was getTableCursor
+
+	// Runs the SQL select statement with the supplied parameters
+	//  sql -- the sql select statement to execute
+	//  params -- variant array of parameters, can be empty or null
+	REALdbCursor (*SelectSQL)(dbDatabase *, REALstring sql, REALarray params);
 
 	void (*updateFields)(dbDatabase *, REALfieldUpdate *fields);
 	void (*addTableColumn)(dbDatabase *, REALstring, REALnewColumn *);
@@ -637,8 +642,7 @@ typedef struct
 
 	void (*commit)(dbDatabase *);
 	void (*rollback)(dbDatabase *);
-
-	REALproc unused2;	// Was getProperty
+	void (*BeginTransaction)(dbDatabase *);
 
 	void (*getSupportedTypes)(int32_t **dataTypes, char **dataNames, size_t *count);
 
@@ -680,7 +684,10 @@ typedef struct
 
 	REALobject (*PrepareStatement)( dbDatabase *db, REALstring statement );
 
-	REALproc unused3;
+	// Executes the SQL statement with the supplied parameters
+	//  sql -- the sql statement to execute
+	//  params -- variant array of parameters, can be empty
+	void (*ExecuteSQL)(dbDatabase *, REALstring sql, REALarray params);
 	REALproc unused4;
 } REALdbEngineDefinition;
 

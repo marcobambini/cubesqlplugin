@@ -1,0 +1,35 @@
+# Makefile_OSX	|	Sep 08 2011
+#
+#	This is the OS X makefile for the EyeControl plugin.
+#
+# Document Author: William Yu
+# Document Contributor(s):
+#
+# Revision History
+
+BASEDIR = ../..
+SDKGLUECODEDIR = $(BASEDIR)/GlueCode
+SDKINCLUDEDIR = $(BASEDIR)/Includes
+
+CXXFLAGS = -arch i386 -arch x86_64 -Os -g -mmacosx-version-min=10.9 -I$(SDKINCLUDEDIR)
+
+BUILDOBJDIR = BuildOSX
+
+OBJS =	$(BUILDOBJDIR)/EyeControlPlugin.o \
+		$(BUILDOBJDIR)/PluginMain.o
+
+all: CreateBuildObjDir $(OBJS)
+	$(CXX) $(CXXFLAGS) -shared -o EyeControl.dylib $(OBJS)
+
+CreateBuildObjDir:
+	mkdir -p $(BUILDOBJDIR)
+
+$(BUILDOBJDIR)/EyeControlPlugin.o: EyeControlPlugin.cpp
+	$(CXX) $(CXXFLAGS) EyeControlPlugin.cpp -c -o $@
+
+$(BUILDOBJDIR)/PluginMain.o: $(SDKGLUECODEDIR)/PluginMain.cpp
+	$(CXX) $(CXXFLAGS) $(SDKGLUECODEDIR)/PluginMain.cpp -c -o $@
+
+clean:
+	rm $(BUILDOBJDIR)/*.o -f
+	rm EyeControl.dylib

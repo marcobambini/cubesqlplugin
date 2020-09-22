@@ -727,7 +727,7 @@ Database Source Interface</p>
 <td width='100%'>
 <p style='margin-bottom: 9px'><p>The REALRegisterDBEngine function passes a reference to a REALdbEngineDefinition structure. This is the set of functions which operate primarily on a dbDatabase object, and make up the core of the database functionality.</p></p>
 <p style='margin-bottom: 9px'><p></p></p>
-<p style='margin-bottom: 9px'><p>The fields of the REALdbEngineDefinition structure are as follows:</p></p>
+<p style='margin-bottom: 9px'><p>The fields of the REALdbEngineDefinition structure are as follows (<b>Please refer to the REALdbEngineDefinition in REALplugin.h for a more comprehensive list</b>):</p></p>
 <p style='margin-bottom: 9px'><p></p></p>
 <p style='margin-bottom: 9px'><p>version: the version of the plugin architecture that the control was built under; just pass the constant kCurrentREALControlVersion</p></p>
 <p style='margin-bottom: 9px'><p>forSystemUse: just pass 0 (zero)</p></p>
@@ -737,7 +737,7 @@ Database Source Interface</p>
 <p style='margin-bottom: 9px'><p>closeFunc: pointer to a function with prototype:</p></p>
 <p style='margin-bottom: 9px'><p>closeDB( dbDatabase* database );</p></p>
 <p style='margin-bottom: 9px'><p>getTableSchemaCursorFunc: pointer to a function with prototype:</p></p>
-<p style='margin-bottom: 9px'><p>REALdbCursor getTableCursor(dbDatabase *database, REALstring tableName, REALgetColumn *columns, REALcolumnConstraints *constraints);</p></p>
+<p style='margin-bottom: 9px'><p>REALdbCursor SelectSQL(dbDatabase *, REALstring sql, REALarray params);</p></p>
 <p style='margin-bottom: 9px'><p>getFieldSchemaCursorFunc: pointer to a function with prototype:</p></p>
 <p style='margin-bottom: 9px'><p>REALdbCursor getFieldSchema(dbDatabase *database, REALstring tableName);</p></p>
 <p style='margin-bottom: 9px'><p>directSQLSelectFunc: nil, or a pointer to a function with prototype:</p></p>

@@ -364,6 +364,17 @@ void REALUnlockPictureDescription(REALpicture pic);
 
 REALdbCursor REALdbCursorFromDBCursor(dbCursor *cursor, REALdbCursorDefinition *defn);
 
+/**
+ * This function creates a new RowSet from the given dbCursor definition.  Since it
+ * returns a REALdbCursor you can use it on other functions that accept it
+ *
+ * @param cursor Your dbCursor object which you'll need to maintain until closeCursor is called
+ * @param defn Your cursor definition structure
+ * @result A new object.
+ * @version 2019r2
+ */
+REALdbCursor REALNewRowSetFromDBCursor(dbCursor *cursor, REALdbCursorDefinition *defn);
+
 REALdbDatabase REALdbDatabaseFromDBDatabase(dbDatabase *database, REALdbEngineDefinition *defn);
 
 void *REALGetEventInstance(REALcontrolInstance instance, REALevent *event);
@@ -645,6 +656,29 @@ void REALPictureClearCache(REALpicture pic);
  * @version 2016r1
  */
 RBInteger REALGetPictureType(REALpicture pic) RB_NON_NULL(1);
+
+
+/**
+* Returns the number of properties for the specified object
+*
+* @version Added in 2019r2, but this API can be used in 2012 or even earlier
+*/
+RBInteger REALCountClassProperties(REALobject obj);
+
+/**
+* Retreives the property getter, setter, and declaration
+*
+* @param obj The object to get the property for
+* @param index The number of the property to be extracted
+* @param getter Address of a variable to contain the property's getter
+* @param setter Address of a variable to contain the property's setter
+* @param param Address of a variable to contain the parameter to pass the getter and setter
+* @param declaration Address of a string to contain its declaration
+* @return True if the property was found, false if it was not
+*
+* @version Added in 2019r2, but this API can be used in 2012 or even earlier
+*/
+RBBoolean REALGetClassProperty(REALobject obj, uint32_t index, void **getter, void **setter, long *param, REALstring *declaration);
 
 #if defined(__cplusplus)
 	}

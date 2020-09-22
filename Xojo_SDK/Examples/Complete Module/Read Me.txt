@@ -1,0 +1,13 @@
+Project created: Jun 28 2006
+Last modified: Jun 4 2018
+
+
+Description:
+This plugin was created  as a demonstration of how to create a Module via the Plugins SDK.  This code is provided as-is and there is no promise of it being fit for production.  However, it should be very explanatory and be a good learning example of how to create a module.  If you find any bugs or have suggestions, please report them feedback system.
+
+Topics this project covers:
+How to make a plugin module
+ How to make Properties (computed)
+ How to make Methods (regular)
+ How to make Constants
+ Console safety
