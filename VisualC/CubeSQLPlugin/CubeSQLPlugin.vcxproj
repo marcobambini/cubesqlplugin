@@ -173,7 +173,6 @@
     <ClCompile Include="..\..\CubeSQL_SDK\crypt\sha1.c" />
     <ClCompile Include="..\..\CubeSQL_SDK\cubesql.c" />
     <ClCompile Include="..\..\CubeSQL_SDK\zlib\zlib.c" />
-    <ClCompile Include="..\..\sources\applink.c" />
     <ClCompile Include="..\..\sources\CubeSQLPlugin.cpp" />
     <ClCompile Include="..\..\Xojo_SDK\Glue Code\PluginMain.cpp" />
   </ItemGroup>

@@ -37,9 +37,6 @@
     <ClCompile Include="..\..\CubeSQL_SDK\zlib\zlib.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sources\applink.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\sources\CubeSQLPlugin.h">
