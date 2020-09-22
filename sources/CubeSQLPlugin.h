@@ -13,8 +13,9 @@
 
 #define	PING_FREQUENCY		300 // on the server it is specified as 300
 #define DEBUG_WRITE(...)	if (debugFile != NULL) debug_write(__VA_ARGS__)
-#define PLUGIN_VERSION		"2.0.4"
+#define PLUGIN_VERSION		"2.1.0"
 #define SSL_NOVERSION		"N/A"
+#define MAX_TYPES_COUNT     512
 
 #define kTempError1			100
 #define kTempError2			101
@@ -28,8 +29,7 @@
 #define snprintf _snprintf
 #pragma pack(push, 1)
 #endif
-struct dbDatabase
-{
+struct dbDatabase {
 	csqldb				*db;					// the CubeSQL database
 	int					referenceCount;			// to protect the reference
 	int					pingFrequency;			// how often a ping message is sent
@@ -67,9 +67,13 @@ struct dbCursor {
 };
 
 struct cubeSQLVM {
-	csqlvm				*vm;
+	csqlvm              *vm;
 };
 
+struct cubeSQLPrepare {
+    csqlvm              *vm;
+    int                 types[MAX_TYPES_COUNT];
+};
 
 // accessories
 csqlc			*REALServerBuildFieldSchemaCursor (csqlc *c);
@@ -80,6 +84,7 @@ void			debug_fileopen (REALfolderItem value);
 void			debug_fileclose (void);
 void			TraceEventSetter (REALobject instance, long param, Boolean value);
 void			rb_trace (const char* sql, void *userData);
+int             GetVarType (REALobject value);
 
 // implicit methods
 void			DatabaseConstructor(REALobject instance);
@@ -94,7 +99,7 @@ void			DatabaseSQLExecute(dbDatabase *aDatabase, REALstring sql);
 REALdbCursor	DatabaseSQLSelect(dbDatabase *aDatabase, REALstring sql);
 void			DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolumnValue *values);
 void			DatabaseGetSupportedTypes(int32_t **dataTypes, char **dataNames, size_t *count);
-REALobject		DatabasePrepare (REALobject instance, REALstring sql);
+REALobject		DatabasePrepare(REALobject instance, REALstring sql);
 
 // vm class
 void			CubeSQLVMConstructor (REALobject instance);
@@ -108,7 +113,23 @@ void			CubeSQLVMBindZeroBlob (REALobject instance, int index, int len);
 void			CubeSQLVMBindText (REALobject instance, int index, REALstring str);
 void			CubeSQLVMExecute (REALobject instance);
 REALdbCursor	CubeSQLVMSelect (REALobject instance);
+REALdbCursor    CubeSQLVMSelectRowSet (REALobject instance);
 void			CubeSQLVMClose (REALobject instance);
+
+// prepare class
+void            CubeSQLPrepareConstructor (REALobject instance);
+void            CubeSQLPrepareDestructor (REALobject instance);
+void            CubeSQLPrepareBindValue (REALobject instance, int index, REALobject value);
+void            CubeSQLPrepareBindValueType (REALobject instance, int index, REALobject value, int type);
+void            CubeSQLPrepareBindValues (REALobject instance, REALarray values);
+void            CubeSQLPrepareBindType (REALobject instance, int index, int type);
+void            CubeSQLPrepareBindTypes (REALobject instance, REALarray types);
+void            CubeSQLPrepareExecuteSQL (REALobject instance, REALarray values);
+REALdbCursor    CubeSQLPrepareSelectSQL (REALobject instance, REALarray values);
+//void            CubeSQLPrepareExecuteSQLNoValues (REALobject instance);
+//REALdbCursor    CubeSQLPrepareSelectSQLNoValues (REALobject instance);
+void            CubeSQLPrepareSQLExecute (REALobject instance, REALarray params);
+REALdbCursor    CubeSQLPrepareSQLSelect (REALobject instance, REALarray params);
 
 // new methods
 void			DatabaseSetTempError(dbDatabase *db, const char *errorMsg, int errorCode);
@@ -183,6 +204,15 @@ void			SSLLibrarySetter(REALfolderItem value);
 void			CryptoLibrarySetter(REALfolderItem value);
 REALstring		REALbasicPathFromFolderItem (REALfolderItem value);
 
+// MARK: - NEW 2019 API -
+REALdbCursor    DatabaseSelectSQL(dbDatabase *db, REALstring sql, REALarray params);
+void            DatabaseExecuteSQL(dbDatabase *db, REALstring sql, REALarray params);
+REALobject      DatabasePrepareStatement(dbDatabase *db, REALstring statement);
+REALobject      CubeSQLDatabasePrepare(REALdbDatabase dbObject, REALstring statement);
+void            DatabaseCommit(dbDatabase *db);
+void            DatabaseRollback(dbDatabase *db);
+void            BeginTransaction(dbDatabase *db);
+    
 void			DatabaseLock(dbDatabase *database);
 void			DatabaseUnlock(dbDatabase *database);
 void			PluginEntry(void);
@@ -199,8 +229,9 @@ REALmethodDefinition CubeSQLDatabaseMethods[] = {
 	{ (REALproc) DatabaseSendAbortChunk, REALnoImplementation, "SendAbortChunk()", REALconsoleSafe},
 	{ (REALproc) DatabasePing, REALnoImplementation, "Ping() as Boolean", REALconsoleSafe},
 	{ (REALproc) DatabasePrepare, REALnoImplementation, "VMPrepare(sql as String) as CubeSQLVM", REALconsoleSafe},
+    { (REALproc) CubeSQLDatabasePrepare, REALnoImplementation, "Prepare(statement As String) as CubeSQLPreparedStatement", REALconsoleSafe},
 	{ (REALproc) CursorGoToRow, REALnoImplementation, "GoToRow(rs As RecordSet, index As Integer) As Boolean", REALconsoleSafe},
-	{ (REALproc) CursorTableName, REALnoImplementation, "TableName(rs As RecordSet) As String", REALconsoleSafe}
+	{ (REALproc) CursorTableName, REALnoImplementation, "TableName(rs As RecordSet) As String", REALconsoleSafe},
 };
 
 REALproperty CubeSQLDatabaseProperties[] = {
@@ -241,6 +272,16 @@ REALconstant CubeSQLConstants[] = {
 	{"kSSL = 8", NULL, 0},
 };
 
+REALconstant CubeSQLPrepareConstants[] = {
+    {"CUBESQL_INTEGER = 1", NULL, 0},
+    {"CUBESQL_DOUBLE = 2", NULL, 0},
+    {"CUBESQL_TEXT = 3", NULL, 0},
+    {"CUBESQL_BLOB = 4", NULL, 0},
+    {"CUBESQL_NULL = 5", NULL, 0},
+    {"CUBESQL_INT64 = 8", NULL, 0},
+    {"CUBESQL_ZEROBLOB = 9", NULL, 0},
+};
+
 REALevent CubeSQLEvents[] = {
 	{ "Trace(sql As String)" }
 };
@@ -265,6 +306,49 @@ REALmethodDefinition CubeSQLVMMethods[] = {
 	{ (REALproc) CubeSQLVMBindZeroBlob, NULL, "BindZeroBlob(index As Integer, length As Integer)", REALconsoleSafe},
 	{ (REALproc) CubeSQLVMExecute, NULL, "VMExecute()", REALconsoleSafe},
 	{ (REALproc) CubeSQLVMSelect, NULL, "VMSelect() As RecordSet", REALconsoleSafe},
+    { (REALproc) CubeSQLVMSelectRowSet, NULL, "VMSelectRowSet() As RowSet", REALconsoleSafe},
+};
+
+/*
+REALmethodDefinition MySQLStatementMethods[] = {
+    { (REALproc) MySQLStatementBindIndex, REALnoImplementation, "Bind(zeroBasedIndex As Integer, param As Variant)", REALconsoleSafe},
+    { (REALproc) MySQLStatementBindIndexAndType, REALnoImplementation, "Bind(zeroBasedIndex As Integer, param As Variant, type As Integer)", REALconsoleSafe},
+    { (REALproc) MySQLStatementBindArray, REALnoImplementation, "Bind(values() As Variant)", REALconsoleSafe},
+    { (REALproc) MySQLStatementBindTypeIndex, REALnoImplementation, "BindType(zeroBasedIndex As Integer, type As Integer)", REALconsoleSafe},
+    { (REALproc) MySQLStatementBindTypeArray, REALnoImplementation, "BindType(types() As Integer)", REALconsoleSafe},
+ 
+    { (REALproc) MySQLStatementSQLSelect, REALnoImplementation, "SQLSelect(ParamArray params As Variant) As RecordSet", REALconsoleSafe},
+    { (REALproc) MySQLStatementSelectSQL, REALnoImplementation, "SelectSQL(ParamArray params As Variant) As RowSet", REALconsoleSafe},
+    { (REALproc) MySQLStatementSQLExecute, REALnoImplementation, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
+    { (REALproc) MySQLStatementExecuteSQL, REALnoImplementation, "ExecuteSQL(ParamArray params As Variant)", REALconsoleSafe},
+    { (REALproc) REALnoImplementation, REALnoImplementation, "Constructor", REALconsoleSafe | REALScopePrivate},
+    { (REALproc) MySQLStatementDestructor, REALnoImplementation, "Destructor", REALconsoleSafe | REALScopePrivate},
+};
+ */
+
+REALmethodDefinition CubeSQLPrepareMethods[] = {
+    { (REALproc) CubeSQLPrepareBindValue, NULL, "Bind(index As Integer, value As Variant)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareBindValueType, NULL, "Bind(index As Integer, value As Variant, type As Integer)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareBindValues, NULL, "Bind(values() As Variant)", REALconsoleSafe},
+    
+    { (REALproc) CubeSQLPrepareBindType, NULL, "BindType(index As Integer, type As Integer)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareBindTypes, NULL, "BindType(types() As Integer)", REALconsoleSafe},
+    
+    { (REALproc) CubeSQLPrepareSQLSelect, REALnoImplementation, "SQLSelect(ParamArray params As Variant) As RecordSet", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareSelectSQL, REALnoImplementation, "SelectSQL(ParamArray params As Variant) As RowSet", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareSQLExecute, REALnoImplementation, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareExecuteSQL, REALnoImplementation, "ExecuteSQL(ParamArray params As Variant)", REALconsoleSafe},
+    
+    /*
+    { (REALproc) CubeSQLPrepareExecuteSQLNoValues, NULL, "ExecuteSQL()", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareSelectSQLNoValues, NULL, "SelectSQL() As RowSet", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareExecuteSQL, NULL, "ExecuteSQL(Paramarray values() As Variant)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareSelectSQL, NULL, "SelectSQL(Paramarray values() As Variant) As RowSet", REALconsoleSafe},
+    // one of the unfortunate side effects of deprecation and not removal, even though SQLSelect and SQLExecute are no longer documented or autocomplete,
+    // they still exist on the PreparedSQLStatement interface so you will have to add implementations for them, even if all you
+    { (REALproc) CubeSQLPrepareSQLExecute, NULL, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
+    { (REALproc) CubeSQLPrepareSQLSelect, NULL, "SQLSelect(ParamArray params As Variant) As RecordSet", REALconsoleSafe},
+     */
 };
 
 REALclassDefinition CubeSQLVMClass = {
@@ -280,6 +364,27 @@ REALclassDefinition CubeSQLVMClass = {
 	CubeSQLVMMethods,
     sizeof(CubeSQLVMMethods) / sizeof(REALmethodDefinition),
 	NULL,0,
+};
+
+REALclassDefinition CubeSQLPrepareClass = {
+    kCurrentREALControlVersion,
+    "CubeSQLPreparedStatement",
+    NULL,
+    sizeof(cubeSQLPrepare),
+    0,
+    (REALproc) CubeSQLPrepareConstructor,
+    (REALproc) CubeSQLPrepareDestructor,
+    NULL,
+    0,
+    CubeSQLPrepareMethods,
+    sizeof(CubeSQLPrepareMethods) / sizeof(REALmethodDefinition),
+    NULL,0, // events
+    NULL,0, // eventInstances
+    "PreparedSQLStatement",   // interfaces
+    NULL,0, // attributes
+    CubeSQLPrepareConstants,
+    sizeof(CubeSQLPrepareConstants) / sizeof(REALconstant),
+    0,      // mFlags
 };
 
 REALclassDefinition CubeSQLDatabaseClass = {
@@ -321,9 +426,12 @@ REALdbCursorDefinition CubeSQLFieldSchemaCursor = {
 };
 
 REALdbEngineDefinition CubeSQLEngine = {
-	kCurrentREALControlVersion,
-	0,
-	dbEnginePrimaryKeySupported | dbEngineDontUseBrackets, 0, 0,		// flags1
+	kCurrentREALControlVersion,     // version
+	0,                              // forSystemUse
+	dbEnginePrimaryKeySupported | dbEngineDontUseBrackets,  // flags1
+    0,  // flags2
+    0,  // flags3
+    
 	DatabaseClose,
 	DatabaseTableSchema,
 	DatabaseFieldSchema,
@@ -331,15 +439,15 @@ REALdbEngineDefinition CubeSQLEngine = {
 	DatabaseSQLExecute,
 	nil,		// CreateTable
 	DatabaseAddTableRecord,
-	nil,		// TableCursor
+	DatabaseSelectSQL,
 	nil,		// UpdateFields
 	nil,		// AddTableColumn
 	DatabaseIndexSchema,
 	DatabaseLastErrorCode,
 	DatabaseLastErrorString,
-	nil,		// DatabaseCommit,
-	nil,		// DatabaseRollback,
-	nil,		// GetProperty,
+	DatabaseCommit,
+	DatabaseRollback,
+	BeginTransaction,
 	DatabaseGetSupportedTypes,
 	NULL,		// dropTable
 	NULL,		// dropColumn
@@ -347,7 +455,9 @@ REALdbEngineDefinition CubeSQLEngine = {
 	NULL,		// alterColumnName
 	NULL,		// alterColumnType
 	NULL,		// alterColumnConstraint
-	//DatabasePrepareStatement
+	DatabasePrepareStatement,
+    DatabaseExecuteSQL,
+    NULL
 };
 
 REALdbCursorDefinition CubeSQLCursor = {

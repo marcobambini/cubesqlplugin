@@ -44,6 +44,8 @@ static Boolean nullAsString	= true;
 static Boolean blobAsString = true;
 static Boolean booleanAsInteger = true;
 
+// MARK: - Database API -
+
 void DatabaseConstructor(REALobject instance) {
 	DEBUG_WRITE("DatabaseConstructor");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
@@ -465,7 +467,491 @@ REALstring DatabaseReceiveChunk(REALobject instance) {
 	return s;
 }
 
-#pragma mark -
+// MARK: - New DB API 2.0 -
+
+REALstring ConvertObjectToMemoryBlockString(REALobject obj) {
+    // check if respond to StringValue first
+    REALstring value = nullptr;
+    if (REALGetPropValueString(obj, "StringValue", &value)) return value;
+    
+    static REALclassRef memblockRef = NULL;
+    static REALclassRef pictureRef = NULL;
+    if (!memblockRef) memblockRef = REALGetClassRef("MemoryBlock");
+    if (!pictureRef ) pictureRef = REALGetClassRef("Picture");
+    
+    // MemoryBlock case
+    REALmemoryBlock mb = NULL;
+    if (REALObjectIsA(obj, memblockRef)) {
+        mb = (REALmemoryBlock)obj;
+    } else {
+        // Picture case
+        if (REALObjectIsA(obj, pictureRef)) {
+            // load ToData function
+            REALmemoryBlock (*toDataFunc)(REALobject,RBInteger,RBInteger) = NULL;
+            toDataFunc = (REALmemoryBlock (*)(REALobject,RBInteger,RBInteger))REALLoadObjectMethod(obj, "ToData(format As Picture.Formats, quality As Integer) As MemoryBlock");
+            RBInteger quality = -1; // QualityDefault
+            RBInteger format = 150; // PNG
+            mb = (toDataFunc) ? toDataFunc(obj, format, quality) : NULL;
+        }
+    }
+    
+    if (mb && REALGetPropValueString(mb, "StringValue", &value)) return value;
+    return NULL;
+}
+
+void BindVariantObjectToVM(REALobject vm, int index, REALobject item) {
+    RBInteger varType = GetVarType(item);
+    if (varType == -1) { // was (!REALGetPropValueInteger(item, "Type", &varType)) {
+        CubeSQLVMBindNull(vm, index);
+        return;
+    }
+    
+    // https://docs.xojo.com/VarType
+    // https://docs.xojo.com/Variant
+    
+    switch (varType) {
+        case 0: { // TypeNil
+            CubeSQLVMBindNull(vm, index);
+        } break;
+            
+        case 2: { // TypeInt32
+            int32_t value = 0;
+            if (!REALGetPropValueInt32(item, "Int32Value", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindInt(vm, index, (int)value);
+        } break;
+            
+        case 3: { // TypeInt64
+            RBInt64 value = 0;
+            if (!REALGetPropValueInt64(item, "Int64Value", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindInt64(vm, index, (int64)value);
+        } break;
+            
+        case 4: { // TypeSingle
+            float value = 0.0;
+            if (!REALGetPropValueSingle(item, "SingleValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindDouble(vm, index, (double)value);
+        } break;
+            
+        case 5: { // TypeDouble
+            double value = 0.0;
+            if (!REALGetPropValueDouble(item, "DoubleValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindDouble(vm, index, (double)value);
+        } break;
+            
+        case 6: { // TypeCurrency
+            REALcurrency value = 0;
+            if (!REALGetPropValueCurrency(item, "CurrencyValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindInt64(vm, index, (int64)value);
+        } break;
+            
+        case 7:
+        case 38: { // TypeDate and TypeDateTime
+            REALobject value = nullptr;;
+            if (!REALGetPropValueObject(item, "DateTimeValue", &value)) CubeSQLVMBindNull(vm, index);
+            else {
+                REALstring svalue = nullptr;;
+                if (!REALGetPropValueString(value, "SQLDateTime", &svalue)) CubeSQLVMBindNull(vm, index);
+                else CubeSQLVMBindText(vm, index, svalue);
+            }
+        } break;
+            
+        case 8:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 37: { // TypeString, CString, WString, PString, CFStringRef and TypeText
+            REALstring value = nullptr;;
+            if (!REALGetPropValueString(item, "StringValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindText(vm, index, value);
+        } break;
+            
+        case 9: { // TypeObject
+            // https://docs.xojo.com/MemoryBlock.StringValue
+            // https://forum.xojo.com/25966-realcallfunctionwithexceptionhandler-example/0#p214758
+            // file:///Users/marco/GitHub/CubeSQLPlugin/Xojo_SDK/Documentation/Plugin%20SDK%20Dynamic%20Access%20Reference.html
+            // file:///Users/marco/GitHub/CubeSQLPlugin/Xojo_SDK/Documentation/Plugin%20SDK%20String%20Reference.html
+            
+            // try to convert object to a buffer
+            REALstring svalue = ConvertObjectToMemoryBlockString(item);
+            if (svalue) CubeSQLVMBindBlob(vm, index, svalue);
+            else CubeSQLVMBindNull(vm, index);
+        } break;
+            
+        case 11:  { // TypeBoolean
+            bool value = false;
+            if (!REALGetPropValueBoolean(item, "BooleanValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindInt(vm, index, value ? 1 : 0);
+        } break;
+            
+        case 16:  { // TypeColor
+            RBColor value = 0;
+            if (!REALGetPropValueColor(item, "ColorValue", &value)) CubeSQLVMBindNull(vm, index);
+            else CubeSQLVMBindInt(vm, index, (int)value);
+        } break;
+            
+//            case 18: {
+//                // TypeCString
+//                const char *value;
+//                if (!REALGetPropValueCString(item, "CStringValue", &value)) CubeSQLVMBindNull(vm, index);
+//                else {
+//                    ClassData(CubeSQLVMClass, vm, cubeSQLVM, data);
+//                    int len = (int)strlen(value);
+//                    cubesql_vmbind_text(data->vm, index, (char *)value, len);
+//                }
+//            } break;
+//
+//            case 19: {
+//                // TypeWString
+//                const wchar_t *value;
+//                if (!REALGetPropValueWString(item, "WStringValue", &value)) CubeSQLVMBindNull(vm, index);
+//                else {
+//                    ClassData(CubeSQLVMClass, vm, cubeSQLVM, data);
+//                    int len = (int)sizeof(value);
+//                    cubesql_vmbind_text(data->vm, index, (char *)value, len);
+//                }
+//            } break;
+//
+//            case 20: {
+//                // TypePString (used only with Mac OS 9)
+//                CubeSQLVMBindNull(vm, index);
+//                #if 0
+//                const unsigned char *value;
+//                if (!REALGetPropValuePString(item, "PStringValue", &value)) CubeSQLVMBindNull(vm, index);
+//                else {
+//                    ClassData(CubeSQLVMClass, vm, cubeSQLVM, data);
+//                    int len = (int)strlen(value);
+//                    cubesql_vmbind_text(data->vm, index, (char *)value, len);
+//                }
+//                #endif
+//            } break;
+//
+//            case 21: {
+//                // TypeCString
+//                #if TARGET_CARBON || TARGET_COCOA
+//                CFStringRef value;
+//                if (!REALGetPropValueCFStringRef(item, "CFStringRefValue", &value)) CubeSQLVMBindNull(vm, index);
+//                else {
+//                    ClassData(CubeSQLVMClass, vm, cubeSQLVM, data);
+//                    int len = (int)CFStringGetLength(value);
+//                    const char *s = CFStringGetCStringPtr(value, kCFStringEncodingUTF8);
+//                    cubesql_vmbind_text(data->vm, index, (char *)s, len);
+//                }
+//                #endif
+//            } break;
+        
+        case 22:
+        case 23:
+        case 26:
+        case 36: {
+            // TypeWindowPtr
+            // TypeOSType
+            // TypePtr
+            // TypeStructure
+            CubeSQLVMBindNull(vm, index);
+        } break;
+            
+//            case 37: {
+//                // TypeText
+//                REALtext value;
+//                if (!REALGetPropValueText(item, "TextValue", &value)) CubeSQLVMBindNull(vm, index);
+//                else {
+//                    ClassData(CubeSQLVMClass, vm, cubeSQLVM, data);
+//                    REALtextData *textData = REALGetTextData(value, "utf-8", false);
+//                    cubesql_vmbind_text(data->vm, index, (char *)textData->data, (int)textData->size);
+//                    REALDisposeTextData(textData);
+//                }
+//
+//            } break;
+            
+        default: {
+            // TypeArray (4096, logically OR'ed with the element type)
+            CubeSQLVMBindNull(vm, index);
+        } break;
+    }
+}
+
+void BindVariantArrayToVM(REALobject vm, REALarray params) {
+    RBInteger count = REALGetArrayUBound(params);
+    
+    // loop REALarray
+    for (RBInteger i=0; i<=count; ++i) {
+        REALobject item = nullptr;
+        REALGetArrayValueObject(params, i, &item);
+        BindVariantObjectToVM(vm, (int)(i+1), item);
+    }
+}
+
+// Runs the SQL select statement with the supplied parameters
+// sql -- the sql select statement to execute
+// params -- variant array of parameters, can be empty or null
+REALdbCursor DatabaseSelectSQL(dbDatabase *instance, REALstring sql, REALarray params) {
+    DEBUG_WRITE("DatabaseSelect: %s", REALGetCString(sql));
+    if (instance->isConnected == false) return NULL;
+    instance->endChunkReceived = false;
+    
+    RBInteger count = REALGetArrayUBound(params);
+    Boolean isParamsEmpty = (!params || count == -1);
+    
+    if (isParamsEmpty) {
+        // simpler case without params
+        csqlc *c = cubesql_select(instance->db, REALGetCString(sql), kFALSE);
+        if (c == NULL) return NULL;
+        return REALNewRowSetFromDBCursor(CursorCreate(c), &CubeSQLCursor);
+    }
+    
+    // more complex case with params so a VM is required
+    csqlvm *_vm = cubesql_vmprepare(instance->db, REALGetCString(sql));
+    if (!_vm) return NULL;
+    
+    REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLVM"));
+    ClassData(CubeSQLVMClass, result, cubeSQLVM, vm);
+    if (!vm || !_vm) return NULL;
+    vm->vm = _vm;
+    
+    BindVariantArrayToVM(result, params);
+    return CubeSQLVMSelectRowSet(result);
+}
+
+// Executes the SQL statement with the supplied parameters
+// sql -- the sql statement to execute
+// params -- variant array of parameters, can be empty
+void DatabaseExecuteSQL(dbDatabase *instance, REALstring sql, REALarray params) {
+    DEBUG_WRITE("DatabaseExecute: %s", REALGetCString(sql));
+    if (instance->isConnected == false) return;
+    instance->endChunkReceived = false;
+    
+    RBInteger count = REALGetArrayUBound(params); // COUNT ARRAY
+    Boolean isParamsEmpty = (params == nil || count == -1);
+    
+    if (isParamsEmpty) {
+        cubesql_execute(instance->db, REALGetCString(sql));
+        return;
+    }
+    
+    // more complex case with params so a VM is required
+    csqlvm *_vm = cubesql_vmprepare(instance->db, REALGetCString(sql));
+    if (!_vm) return;
+    
+    REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLVM"));
+    ClassData(CubeSQLVMClass, result, cubeSQLVM, vm);
+    if (!vm || !_vm) return;
+    vm->vm = _vm;
+    
+    BindVariantArrayToVM(result, params);
+    CubeSQLVMExecute(result);
+}
+
+void DatabaseCommit(dbDatabase *instance) {
+    cubesql_commit(instance->db);
+}
+
+void DatabaseRollback(dbDatabase *instance) {
+    cubesql_rollback(instance->db);
+}
+
+void BeginTransaction(dbDatabase *instance) {
+    cubesql_begintransaction(instance->db);
+}
+
+// MARK: - Prepare Statement (DB API 2.0) -
+
+REALobject DatabasePrepareStatement(dbDatabase *database, REALstring statement) {
+    // https://docs.xojo.com/Database.Prepare
+    // https://docs.xojo.com/PreparedSQLStatement
+    
+    DEBUG_WRITE("DatabasePrepareStatement");
+    if (database->isConnected == false) return NULL;
+    
+    csqlvm *cvm = cubesql_vmprepare(database->db, REALGetCString(statement));
+    if (cvm == NULL) return NULL;
+    
+    REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLPreparedStatement"));
+    ClassData(CubeSQLPrepareClass, result, cubeSQLPrepare, vm);
+    vm->vm = cvm;
+    
+    // return a PreparedSQLStatement
+    return result;
+}
+
+REALobject CubeSQLDatabasePrepare(REALdbDatabase dbObject, REALstring statement) {
+    dbDatabase *db = (dbDatabase *)REALGetDBFromREALdbDatabase(dbObject);
+    if (db->isConnected == false) return NULL;
+
+    return DatabasePrepareStatement(db, statement);
+}
+
+void CubeSQLPrepareConstructor (REALobject instance) {
+    DEBUG_WRITE("CubeSQLPrepareConstructor");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    memset((void *)data, 0, sizeof(cubeSQLPrepare));
+}
+
+void CubeSQLPrepareDestructor (REALobject instance) {
+    DEBUG_WRITE("CubeSQLPrepareDestructor");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    cubesql_vmclose(data->vm);
+}
+
+void CubeSQLPrepareBindValue (REALobject instance, int index, REALobject value) {
+    DEBUG_WRITE("CubeSQLPrepareBindValue");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    
+    int type = CUBESQL_BIND_TEXT; // default CUBESQL_TEXT
+    if (index < MAX_TYPES_COUNT && data->types[index] != 0) type = data->types[index];
+    CubeSQLPrepareBindValueType(instance, index, value, type);
+}
+
+void CubeSQLPrepareBindValueType (REALobject instance, int index, REALobject object, int type) {
+    DEBUG_WRITE("CubeSQLPrepareBindValueType");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    
+    csqlvm *vm = data->vm;
+    if (!vm) return;
+    
+    /*
+     {"CUBESQL_INTEGER = 1", NULL, 0},
+     {"CUBESQL_DOUBLE = 2", NULL, 0},
+     {"CUBESQL_TEXT = 3", NULL, 0},
+     {"CUBESQL_BLOB = 4", NULL, 0},
+     {"CUBESQL_NULL = 5", NULL, 0},
+     {"CUBESQL_INT64 = 8", NULL, 0},
+     {"CUBESQL_ZEROBLOB = 9", NULL, 0},
+     */
+    
+    // sqlite3 on server side expects a 1-based index (while Xojo requires a 0-based index)
+    ++index;
+    
+    switch (type) {
+        case CUBESQL_BIND_INTEGER: { // CUBESQL_INTEGER
+            int32_t value = 0;
+            if (!REALGetPropValueInt32(object, "Int32Value", &value)) cubesql_vmbind_null(vm, index);
+            else cubesql_vmbind_int(vm, index, (int)value);
+        }
+        break;
+            
+        case CUBESQL_BIND_DOUBLE: { // CUBESQL_DOUBLE
+            double value = 0.0;
+            if (!REALGetPropValueDouble(object, "DoubleValue", &value)) cubesql_vmbind_null(vm, index);
+            else cubesql_vmbind_double(vm, index, (double)value);
+        }
+        break;
+            
+        case CUBESQL_BIND_BLOB: { // CUBESQL_BLOB
+            REALstring svalue = ConvertObjectToMemoryBlockString(object);
+            if (!svalue) cubesql_vmbind_null(vm, index);
+            else {
+                REALstringData sdata;
+                if (!REALGetStringData(svalue, kREALTextEncodingUnknown, &sdata)) return;
+                cubesql_vmbind_blob(vm, index, (void*)sdata.data, (int)sdata.length);
+                REALDisposeStringData(&sdata);
+            }
+        }
+        break;
+        
+        case CUBESQL_BIND_NULL: { // CUBESQL_NULL
+            cubesql_vmbind_null(vm, index);
+        }
+        break;
+        
+        case CUBESQL_BIND_INT64: { // CUBESQL_INT64
+            RBInt64 value = 0;
+            if (!REALGetPropValueInt64(object, "Int64Value", &value)) cubesql_vmbind_null(vm, index);
+            else cubesql_vmbind_int64(vm, index, (int64)value);
+        }
+        break;
+            
+        case CUBESQL_BIND_ZEROBLOB: { // CUBESQL_ZEROBLOB
+            int32_t value = 0;
+            if (!REALGetPropValueInt32(object, "Int32Value", &value)) cubesql_vmbind_null(vm, index);
+            else cubesql_vmbind_zeroblob(vm, index, (int)value); // value is length
+        }
+        break;
+            
+        default: { // CUBESQL_TEXT
+            REALstring value = nullptr;
+            if (!REALGetPropValueString(object, "StringValue", &value)) cubesql_vmbind_null(vm, index);
+            else {
+                REALstringData sdata;
+                if (!REALGetStringData(value, kREALTextEncodingUTF8, &sdata)) return;
+                cubesql_vmbind_text(vm, index, (char *)sdata.data, (int)sdata.length);
+                REALDisposeStringData(&sdata);
+            }
+        }
+        break;
+    }
+}
+
+void CubeSQLPrepareBindValues (REALobject instance, REALarray values) {
+    DEBUG_WRITE("CubeSQLPrepareBindValues");
+    if (values == nil) return;
+    
+    RBInteger count = REALGetArrayUBound(values);
+    for (int i=0; i<=count; ++i) {
+        if (i >= MAX_TYPES_COUNT) break;
+        REALobject value = nullptr;
+        REALGetArrayValueObject(values, i, &value);
+        CubeSQLPrepareBindValue(instance, i, value);
+    }
+}
+
+void CubeSQLPrepareBindType (REALobject instance, int index, int type) {
+    DEBUG_WRITE("CubeSQLPrepareBindType");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    if (index < MAX_TYPES_COUNT) data->types[index] = type;
+}
+
+void CubeSQLPrepareBindTypes (REALobject instance, REALarray types) {
+    DEBUG_WRITE("CubeSQLPrepareBindTypes");
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    
+    RBInteger count = REALGetArrayUBound(types); // COUNT ARRAY
+    Boolean isTypesEmpty = (types == nil || count == -1);
+    if (!isTypesEmpty) {
+        for (RBInteger i=0; i<=count; ++i) {
+            if (i >= MAX_TYPES_COUNT) break;
+            int32_t type = 0;
+            REALGetArrayValueInt32(types, i, &type);
+            data->types[i] = type;
+        }
+    }
+}
+
+void CubeSQLPrepareExecuteSQL (REALobject instance, REALarray values) {
+    DEBUG_WRITE("CubeSQLPrepareExecuteSQL");
+    if (values && (REALGetArrayUBound(values) >= 0)) CubeSQLPrepareBindValues(instance, values);
+        
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    cubesql_vmexecute(data->vm);
+}
+
+void CubeSQLPrepareSQLExecute (REALobject instance, REALarray params) {
+    DEBUG_WRITE("CubeSQLPrepareSQLExecute");
+    CubeSQLPrepareExecuteSQL(instance, params);
+}
+
+REALdbCursor CubeSQLPrepareSelectSQL (REALobject instance, REALarray values) {
+    DEBUG_WRITE("CubeSQLPrepareSelectSQL");
+    if (values && (REALGetArrayUBound(values) >= 0)) CubeSQLPrepareBindValues(instance, values);
+    
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    csqlc *c = cubesql_vmselect(data->vm);
+    if (c == NULL) return NULL;
+    return REALNewRowSetFromDBCursor(CursorCreate(c), &CubeSQLCursor);
+}
+
+REALdbCursor CubeSQLPrepareSQLSelect (REALobject instance, REALarray params) {
+    DEBUG_WRITE("CubeSQLPrepareSQLSelect");
+    if (params && (REALGetArrayUBound(params) >= 0)) CubeSQLPrepareBindValues(instance, params);
+    
+    ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
+    csqlc *c = cubesql_vmselect(data->vm);
+    if (c == NULL) return NULL;
+    return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLCursor);
+}
+
+// MARK: - Cursor API -
+
 dbCursor *CursorCreate(csqlc *c) {
 	DEBUG_WRITE("CursorCreate");
 	if (c == NULL) return NULL;
@@ -816,11 +1302,11 @@ emptyResult:
 	return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 }
 
-#pragma mark -
+// MARK: - VM API -
 
 REALobject DatabasePrepare (REALobject instance, REALstring sql) {
 	REALobject result = NULL;
-	csqlvm		*cvm = NULL;
+	csqlvm *cvm = NULL;
 	
 	DEBUG_WRITE("DatabasePrepare");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
@@ -914,7 +1400,15 @@ REALdbCursor CubeSQLVMSelect (REALobject instance) {
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLCursor);
 }
 
-#pragma mark -
+REALdbCursor CubeSQLVMSelectRowSet (REALobject instance) {
+    DEBUG_WRITE("CubeSQLVMSelectRowSet");
+    ClassData(CubeSQLVMClass, instance, cubeSQLVM, data);
+    csqlc *c = cubesql_vmselect(data->vm);
+    if (c == NULL) return NULL;
+    return REALNewRowSetFromDBCursor(CursorCreate(c), &CubeSQLCursor);
+}
+
+// MARK: - Properties -
 
 REALstring ServerVersionGetter(REALobject instance, long param) {
 	DEBUG_WRITE("ServerVersionGetter");
@@ -1153,7 +1647,7 @@ REALstring TokenGetter(REALobject instance, long param) {
 	return data->token;	
 }
 
-#pragma mark -
+// MARK: - Plugin Module API -
 
 REALstring PluginVersionGetter(void) {
 	DEBUG_WRITE("PluginVersionGetter");
@@ -1224,7 +1718,13 @@ void BooleanAsIntegerSetter(Boolean value) {
 	booleanAsInteger = value;
 }
 
-#pragma mark -
+// MARK: - Utils -
+typedef int (*vartype_callback) (void *);
+int GetVarType (REALobject value) {
+    static vartype_callback vartype = NULL;
+    if (!vartype) vartype = (vartype_callback) REALLoadFrameworkMethod("VarType (value As Variant) As Integer");
+    return (vartype) ? vartype(value) : -1;
+}
 
 csqlc *REALServerBuildFieldSchemaCursor (csqlc *pragmac) {
 	// c is: cid  name  type  notnull  dflt_value  pk (6 columns)
@@ -1377,13 +1877,13 @@ void TraceEventSetter (REALobject instance, long param, Boolean value) {
 	if (data == NULL) return;
 	
 	if (value == false) {
-		cubesql_trace(data->db, NULL, NULL);
+		cubesql_set_trace_callback(data->db, NULL, NULL);
 		return;
 	}
 	
 	// set trace function
 	data->traceEvent = REALGetEventInstance((REALcontrolInstance)instance, &CubeSQLEvents[0]);
-	cubesql_trace(data->db, rb_trace, (void *)instance);
+	cubesql_set_trace_callback(data->db, rb_trace, (void *)instance);
 }
 
 void rb_trace (const char* sql, void *userData) {	
@@ -1418,6 +1918,10 @@ void PluginEntry() {
 	// register the CubeSQLVM class
 	SetClassConsoleSafe(&CubeSQLVMClass);
 	REALRegisterClass(&CubeSQLVMClass);
+    
+    // register the CubeSQLVM class
+    SetClassConsoleSafe(&CubeSQLPrepareClass);
+    REALRegisterClass(&CubeSQLPrepareClass);
 	
 	REALRegisterModule(&CubeSQLModule);
 }
