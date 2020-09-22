@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A902BFE424251AB000D85F02 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A902BFE324251AB000D85F02 /* CoreFoundation.framework */; };
 		A9A2ADE821ABF4610026AA00 /* cubesql.c in Sources */ = {isa = PBXBuildFile; fileRef = A9A2ADD221ABF4600026AA00 /* cubesql.c */; };
 		A9A2ADEA21ABF4610026AA00 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = A9A2ADD421ABF4600026AA00 /* aeskey.c */; };
 		A9A2ADEC21ABF4610026AA00 /* pseudorandom.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2ADD521ABF4600026AA00 /* pseudorandom.h */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A902BFE324251AB000D85F02 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A9707AED130D75F400BF8993 /* CubeSQLPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CubeSQLPlugin.cpp; path = ../sources/CubeSQLPlugin.cpp; sourceTree = SOURCE_ROOT; };
 		A9707B04130D775400BF8993 /* CubeSQLPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CubeSQLPlugin.h; path = ../sources/CubeSQLPlugin.h; sourceTree = SOURCE_ROOT; };
 		A9A2ADD221ABF4600026AA00 /* cubesql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cubesql.c; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A902BFE424251AB000D85F02 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +168,7 @@
 		A9BEB04F1862D0040029216B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A902BFE324251AB000D85F02 /* CoreFoundation.framework */,
 				EAFF3AD80659658000342AFB /* Carbon.framework */,
 			);
 			name = Frameworks;
