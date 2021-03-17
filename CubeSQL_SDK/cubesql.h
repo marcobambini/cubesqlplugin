@@ -122,7 +122,7 @@ CUBESQL_APIEXPORT int		cubesql_connect (csqldb **db, const char *host, int port,
 CUBESQL_APIEXPORT int		cubesql_connect_ssl (csqldb **db, const char *host, int port, const char *username, const char *password, int timeout, const char *ssl_certificate_path);
 CUBESQL_APIEXPORT void		cubesql_disconnect (csqldb *db, int gracefully);
 CUBESQL_APIEXPORT int		cubesql_execute (csqldb *db, const char *sql);
-CUBESQL_APIEXPORT csqlc		*cubesql_select (csqldb *db, const char *sql, int unused);
+CUBESQL_APIEXPORT csqlc		*cubesql_select (csqldb *db, const char *sql);
 CUBESQL_APIEXPORT int		cubesql_commit (csqldb *db);
 CUBESQL_APIEXPORT int		cubesql_rollback (csqldb *db);
 CUBESQL_APIEXPORT int       cubesql_begintransaction (csqldb *db);

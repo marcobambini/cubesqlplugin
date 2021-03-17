@@ -34,7 +34,9 @@ static int      ssl_loaded = kTRUE;
 static int      TLSv1_1_client_method_loaded = kTRUE;
 static int      TLSv1_2_client_method_loaded = kTRUE;
 static int      TSL_client_method_loaded = kTRUE;
+#ifndef OPENSSL_NO_SSL3_METHOD
 static int      SSLv3_client_method_loaded = kTRUE;
+#endif
 static int      SSL_library_init_loaded = kTRUE;
 // version
 static int      OpenSSL_version_loaded = kTRUE;
@@ -130,15 +132,13 @@ int cubesql_execute (csqldb *db, const char *sql) {
 	if (db->trace) db->trace(sql, db->data);
 	
 	// send sql statement
-	if (csql_send_statement (db, kCOMMAND_EXECUTE, sql, kFALSE, kFALSE) != CUBESQL_NOERR) return CUBESQL_ERR;
+	if (csql_send_statement (db, kCOMMAND_EXECUTE, sql) != CUBESQL_NOERR) return CUBESQL_ERR;
 	
 	// read replay
 	return csql_netread(db, -1, -1, kFALSE, NULL, NO_TIMEOUT);
 }
 
-csqlc *cubesql_select (csqldb *db, const char *sql, int is_serverside) {
-	// serverside is disabled in this version
-	
+csqlc *cubesql_select (csqldb *db, const char *sql) {
 	// clear errors first
 	cubesql_clear_errors(db);
 	
@@ -146,10 +146,10 @@ csqlc *cubesql_select (csqldb *db, const char *sql, int is_serverside) {
 	if (db->trace) db->trace(sql, db->data);
 	
 	// send sql statement
-	if (csql_send_statement (db, kCOMMAND_SELECT, sql, kFALSE, kFALSE) != CUBESQL_NOERR) return NULL;
+	if (csql_send_statement (db, kCOMMAND_SELECT, sql) != CUBESQL_NOERR) return NULL;
 	
 	// read the cursor
-	return csql_read_cursor(db, NULL);
+	return csql_read_cursor(db);
 }
 
 int cubesql_commit (csqldb *db) {
@@ -179,10 +179,10 @@ int64 cubesql_changes (csqldb *db) {
 	int64	nchanges = 0;
 	
 	// send sql statement
-	if (csql_send_statement (db, kCOMMAND_SELECT, "SELECT changes();", kFALSE, kFALSE) != CUBESQL_NOERR) return 0;
+	if (csql_send_statement (db, kCOMMAND_SELECT, "SELECT changes();") != CUBESQL_NOERR) return 0;
 	
 	// read the cursor
-	cursor = csql_read_cursor(db, NULL);
+	cursor = csql_read_cursor(db);
 	if (!cursor) return 0;
 	
 	nchanges = cubesql_cursor_int64(cursor, 1, 1, 0);
@@ -234,7 +234,7 @@ int64 cubesql_affected_rows (csqldb *db) {
     
     if (!db || db->sockfd <= 0) return 0;
     
-    c = cubesql_select(db, "SHOW CHANGES;", kFALSE);
+    c = cubesql_select(db, "SHOW CHANGES;");
     if (c == NULL) return 0;
     
     value = cubesql_cursor_int64 (c, 1, 1, 0);
@@ -249,7 +249,7 @@ int64 cubesql_last_inserted_rowID (csqldb *db) {
     
     if (!db || db->sockfd <= 0) return 0;
     
-    c = cubesql_select(db, "SHOW LASTROWID;", kFALSE);
+    c = cubesql_select(db, "SHOW LASTROWID;");
     if (c == NULL) return 0;
     
     value = cubesql_cursor_int64 (c, 1, 1, 0);
@@ -295,7 +295,9 @@ int cubesql_cursor_seek (csqlc *c, int index) {
 	if (c->server_side == kTRUE) {
 		if (index != CUBESQL_SEEKNEXT) return kFALSE;
 		if (c->eof == kTRUE) return kFALSE;
-		return (csql_cursor_step(c) == CUBESQL_NOERR) ? kTRUE : kFALSE;
+        // server side cursors not supported
+        return kFALSE;
+		// return (csql_cursor_step(c) == CUBESQL_NOERR) ? kTRUE : kFALSE;
 	}
 		
 	if (index == CUBESQL_SEEKNEXT) index = c->current_row + 1;
@@ -594,7 +596,7 @@ csqlvm *cubesql_vmprepare (csqldb *db, const char *sql) {
 	if (db->trace) db->trace(sql, db->data);
 	
 	// send sql statement
-	if (csql_send_statement (db, kVM_PREPARE, sql, kFALSE, kFALSE) != CUBESQL_NOERR) return NULL;
+	if (csql_send_statement (db, kVM_PREPARE, sql) != CUBESQL_NOERR) return NULL;
 	
 	// read replay
 	if (csql_netread(db, -1, -1, kFALSE, NULL, NO_TIMEOUT) != CUBESQL_NOERR) return NULL;
@@ -673,7 +675,7 @@ csqlc *cubesql_vmselect (csqlvm *vm) {
 	csql_netwrite(db, NULL, 0, NULL, 0);
 	
 	// read the cursor
-	return csql_read_cursor(db, NULL);
+	return csql_read_cursor(db);
 }
 
 int cubesql_vmclose (csqlvm *vm) {
@@ -893,7 +895,9 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 			db->ssl_ctx = SSL_CTX_new(TLSv1_1_client_method());
         } else { // switch back to default TSL/SSLv3 method
             if (TSL_client_method_loaded) db->ssl_ctx = SSL_CTX_new(TLS_client_method());
+            # ifndef OPENSSL_NO_SSL3_METHOD
             else if (SSLv3_client_method_loaded) db->ssl_ctx = SSL_CTX_new(SSLv3_client_method());
+            #endif
         }
 		
 		if (db->ssl_ctx == NULL)
@@ -1306,7 +1310,7 @@ int csql_bindexecute(csqldb *db, const char *sql, char **colvalue, int *colsize,
 	if (db->trace) db->trace(sql, db->data);
 	
 	// send sql statement first
-	if (csql_send_statement(db, kCOMMAND_CHUNK_BIND, sql, kFALSE, kFALSE) != CUBESQL_NOERR) return CUBESQL_ERR;
+	if (csql_send_statement(db, kCOMMAND_CHUNK_BIND, sql) != CUBESQL_NOERR) return CUBESQL_ERR;
 	
 	// read and check header first
 	if (csql_socketread(db, kTRUE, NO_TIMEOUT) != CUBESQL_NOERR) return CUBESQL_ERR;
@@ -1337,7 +1341,7 @@ int csql_bindexecute(csqldb *db, const char *sql, char **colvalue, int *colsize,
 	return csql_ack(db, kBIND_FINALIZE);
 }
 
-int csql_send_statement (csqldb *db, int command_type, const char *sql, int is_partial, int server_side) {
+int csql_send_statement (csqldb *db, int command_type, const char *sql) {
 	int field_size[1];
 	int nfields, nsizedim, packet_size, datasize = 0;
 	
@@ -1350,18 +1354,12 @@ int csql_send_statement (csqldb *db, int command_type, const char *sql, int is_p
 	csql_initrequest(db, packet_size, nfields, command_type, kNO_SELECTOR);
 	field_size[0] = htonl(datasize);
 	
-	if (command_type == kCOMMAND_SELECT) {
-		if (server_side == kTRUE) SETBIT(db->request.flag1, CLIENT_REQUEST_SERVER_SIDE);
-	}
-	else if (is_partial == kTRUE)
-		SETBIT(db->request.flag1, CLIENT_PARTIAL_PACKET);
-	
 	return csql_netwrite(db, (char *) field_size, nsizedim, (char *) sql, datasize);
 }
 
-csqlc *csql_read_cursor (csqldb *db, csqlc *existing_c) {
+csqlc *csql_read_cursor (csqldb *db) {
 	csqlc	*c = NULL;
-	int		index, gdone = kFALSE, is_partial = kFALSE;
+	int		index = 0, gdone = kFALSE, is_partial = kFALSE;
 	int		has_tables, has_rowid, nfields, server_rowcount, server_colcount, cursor_colcount;
 	char	*buffer;
 	int		i, nrows, ncols, count, data_seek = 0, end_chuck;
@@ -1369,15 +1367,7 @@ csqlc *csql_read_cursor (csqldb *db, csqlc *existing_c) {
 	char	*server_names, *server_data, *server_tables;
 	
 	// allocate basic cursor struct
-	if (existing_c == NULL) {
-		index = 0;
-		c = csql_cursor_alloc(db);
-	}
-	else {
-		index = 1;
-		c = existing_c;
-	}
-			
+    c = csql_cursor_alloc(db);
 	if (c == NULL) {
 		csql_seterror(db, CUBESQL_MEMORY_ERROR, "Unable to allocate cursor struct");
 		return NULL;
@@ -1387,7 +1377,6 @@ csqlc *csql_read_cursor (csqldb *db, csqlc *existing_c) {
 	do {
 		if (csql_netread (db, -1, -1, kFALSE, &end_chuck, NO_TIMEOUT) != CUBESQL_NOERR) goto abort;
 		if (end_chuck == kTRUE) {
-			
 			gdone = kTRUE;
 			if (c->server_side) c->eof = kTRUE;
 			//else if (db->client_version == k2007PROTOCOL) csql_ack(db, kCHUNK_OK);
@@ -1539,7 +1528,7 @@ abort_memory:
 	csql_seterror(db, CUBESQL_MEMORY_ERROR, "Not enought memory to allocate buffer required to build the cursor");
 	
 abort:
-	if ((c) && (existing_c != NULL)) cubesql_cursor_free(c);
+	if (c) cubesql_cursor_free(c);
 	return NULL;
 }
 
@@ -2277,18 +2266,19 @@ int csql_cursor_reallocate (csqlc *c) {
 	return kTRUE;
 }
 
-int csql_cursor_step (csqlc *c) {
-	// prepare header request
-	csql_initrequest(c->db, 0, 0, kCOMMAND_CURSOR_STEP, kNO_SELECTOR);
-	
-	// send header request
-	if (csql_socketwrite(c->db, (char *)&c->db->request, kHEADER_SIZE) != CUBESQL_NOERR) return CUBESQL_ERR;
-	
-	// receive row
-	if (csql_read_cursor(c->db, c) == NULL) return CUBESQL_ERR;
-	
-	return CUBESQL_NOERR;
-}
+// NOT IMPLEMENTED ON SERVER SIDE
+//int csql_cursor_step (csqlc *c) {
+//	// prepare header request
+//	csql_initrequest(c->db, 0, 0, kCOMMAND_CURSOR_STEP, kNO_SELECTOR);
+//
+//	// send header request
+//	if (csql_socketwrite(c->db, (char *)&c->db->request, kHEADER_SIZE) != CUBESQL_NOERR) return CUBESQL_ERR;
+//
+//	// receive row
+//	if (csql_read_cursor(c->db, c) == NULL) return CUBESQL_ERR;
+//
+//	return CUBESQL_NOERR;
+//}
 
 int csql_cursor_close (csqlc *c) {
 	// prepare header request

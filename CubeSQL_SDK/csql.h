@@ -220,6 +220,7 @@ typedef int SOCKET;
 #include <openssl/err.h>
 #define X509_CERT_SSL       X509
 #define X509_NAME_SSL       X509_NAME
+#define SSL_CTRL_OPTIONS    32
 #else
 // common part between CUBESQL_EXTERN_SSL_LIBRARY and CUBESQL_DYNAMIC_SSL_LIBRARY
     
@@ -598,7 +599,7 @@ void	csql_socketclose (csqldb *db);
 int		csql_connect (csqldb *db, int encryption);
 int		csql_connect_encrypted (csqldb *db);
 int		csql_netread (csqldb *db, int expected_size, int expected_nfields, int is_chunk, int *end_chunk, int timeout);
-csqlc  *csql_read_cursor (csqldb *db, csqlc *existing_c);
+csqlc  *csql_read_cursor (csqldb *db);
 int		csql_checkinbuffer (csqldb *db);
 int		csql_netwrite (csqldb *db, char *size_array, int nsize_array, char *buffer, int nbuffer);
 int		csql_ack(csqldb *db, int chunk_code);
@@ -611,7 +612,7 @@ char	*csql_receivechunk (csqldb *db, int *len, int *is_end_chunk);
 void	csql_initrequest (csqldb *db, int packetsize, int nfields, char command, char selector);
 void	random_hash_field (unsigned char hval[], const char *randpoll, const char *field);
 void	csql_seterror(csqldb *db, int errcode, const char *errmsg);
-int		csql_send_statement (csqldb *db, int command_type, const char *sql, int is_partial, int server_side);	
+int		csql_send_statement (csqldb *db, int command_type, const char *sql);	
 void	hash_field (unsigned char hval[], const char *field, int len, int times);
 void	hex_hash_field (char result[], const char *field, int len);
 void	hex_hash_field2 (char result[], const char *field, unsigned char *randpoll);
@@ -623,7 +624,7 @@ int		csql_bind_value (csqldb *db, int index, int bindtype, char *value, int len)
 csqlc	*csql_cursor_alloc (csqldb *db);
 int		csql_cursor_reallocate (csqlc *c);
 int		csql_cursor_close (csqlc *c);
-int		csql_cursor_step (csqlc *c);
+// int		csql_cursor_step (csqlc *c);
 void	csql_load_ssl (void);
 const	char *ssl_error(void);
 int		encryption_is_ssl (int encryption);
