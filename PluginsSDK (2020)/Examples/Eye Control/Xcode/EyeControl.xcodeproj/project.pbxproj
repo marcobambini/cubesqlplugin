@@ -1,0 +1,388 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D32393325094E9F005949B8 /* rb_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D7BCCAA2412A88A00766721 /* rb_plugin.h */; };
+		3D32393425094E9F005949B8 /* REALplugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D7BCCAB2412A88A00766721 /* REALplugin.h */; };
+		3D32393625094E9F005949B8 /* EyeControlPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D7BCCA72412A87000766721 /* EyeControlPlugin.cpp */; };
+		3D32393725094E9F005949B8 /* PluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D7BCCA92412A88A00766721 /* PluginMain.cpp */; };
+		3D32393E25094F0D005949B8 /* EyeControlMobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D32393D25094F0D005949B8 /* EyeControlMobile.cpp */; };
+		3D32393F25094F0D005949B8 /* EyeControlMobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D32393D25094F0D005949B8 /* EyeControlMobile.cpp */; };
+		3D32394125095544005949B8 /* EyeControlMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D32394025095544005949B8 /* EyeControlMobile.h */; };
+		3D32394225095544005949B8 /* EyeControlMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D32394025095544005949B8 /* EyeControlMobile.h */; };
+		3D7BCCA82412A87000766721 /* EyeControlPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D7BCCA72412A87000766721 /* EyeControlPlugin.cpp */; };
+		3D7BCCAC2412A88A00766721 /* PluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D7BCCA92412A88A00766721 /* PluginMain.cpp */; };
+		3D7BCCAD2412A88A00766721 /* rb_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D7BCCAA2412A88A00766721 /* rb_plugin.h */; };
+		3D7BCCAE2412A88A00766721 /* REALplugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D7BCCAB2412A88A00766721 /* REALplugin.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3D32393C25094E9F005949B8 /* libEyeControl_iOS_Simulator.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libEyeControl_iOS_Simulator.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D32393D25094F0D005949B8 /* EyeControlMobile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EyeControlMobile.cpp; path = ../EyeControlMobile.cpp; sourceTree = "<group>"; };
+		3D32394025095544005949B8 /* EyeControlMobile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EyeControlMobile.h; path = ../EyeControlMobile.h; sourceTree = "<group>"; };
+		3D5F1F942412A84400BEB519 /* libEyeControl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libEyeControl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D7BCCA72412A87000766721 /* EyeControlPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EyeControlPlugin.cpp; path = ../EyeControlPlugin.cpp; sourceTree = "<group>"; };
+		3D7BCCA92412A88A00766721 /* PluginMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginMain.cpp; path = ../../../GlueCode/PluginMain.cpp; sourceTree = "<group>"; };
+		3D7BCCAA2412A88A00766721 /* rb_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rb_plugin.h; path = ../../../Includes/rb_plugin.h; sourceTree = "<group>"; };
+		3D7BCCAB2412A88A00766721 /* REALplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = REALplugin.h; path = ../../../Includes/REALplugin.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D32393825094E9F005949B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D5F1F922412A84400BEB519 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D5F1F8B2412A84400BEB519 = {
+			isa = PBXGroup;
+			children = (
+				3D5F1F952412A84400BEB519 /* Products */,
+				3D7BCCA72412A87000766721 /* EyeControlPlugin.cpp */,
+				3D32394025095544005949B8 /* EyeControlMobile.h */,
+				3D32393D25094F0D005949B8 /* EyeControlMobile.cpp */,
+				3D7BCCA92412A88A00766721 /* PluginMain.cpp */,
+				3D7BCCAA2412A88A00766721 /* rb_plugin.h */,
+				3D7BCCAB2412A88A00766721 /* REALplugin.h */,
+			);
+			sourceTree = "<group>";
+		};
+		3D5F1F952412A84400BEB519 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D5F1F942412A84400BEB519 /* libEyeControl.dylib */,
+				3D32393C25094E9F005949B8 /* libEyeControl_iOS_Simulator.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3D32393225094E9F005949B8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D32394225095544005949B8 /* EyeControlMobile.h in Headers */,
+				3D32393325094E9F005949B8 /* rb_plugin.h in Headers */,
+				3D32393425094E9F005949B8 /* REALplugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D5F1F902412A84400BEB519 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D32394125095544005949B8 /* EyeControlMobile.h in Headers */,
+				3D7BCCAD2412A88A00766721 /* rb_plugin.h in Headers */,
+				3D7BCCAE2412A88A00766721 /* REALplugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3D32393125094E9F005949B8 /* EyeControl_iOS_Simulator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D32393925094E9F005949B8 /* Build configuration list for PBXNativeTarget "EyeControl_iOS_Simulator" */;
+			buildPhases = (
+				3D32393225094E9F005949B8 /* Headers */,
+				3D32393525094E9F005949B8 /* Sources */,
+				3D32393825094E9F005949B8 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EyeControl_iOS_Simulator;
+			productName = EyeControl;
+			productReference = 3D32393C25094E9F005949B8 /* libEyeControl_iOS_Simulator.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		3D5F1F932412A84400BEB519 /* EyeControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D5F1F982412A84400BEB519 /* Build configuration list for PBXNativeTarget "EyeControl" */;
+			buildPhases = (
+				3D5F1F902412A84400BEB519 /* Headers */,
+				3D5F1F912412A84400BEB519 /* Sources */,
+				3D5F1F922412A84400BEB519 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EyeControl;
+			productName = EyeControl;
+			productReference = 3D5F1F942412A84400BEB519 /* libEyeControl.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3D5F1F8C2412A84400BEB519 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1030;
+				TargetAttributes = {
+					3D5F1F932412A84400BEB519 = {
+						CreatedOnToolsVersion = 10.3;
+					};
+				};
+			};
+			buildConfigurationList = 3D5F1F8F2412A84400BEB519 /* Build configuration list for PBXProject "EyeControl" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3D5F1F8B2412A84400BEB519;
+			productRefGroup = 3D5F1F952412A84400BEB519 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3D5F1F932412A84400BEB519 /* EyeControl */,
+				3D32393125094E9F005949B8 /* EyeControl_iOS_Simulator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D32393525094E9F005949B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D32393F25094F0D005949B8 /* EyeControlMobile.cpp in Sources */,
+				3D32393625094E9F005949B8 /* EyeControlPlugin.cpp in Sources */,
+				3D32393725094E9F005949B8 /* PluginMain.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D5F1F912412A84400BEB519 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D32393E25094F0D005949B8 /* EyeControlMobile.cpp in Sources */,
+				3D7BCCA82412A87000766721 /* EyeControlPlugin.cpp in Sources */,
+				3D7BCCAC2412A88A00766721 /* PluginMain.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3D32393A25094E9F005949B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = ../../../Includes/iOSPrefixHeader.h;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		3D32393B25094E9F005949B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = ../../../Includes/iOSPrefixHeader.h;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphonesimulator;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		3D5F1F962412A84400BEB519 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3D5F1F972412A84400BEB519 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3D5F1F992412A84400BEB519 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3D5F1F9A2412A84400BEB519 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3D32393925094E9F005949B8 /* Build configuration list for PBXNativeTarget "EyeControl_iOS_Simulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D32393A25094E9F005949B8 /* Debug */,
+				3D32393B25094E9F005949B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D5F1F8F2412A84400BEB519 /* Build configuration list for PBXProject "EyeControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D5F1F962412A84400BEB519 /* Debug */,
+				3D5F1F972412A84400BEB519 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D5F1F982412A84400BEB519 /* Build configuration list for PBXNativeTarget "EyeControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D5F1F992412A84400BEB519 /* Debug */,
+				3D5F1F9A2412A84400BEB519 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3D5F1F8C2412A84400BEB519 /* Project object */;
+}
