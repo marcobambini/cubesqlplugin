@@ -13,7 +13,7 @@
 
 #define	PING_FREQUENCY		300 // on the server it is specified as 300
 #define DEBUG_WRITE(...)	if (debugFile != NULL) debug_write(__VA_ARGS__)
-#define PLUGIN_VERSION		"2.1.0"
+#define PLUGIN_VERSION		"2.1.1"
 #define SSL_NOVERSION		"N/A"
 #define MAX_TYPES_COUNT     512
 
@@ -309,23 +309,6 @@ REALmethodDefinition CubeSQLVMMethods[] = {
     { (REALproc) CubeSQLVMSelectRowSet, NULL, "VMSelectRowSet() As RowSet", REALconsoleSafe},
 };
 
-/*
-REALmethodDefinition MySQLStatementMethods[] = {
-    { (REALproc) MySQLStatementBindIndex, REALnoImplementation, "Bind(zeroBasedIndex As Integer, param As Variant)", REALconsoleSafe},
-    { (REALproc) MySQLStatementBindIndexAndType, REALnoImplementation, "Bind(zeroBasedIndex As Integer, param As Variant, type As Integer)", REALconsoleSafe},
-    { (REALproc) MySQLStatementBindArray, REALnoImplementation, "Bind(values() As Variant)", REALconsoleSafe},
-    { (REALproc) MySQLStatementBindTypeIndex, REALnoImplementation, "BindType(zeroBasedIndex As Integer, type As Integer)", REALconsoleSafe},
-    { (REALproc) MySQLStatementBindTypeArray, REALnoImplementation, "BindType(types() As Integer)", REALconsoleSafe},
- 
-    { (REALproc) MySQLStatementSQLSelect, REALnoImplementation, "SQLSelect(ParamArray params As Variant) As RecordSet", REALconsoleSafe},
-    { (REALproc) MySQLStatementSelectSQL, REALnoImplementation, "SelectSQL(ParamArray params As Variant) As RowSet", REALconsoleSafe},
-    { (REALproc) MySQLStatementSQLExecute, REALnoImplementation, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
-    { (REALproc) MySQLStatementExecuteSQL, REALnoImplementation, "ExecuteSQL(ParamArray params As Variant)", REALconsoleSafe},
-    { (REALproc) REALnoImplementation, REALnoImplementation, "Constructor", REALconsoleSafe | REALScopePrivate},
-    { (REALproc) MySQLStatementDestructor, REALnoImplementation, "Destructor", REALconsoleSafe | REALScopePrivate},
-};
- */
-
 REALmethodDefinition CubeSQLPrepareMethods[] = {
     { (REALproc) CubeSQLPrepareBindValue, NULL, "Bind(index As Integer, value As Variant)", REALconsoleSafe},
     { (REALproc) CubeSQLPrepareBindValueType, NULL, "Bind(index As Integer, value As Variant, type As Integer)", REALconsoleSafe},
@@ -338,17 +321,6 @@ REALmethodDefinition CubeSQLPrepareMethods[] = {
     { (REALproc) CubeSQLPrepareSelectSQL, REALnoImplementation, "SelectSQL(ParamArray params As Variant) As RowSet", REALconsoleSafe},
     { (REALproc) CubeSQLPrepareSQLExecute, REALnoImplementation, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
     { (REALproc) CubeSQLPrepareExecuteSQL, REALnoImplementation, "ExecuteSQL(ParamArray params As Variant)", REALconsoleSafe},
-    
-    /*
-    { (REALproc) CubeSQLPrepareExecuteSQLNoValues, NULL, "ExecuteSQL()", REALconsoleSafe},
-    { (REALproc) CubeSQLPrepareSelectSQLNoValues, NULL, "SelectSQL() As RowSet", REALconsoleSafe},
-    { (REALproc) CubeSQLPrepareExecuteSQL, NULL, "ExecuteSQL(Paramarray values() As Variant)", REALconsoleSafe},
-    { (REALproc) CubeSQLPrepareSelectSQL, NULL, "SelectSQL(Paramarray values() As Variant) As RowSet", REALconsoleSafe},
-    // one of the unfortunate side effects of deprecation and not removal, even though SQLSelect and SQLExecute are no longer documented or autocomplete,
-    // they still exist on the PreparedSQLStatement interface so you will have to add implementations for them, even if all you
-    { (REALproc) CubeSQLPrepareSQLExecute, NULL, "SQLExecute(ParamArray params As Variant)", REALconsoleSafe},
-    { (REALproc) CubeSQLPrepareSQLSelect, NULL, "SQLSelect(ParamArray params As Variant) As RecordSet", REALconsoleSafe},
-     */
 };
 
 REALclassDefinition CubeSQLVMClass = {

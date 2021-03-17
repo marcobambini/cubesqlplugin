@@ -254,7 +254,7 @@ REALstring DatabaseErrMessage (REALobject instance) {
 REALdbCursor DatabaseTableSchema(dbDatabase *database) {
 	DEBUG_WRITE("DatabaseTableSchema");
 	if (database->isConnected == false) return NULL;
-	csqlc *c = cubesql_select(database->db, "SELECT name as TableName FROM sqlite_master WHERE type='table' ORDER BY TableName;", kFALSE);
+	csqlc *c = cubesql_select(database->db, "SELECT name as TableName FROM sqlite_master WHERE type='table' ORDER BY TableName;");
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLFieldSchemaCursor);
 }
@@ -264,7 +264,7 @@ REALdbCursor DatabaseIndexSchema(dbDatabase *database, REALstring tableName) {
 	if (database->isConnected == false) return NULL;
 	char sql[512];
 	snprintf(sql, sizeof(sql), "SELECT name as IndexName FROM sqlite_master WHERE type='index' AND tbl_name='%s';", REALGetCString(tableName));
-	csqlc *c = cubesql_select(database->db, sql, kFALSE);
+	csqlc *c = cubesql_select(database->db, sql);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLFieldSchemaCursor);
 }
@@ -279,7 +279,7 @@ REALdbCursor DatabaseFieldSchema(dbDatabase *database, REALstring tableName) {
 	else
 		snprintf(sql, sizeof(sql), "SHOW TABLE INFO REALBASIC '%s';", REALGetCString(tableName));
 	
-	csqlc *c = cubesql_select(database->db, sql, kFALSE);
+	csqlc *c = cubesql_select(database->db, sql);
 	if (c == NULL) return NULL;
 	
 	if (database->useREALServerProtocol) c = REALServerBuildFieldSchemaCursor(c);
@@ -297,7 +297,7 @@ REALdbCursor DatabaseSQLSelect(dbDatabase *database, REALstring sql) {
 	DEBUG_WRITE("DatabaseSQLSelect");
 	if (database->isConnected == false) return NULL;
 	database->endChunkReceived = false;
-	csqlc *c = cubesql_select(database->db, REALGetCString(sql), kFALSE);
+	csqlc *c = cubesql_select(database->db, REALGetCString(sql));
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLCursor);
 }
@@ -382,7 +382,7 @@ long long DatabaseLastRowID(REALobject instance) {
 	if (data == NULL) return 0;
 	if (data->isConnected == false) return 0;
 	
-	csqlc *c = cubesql_select(data->db, "SHOW LASTROWID;", kFALSE);
+	csqlc *c = cubesql_select(data->db, "SHOW LASTROWID;");
 	if (c == NULL) return 0;
 	
 	int64 value = cubesql_cursor_int64 (c, 1, 1, 0);
@@ -538,11 +538,11 @@ void BindVariantObjectToVM(REALobject vm, int index, REALobject item) {
             else CubeSQLVMBindDouble(vm, index, (double)value);
         } break;
             
-        case 6: { // TypeCurrency
-            REALcurrency value = 0;
-            if (!REALGetPropValueCurrency(item, "CurrencyValue", &value)) CubeSQLVMBindNull(vm, index);
-            else CubeSQLVMBindInt64(vm, index, (int64)value);
-        } break;
+//        case 6: { // TypeCurrency
+//            REALcurrency value = 0;
+//            if (!REALGetPropValueCurrency(item, "CurrencyValue", &value)) CubeSQLVMBindNull(vm, index);
+//            else CubeSQLVMBindInt64(vm, index, (int64)value);
+//        } break;
             
         case 7:
         case 38: { // TypeDate and TypeDateTime
@@ -555,6 +555,7 @@ void BindVariantObjectToVM(REALobject vm, int index, REALobject item) {
             }
         } break;
             
+        case 6: // TypeCurrency
         case 8:
         case 18:
         case 19:
@@ -695,7 +696,7 @@ REALdbCursor DatabaseSelectSQL(dbDatabase *instance, REALstring sql, REALarray p
     
     if (isParamsEmpty) {
         // simpler case without params
-        csqlc *c = cubesql_select(instance->db, REALGetCString(sql), kFALSE);
+        csqlc *c = cubesql_select(instance->db, REALGetCString(sql));
         if (c == NULL) return NULL;
         return REALNewRowSetFromDBCursor(CursorCreate(c), &CubeSQLCursor);
     }
@@ -1416,7 +1417,7 @@ REALstring ServerVersionGetter(REALobject instance, long param) {
 	if (data == NULL) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	if (data->isConnected == false) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	
-	csqlc *c = cubesql_select(data->db, "SHOW PREFERENCE SERVER_RELEASE;", kFALSE);
+	csqlc *c = cubesql_select(data->db, "SHOW PREFERENCE SERVER_RELEASE;");
 	if (c == NULL) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	char *p, s[128];
 	p = cubesql_cursor_cstring_static(c, 1, 2, s, sizeof(s));
