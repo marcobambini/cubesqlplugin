@@ -38,6 +38,15 @@ static void MessageBox(REALstring str)
 	FuncTy fp = (FuncTy)REALLoadFrameworkMethod("MsgBox(s As String)");
 	if (fp) fp(str);
 }
+
+static RBInteger Ticks()
+{
+    typedef RBInteger (*FuncTy)();
+    FuncTy fp = (FuncTy)REALLoadFrameworkMethod("Ticks() As Integer");
+    if (fp) return fp();
+    return 0;
+}
+
 // Defining properties in modules is new to RB2006r4.
 //
 // Define the properties which our module is going to expose.
@@ -153,11 +162,7 @@ static REALstring PlayWithMoose( void )
 	static bool bInited = false;
 	if (not bInited) {
 		bInited = true;
-#if WIN32
-		::srand( ::GetTickCount() );
-#else
-		::srand( ::TickCount() );
-#endif
+		::srand( (uint32_t)Ticks() );
 	}
 
 	// You have a 50/50 chance of making it.  But, the

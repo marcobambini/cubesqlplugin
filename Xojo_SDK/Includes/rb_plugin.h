@@ -1,10 +1,8 @@
-// rb_plugin.h
-//
-// This file is part of the REALbasic plugin API.  Include this file
-// at the top of your plugin source files.
-//
-// (c) 2013 Xojo, Inc. -- All Rights Reserved
-// See file "Plug-in License SDK.txt" for details.
+/** @file rb_plugin.h
+ *  @brief This file contains functions to register data structures and functions to communicate with the Xojo framework.
+ *	Include this file at the top of your plugin source files
+ *	@copyright Xojo, Inc. -- All Rights Reserved.
+ */
 
 #ifndef RB_PLUGIN_H
 #define RB_PLUGIN_H
@@ -26,7 +24,7 @@ extern "C" {
 #endif
 
 /**
-* Accesses the data of a string.
+* @brief Accesses the data of a string.
 *
 * This retrieves the contents of the string in a known encoding. If it is not
 * possible to convert the string, it will return false.
@@ -340,6 +338,8 @@ bool REALinRuntime(void);
 
 void REALRegisterControl(REALcontrol *defn);
 
+void REALRegisterMobileControl(REALmobileControl *defn);
+
 void REALRegisterDBEngine(REALdbEngineDefinition *defn);
 
 void REALRegisterDBTable(REALdbTableDefinition *defn);
@@ -380,6 +380,8 @@ REALdbDatabase REALdbDatabaseFromDBDatabase(dbDatabase *database, REALdbEngineDe
 void *REALGetEventInstance(REALcontrolInstance instance, REALevent *event);
 
 void *REALGetControlData(REALcontrolInstance instance, REALcontrol *defn);
+
+void *REALGetMobileControlData(REALcontrolInstance instance, REALmobileControl *defn);
 
 void *REALGetClassData(REALobject instance, REALclassDefinition *defn);
 
@@ -475,9 +477,7 @@ REALpicture REALBuildPictureFromBuffer(uint32_t width, uint32_t height, RBPixelT
 bool REALInDebugMode(void);
 #endif
 
-#if TARGET_CARBON || TARGET_WIN32 || X_WINDOW || TARGET_COCOA
 void REALStripAmpersands(REALstring*  ioString);
-#endif
 
 REALobject REALGetProjectFolder(void) RB_WARN_UNUSED_RESULT;
 
@@ -679,6 +679,81 @@ RBInteger REALCountClassProperties(REALobject obj);
 * @version Added in 2019r2, but this API can be used in 2012 or even earlier
 */
 RBBoolean REALGetClassProperty(REALobject obj, uint32_t index, void **getter, void **setter, long *param, REALstring *declaration);
+
+/**
+* Adds event implementation for the specified event handler
+*
+* @param obj The object to add a handler for
+* @param eventName The name of the event to add a handler for
+* @param handler A pointer to the handler function with at least the first parameter being the object
+* @return True if the event was found and the handler was successfully added, false otherwise
+*
+* @version Added in 2020r1
+*/
+RBBoolean REALAddEventHandler(REALobject obj, REALstring eventName, void *handler);
+
+/**
+* Removes an event implementation for the specified object
+*
+* @param obj The object to remove a handler for
+* @param eventName The name of the event to remove a handler for
+* @param handler A pointer to the handler function that was used in REALAddEventHandler
+* @return True if the event was found and the handler was successfully removed, false otherwise
+*
+* @version Added in 2020r1
+*/
+RBBoolean REALRemoveEventHandler(REALobject obj, REALstring eventName, void *handler);
+
+/**
+* Checks to see if an event is handled
+*
+* @param obj The object to check against
+* @param eventName The name of the event to check
+* @return True if the event is handled, false otherwise
+*
+* @version Added in 2020r1
+*/
+RBBoolean REALIsEventHandled(REALobject obj, REALstring eventName);
+
+/**
+* Checks to see if the app is running in dark mode
+*
+* @return True if the app is running with dark mode support, false otherwise
+* @note This is the optimized version of the same dynamic access call through Color.IsDarkMode
+*
+* @version Added in 2021r3
+*/
+RBBoolean REALIsDarkMode();
+
+/**
+* Gets the top-level Window of the specified control
+*
+* @return The host Window, or DesktopWindow, of the specified control.
+* @note The returned object is not locked upon return.
+*
+* @version Undeprecated in 2021r3
+*/
+REALwindow REALGetControlWindow(REALcontrolInstance instance) RB_WARN_UNUSED_RESULT;
+
+/**
+* Gets state of current thread execution
+*
+* @return True is current execution is in a Xojo thread (but not Xojo's main thread)
+* @note This is only supported for Console (including Web) and Desktop.
+*
+* @version Added in 2021r3
+*/
+RBBoolean REALIsXojoThread() RB_WARN_UNUSED_RESULT;
+
+/**
+* Gets state of current thread execution
+*
+* @return True is current execution is in Xojo's main thread
+* @note This is only supported for Console (including Web) and Desktop.
+*
+* @version Added in 2021r3
+*/
+RBBoolean REALIsXojoMainThread() RB_WARN_UNUSED_RESULT;
 
 #if defined(__cplusplus)
 	}

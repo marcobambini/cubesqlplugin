@@ -1,0 +1,433 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A948781D2B319AAC00A67785 /* cubesql.c in Sources */ = {isa = PBXBuildFile; fileRef = A94878082B319AAC00A67785 /* cubesql.c */; };
+		A948781E2B319AAC00A67785 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = A948780A2B319AAC00A67785 /* aeskey.c */; };
+		A948781F2B319AAC00A67785 /* pseudorandom.h in Headers */ = {isa = PBXBuildFile; fileRef = A948780B2B319AAC00A67785 /* pseudorandom.h */; };
+		A94878202B319AAC00A67785 /* aestab.h in Headers */ = {isa = PBXBuildFile; fileRef = A948780C2B319AAC00A67785 /* aestab.h */; };
+		A94878212B319AAC00A67785 /* base64.h in Headers */ = {isa = PBXBuildFile; fileRef = A948780D2B319AAC00A67785 /* base64.h */; };
+		A94878222B319AAC00A67785 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = A948780E2B319AAC00A67785 /* aescrypt.c */; };
+		A94878232B319AAC00A67785 /* aesopt.h in Headers */ = {isa = PBXBuildFile; fileRef = A948780F2B319AAC00A67785 /* aesopt.h */; };
+		A94878242B319AAC00A67785 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = A94878102B319AAC00A67785 /* sha1.c */; };
+		A94878252B319AAC00A67785 /* pseudorandom.c in Sources */ = {isa = PBXBuildFile; fileRef = A94878112B319AAC00A67785 /* pseudorandom.c */; };
+		A94878262B319AAC00A67785 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = A94878122B319AAC00A67785 /* aes.h */; };
+		A94878272B319AAC00A67785 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = A94878132B319AAC00A67785 /* base64.c */; };
+		A94878282B319AAC00A67785 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = A94878142B319AAC00A67785 /* aestab.c */; };
+		A94878292B319AAC00A67785 /* sha1.h in Headers */ = {isa = PBXBuildFile; fileRef = A94878152B319AAC00A67785 /* sha1.h */; };
+		A948782A2B319AAC00A67785 /* csql.h in Headers */ = {isa = PBXBuildFile; fileRef = A94878162B319AAC00A67785 /* csql.h */; };
+		A948782E2B319AAC00A67785 /* cubesql.h in Headers */ = {isa = PBXBuildFile; fileRef = A948781C2B319AAC00A67785 /* cubesql.h */; };
+		A94878322B319AB700A67785 /* CubeSQLPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94878302B319AB700A67785 /* CubeSQLPlugin.cpp */; };
+		A94878332B319AB700A67785 /* CubeSQLPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A94878312B319AB700A67785 /* CubeSQLPlugin.h */; };
+		A94878F32B319AE500A67785 /* libtls.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A94878F22B319AE500A67785 /* libtls.a */; };
+		A94878F52B319B6D00A67785 /* PluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94878F42B319B6D00A67785 /* PluginMain.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A94878002B319A8C00A67785 /* CubeSQLPlugin.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = CubeSQLPlugin.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A94878082B319AAC00A67785 /* cubesql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cubesql.c; sourceTree = "<group>"; };
+		A948780A2B319AAC00A67785 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		A948780B2B319AAC00A67785 /* pseudorandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pseudorandom.h; sourceTree = "<group>"; };
+		A948780C2B319AAC00A67785 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		A948780D2B319AAC00A67785 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		A948780E2B319AAC00A67785 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		A948780F2B319AAC00A67785 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		A94878102B319AAC00A67785 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		A94878112B319AAC00A67785 /* pseudorandom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pseudorandom.c; sourceTree = "<group>"; };
+		A94878122B319AAC00A67785 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		A94878132B319AAC00A67785 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
+		A94878142B319AAC00A67785 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		A94878152B319AAC00A67785 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		A94878162B319AAC00A67785 /* csql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = csql.h; sourceTree = "<group>"; };
+		A948781C2B319AAC00A67785 /* cubesql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cubesql.h; sourceTree = "<group>"; };
+		A94878302B319AB700A67785 /* CubeSQLPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeSQLPlugin.cpp; sourceTree = "<group>"; };
+		A94878312B319AB700A67785 /* CubeSQLPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeSQLPlugin.h; sourceTree = "<group>"; };
+		A94878F22B319AE500A67785 /* libtls.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtls.a; path = ../libs/macOS/libtls.a; sourceTree = "<group>"; };
+		A94878F42B319B6D00A67785 /* PluginMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginMain.cpp; path = ../Xojo_SDK/GlueCode/PluginMain.cpp; sourceTree = "<group>"; };
+		A94878F72B319B7600A67785 /* rb_plugin_deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rb_plugin_deprecated.h; sourceTree = "<group>"; };
+		A94878F82B319B7600A67785 /* WinHeader++.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WinHeader++.h"; sourceTree = "<group>"; };
+		A94878F92B319B7600A67785 /* rb_plugin_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rb_plugin_cpp.h; sourceTree = "<group>"; };
+		A94878FA2B319B7600A67785 /* macTypesForAnsi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macTypesForAnsi.h; sourceTree = "<group>"; };
+		A94878FB2B319B7600A67785 /* iOSPrefixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSPrefixHeader.h; sourceTree = "<group>"; };
+		A94878FC2B319B7600A67785 /* LinuxHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxHeader.h; sourceTree = "<group>"; };
+		A94878FD2B319B7600A67785 /* RBCocoaHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBCocoaHeaders.h; sourceTree = "<group>"; };
+		A94878FE2B319B7600A67785 /* rb_plugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rb_plugin.h; sourceTree = "<group>"; };
+		A94878FF2B319B7600A67785 /* REALplugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REALplugin.h; sourceTree = "<group>"; };
+		A94879002B319B7600A67785 /* CarbonHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarbonHeaders.h; sourceTree = "<group>"; };
+		A94879012B319B7600A67785 /* RBCarbonHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBCarbonHeaders.h; sourceTree = "<group>"; };
+		A94879022B319B7600A67785 /* rb_plugin_cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rb_plugin_cocoa.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A94877FE2B319A8C00A67785 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94878F32B319AE500A67785 /* libtls.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A94877F72B319A8C00A67785 = {
+			isa = PBXGroup;
+			children = (
+				A948782F2B319AB700A67785 /* sources */,
+				A94878F62B319B7600A67785 /* Includes */,
+				A94878072B319AAC00A67785 /* CubeSQL_SDK */,
+				A94878012B319A8C00A67785 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A94878012B319A8C00A67785 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A94878002B319A8C00A67785 /* CubeSQLPlugin.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A94878072B319AAC00A67785 /* CubeSQL_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				A94878082B319AAC00A67785 /* cubesql.c */,
+				A94878092B319AAC00A67785 /* crypt */,
+				A94878162B319AAC00A67785 /* csql.h */,
+				A948781C2B319AAC00A67785 /* cubesql.h */,
+			);
+			name = CubeSQL_SDK;
+			path = ../CubeSQL_SDK;
+			sourceTree = "<group>";
+		};
+		A94878092B319AAC00A67785 /* crypt */ = {
+			isa = PBXGroup;
+			children = (
+				A948780A2B319AAC00A67785 /* aeskey.c */,
+				A948780B2B319AAC00A67785 /* pseudorandom.h */,
+				A948780C2B319AAC00A67785 /* aestab.h */,
+				A948780D2B319AAC00A67785 /* base64.h */,
+				A948780E2B319AAC00A67785 /* aescrypt.c */,
+				A948780F2B319AAC00A67785 /* aesopt.h */,
+				A94878102B319AAC00A67785 /* sha1.c */,
+				A94878112B319AAC00A67785 /* pseudorandom.c */,
+				A94878122B319AAC00A67785 /* aes.h */,
+				A94878132B319AAC00A67785 /* base64.c */,
+				A94878142B319AAC00A67785 /* aestab.c */,
+				A94878152B319AAC00A67785 /* sha1.h */,
+			);
+			path = crypt;
+			sourceTree = "<group>";
+		};
+		A948782F2B319AB700A67785 /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				A94878F42B319B6D00A67785 /* PluginMain.cpp */,
+				A94878F22B319AE500A67785 /* libtls.a */,
+				A94878302B319AB700A67785 /* CubeSQLPlugin.cpp */,
+				A94878312B319AB700A67785 /* CubeSQLPlugin.h */,
+			);
+			name = sources;
+			path = ../sources;
+			sourceTree = "<group>";
+		};
+		A94878F62B319B7600A67785 /* Includes */ = {
+			isa = PBXGroup;
+			children = (
+				A94878F72B319B7600A67785 /* rb_plugin_deprecated.h */,
+				A94878F82B319B7600A67785 /* WinHeader++.h */,
+				A94878F92B319B7600A67785 /* rb_plugin_cpp.h */,
+				A94878FA2B319B7600A67785 /* macTypesForAnsi.h */,
+				A94878FB2B319B7600A67785 /* iOSPrefixHeader.h */,
+				A94878FC2B319B7600A67785 /* LinuxHeader.h */,
+				A94878FD2B319B7600A67785 /* RBCocoaHeaders.h */,
+				A94878FE2B319B7600A67785 /* rb_plugin.h */,
+				A94878FF2B319B7600A67785 /* REALplugin.h */,
+				A94879002B319B7600A67785 /* CarbonHeaders.h */,
+				A94879012B319B7600A67785 /* RBCarbonHeaders.h */,
+				A94879022B319B7600A67785 /* rb_plugin_cocoa.h */,
+			);
+			name = Includes;
+			path = ../Xojo_SDK/Includes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A94877FC2B319A8C00A67785 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94878202B319AAC00A67785 /* aestab.h in Headers */,
+				A94878292B319AAC00A67785 /* sha1.h in Headers */,
+				A948781F2B319AAC00A67785 /* pseudorandom.h in Headers */,
+				A948782E2B319AAC00A67785 /* cubesql.h in Headers */,
+				A94878332B319AB700A67785 /* CubeSQLPlugin.h in Headers */,
+				A948782A2B319AAC00A67785 /* csql.h in Headers */,
+				A94878232B319AAC00A67785 /* aesopt.h in Headers */,
+				A94878262B319AAC00A67785 /* aes.h in Headers */,
+				A94878212B319AAC00A67785 /* base64.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A94877FF2B319A8C00A67785 /* CubeSQLPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A94878042B319A8C00A67785 /* Build configuration list for PBXNativeTarget "CubeSQLPlugin" */;
+			buildPhases = (
+				A94877FC2B319A8C00A67785 /* Headers */,
+				A94877FD2B319A8C00A67785 /* Sources */,
+				A94877FE2B319A8C00A67785 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CubeSQLPlugin;
+			productName = CubeSQLPlugin;
+			productReference = A94878002B319A8C00A67785 /* CubeSQLPlugin.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A94877F82B319A8C00A67785 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A94877FF2B319A8C00A67785 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+				};
+			};
+			buildConfigurationList = A94877FB2B319A8C00A67785 /* Build configuration list for PBXProject "CubeSQLPlugin" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A94877F72B319A8C00A67785;
+			productRefGroup = A94878012B319A8C00A67785 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A94877FF2B319A8C00A67785 /* CubeSQLPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A94877FD2B319A8C00A67785 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A94878242B319AAC00A67785 /* sha1.c in Sources */,
+				A94878252B319AAC00A67785 /* pseudorandom.c in Sources */,
+				A94878282B319AAC00A67785 /* aestab.c in Sources */,
+				A94878F52B319B6D00A67785 /* PluginMain.cpp in Sources */,
+				A948781D2B319AAC00A67785 /* cubesql.c in Sources */,
+				A94878222B319AAC00A67785 /* aescrypt.c in Sources */,
+				A94878272B319AAC00A67785 /* base64.c in Sources */,
+				A94878322B319AB700A67785 /* CubeSQLPlugin.cpp in Sources */,
+				A948781E2B319AAC00A67785 /* aeskey.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A94878022B319A8C00A67785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A94878032B319A8C00A67785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A94878052B319A8C00A67785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3ZH6236ET5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=0";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Xojo_SDK/Includes\"",
+					"\"$(SRCROOT)/../CubeSQL_SDK\"",
+					"\"$(SRCROOT)/../CubeSQL_SDK/crypt\"",
+					"\"$(SRCROOT)/../sources\"",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../libs/macOS\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A94878062B319A8C00A67785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3ZH6236ET5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IPHONE=0";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Xojo_SDK/Includes\"",
+					"\"$(SRCROOT)/../CubeSQL_SDK\"",
+					"\"$(SRCROOT)/../CubeSQL_SDK/crypt\"",
+					"\"$(SRCROOT)/../sources\"",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../libs/macOS\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A94877FB2B319A8C00A67785 /* Build configuration list for PBXProject "CubeSQLPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94878022B319A8C00A67785 /* Debug */,
+				A94878032B319A8C00A67785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A94878042B319A8C00A67785 /* Build configuration list for PBXNativeTarget "CubeSQLPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A94878052B319A8C00A67785 /* Debug */,
+				A94878062B319A8C00A67785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A94877F82B319A8C00A67785 /* Project object */;
+}

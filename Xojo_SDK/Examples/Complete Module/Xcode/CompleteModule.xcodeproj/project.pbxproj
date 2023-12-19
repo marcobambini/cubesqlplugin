@@ -11,8 +11,6 @@
 		D8EE93871485493D00E07EBD /* PluginMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EE93651485493D00E07EBD /* PluginMain.cpp */; };
 		D8EE938C1485493D00E07EBD /* rb_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EE936B1485493D00E07EBD /* rb_plugin.h */; };
 		D8EE938F1485493D00E07EBD /* REALplugin.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EE936E1485493D00E07EBD /* REALplugin.h */; };
-		D8EE941714854E6700E07EBD /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EE941614854E6700E07EBD /* Carbon.framework */; };
-		D8EE941914854E6C00E07EBD /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EE941814854E6C00E07EBD /* QuickTime.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,8 +19,6 @@
 		D8EE93651485493D00E07EBD /* PluginMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PluginMain.cpp; sourceTree = "<group>"; };
 		D8EE936B1485493D00E07EBD /* rb_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rb_plugin.h; sourceTree = "<group>"; };
 		D8EE936E1485493D00E07EBD /* REALplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REALplugin.h; sourceTree = "<group>"; };
-		D8EE941614854E6700E07EBD /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
-		D8EE941814854E6C00E07EBD /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = SDKs/MacOSX10.6.sdk/System/Library/Frameworks/QuickTime.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,8 +26,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8EE941914854E6C00E07EBD /* QuickTime.framework in Frameworks */,
-				D8EE941714854E6700E07EBD /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +89,6 @@
 		D8EE942014854EA700E07EBD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D8EE941814854E6C00E07EBD /* QuickTime.framework */,
-				D8EE941614854E6700E07EBD /* Carbon.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,6 +139,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = D8EE92B41485450E00E07EBD;

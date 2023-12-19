@@ -16,7 +16,13 @@
 //
 // Revision history:
 
+// Enable if this platform supports building for iOS
+#define SUPPORTS_IOS_TARGET 0
+
 #include "rb_plugin.h"
+#if SUPPORTS_IOS_TARGET
+    #include "EyeControlMobile.h"
+#endif
 
 static RBColor EyeColorGetter(REALcontrolInstance control, RBInteger unusedParam);
 static void EyeColorSetter(REALcontrolInstance control, RBInteger unusedParam, RBColor newColor);
@@ -74,9 +80,9 @@ struct EyeControlData
 
 static REALcontrol EyeDefinition = {
 	kCurrentREALControlVersion,
-	"EyeControl",
+	"DesktopEyeControl",
 	sizeof(EyeControlData),
-	REALenabledControl | REALcontrolIsHIViewCompatible,
+	REALenabledControl | REALcontrolIsHIViewCompatible | REALdesktopControl,
 	0, 0,	// This is the BMP name, so the IDE will try and find 0.bmp in IDE Resources->Controls Palette folder in the RBX plugin
 	80, 50,
 	EyeProperties, sizeof(EyeProperties) / sizeof(REALproperty),
@@ -116,9 +122,9 @@ static void EyeClose(REALcontrolInstance control)
 
 	// Invalidate control
 	typedef void (* InvalidateFuncTy)(REALcontrolInstance, RBBoolean eraseBackground);
-	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Invalidate( eraseBackground As Boolean = False )");
+	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Refresh(immediately As Boolean = False)");
 
-	Invalidate(control, true);
+	if (Invalidate) Invalidate(control, true);
 }
 
 static void EyeOpen(REALcontrolInstance control)
@@ -128,9 +134,9 @@ static void EyeOpen(REALcontrolInstance control)
 
 	// Invalidate control
 	typedef void (* InvalidateFuncTy)(REALcontrolInstance, RBBoolean eraseBackground);
-	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Invalidate( eraseBackground As Boolean = False )");
+	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Refresh(immediately As Boolean = False)");
 
-	Invalidate(control, true);
+	if (Invalidate) Invalidate(control, true);
 }
 
 static RBBoolean EyeClick(REALcontrolInstance control, int x, int y, int modifiers)
@@ -141,9 +147,9 @@ static RBBoolean EyeClick(REALcontrolInstance control, int x, int y, int modifie
 
 	// Invalidate control
 	typedef void (* InvalidateFuncTy)(REALcontrolInstance, RBBoolean eraseBackground);
-	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Invalidate( eraseBackground As Boolean = False )");
+	InvalidateFuncTy Invalidate = (InvalidateFuncTy)REALLoadObjectMethod((REALobject)control, "Refresh(immediately As Boolean = False)");
 
-	Invalidate(control, true);
+	if (Invalidate) Invalidate(control, true);
 
 	typedef void (*EventTy)(REALcontrolInstance);
 	EventTy fp = NULL;
@@ -212,5 +218,10 @@ static void EyePaint(REALcontrolInstance control, REALgraphics context)
 
 void PluginEntry(void)
 {
+#if !TARGET_OS_IPHONE
 	REALRegisterControl(&EyeDefinition);
+#endif
+#if SUPPORTS_IOS_TARGET
+    RegisteriOSControl();
+#endif
 }

@@ -254,7 +254,7 @@ REALstring DatabaseErrMessage (REALobject instance) {
 REALdbCursor DatabaseTableSchema(dbDatabase *database) {
 	DEBUG_WRITE("DatabaseTableSchema");
 	if (database->isConnected == false) return NULL;
-	csqlc *c = cubesql_select(database->db, "SELECT name as TableName FROM sqlite_master WHERE type='table' ORDER BY TableName;");
+	csqlc *c = cubesql_select(database->db, "SELECT name as TableName FROM sqlite_master WHERE type='table' ORDER BY TableName;", 0);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLFieldSchemaCursor);
 }
@@ -264,7 +264,7 @@ REALdbCursor DatabaseIndexSchema(dbDatabase *database, REALstring tableName) {
 	if (database->isConnected == false) return NULL;
 	char sql[512];
 	snprintf(sql, sizeof(sql), "SELECT name as IndexName FROM sqlite_master WHERE type='index' AND tbl_name='%s';", REALGetCString(tableName));
-	csqlc *c = cubesql_select(database->db, sql);
+	csqlc *c = cubesql_select(database->db, sql, 0);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLFieldSchemaCursor);
 }
@@ -279,7 +279,7 @@ REALdbCursor DatabaseFieldSchema(dbDatabase *database, REALstring tableName) {
 	else
 		snprintf(sql, sizeof(sql), "SHOW TABLE INFO REALBASIC '%s';", REALGetCString(tableName));
 	
-	csqlc *c = cubesql_select(database->db, sql);
+	csqlc *c = cubesql_select(database->db, sql, 0);
 	if (c == NULL) return NULL;
 	
 	if (database->useREALServerProtocol) c = REALServerBuildFieldSchemaCursor(c);
@@ -297,7 +297,7 @@ REALdbCursor DatabaseSQLSelect(dbDatabase *database, REALstring sql) {
 	DEBUG_WRITE("DatabaseSQLSelect");
 	if (database->isConnected == false) return NULL;
 	database->endChunkReceived = false;
-	csqlc *c = cubesql_select(database->db, REALGetCString(sql));
+	csqlc *c = cubesql_select(database->db, REALGetCString(sql), 0);
 	if (c == NULL) return NULL;
 	return REALdbCursorFromDBCursor(CursorCreate(c), &CubeSQLCursor);
 }
@@ -382,7 +382,7 @@ long long DatabaseLastRowID(REALobject instance) {
 	if (data == NULL) return 0;
 	if (data->isConnected == false) return 0;
 	
-	csqlc *c = cubesql_select(data->db, "SHOW LASTROWID;");
+	csqlc *c = cubesql_select(data->db, "SHOW LASTROWID;", 0);
 	if (c == NULL) return 0;
 	
 	int64 value = cubesql_cursor_int64 (c, 1, 1, 0);
@@ -696,7 +696,7 @@ REALdbCursor DatabaseSelectSQL(dbDatabase *instance, REALstring sql, REALarray p
     
     if (isParamsEmpty) {
         // simpler case without params
-        csqlc *c = cubesql_select(instance->db, REALGetCString(sql));
+        csqlc *c = cubesql_select(instance->db, REALGetCString(sql), 0);
         if (c == NULL) return NULL;
         return REALNewRowSetFromDBCursor(CursorCreate(c), &CubeSQLCursor);
     }
@@ -1417,7 +1417,7 @@ REALstring ServerVersionGetter(REALobject instance, long param) {
 	if (data == NULL) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	if (data->isConnected == false) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	
-	csqlc *c = cubesql_select(data->db, "SHOW PREFERENCE SERVER_RELEASE;");
+	csqlc *c = cubesql_select(data->db, "SHOW PREFERENCE SERVER_RELEASE;", 0);
 	if (c == NULL) return REALBuildStringWithEncoding("", 0, kREALTextEncodingUTF8);
 	char *p, s[128];
 	p = cubesql_cursor_cstring_static(c, 1, 2, s, sizeof(s));
@@ -1691,22 +1691,10 @@ void NULLAsStringSetter(Boolean value) {
 
 void SSLLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
-	
-	REALstring path = REALbasicPathFromFolderItem(value);
-    if (!path) return;
-	
-    cubesql_setpath(CUBESQL_SSL_LIBRARY_PATH, (char*)REALGetCString(path));
-	REALUnlockString(path);
 }
 
 void CryptoLibrarySetter(REALfolderItem value) {
 	DEBUG_WRITE("SSLLibrarySetter");
-	
-	REALstring path = REALbasicPathFromFolderItem(value);
-    if (!path) return;
-    
-	cubesql_setpath(CUBESQL_CRYPTO_LIBRARY_PATH, (char*)REALGetCString(path));
-	REALUnlockString(path);
 }
 
 Boolean BooleanAsIntegerGetter(void) {

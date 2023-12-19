@@ -69,7 +69,7 @@ static REALcontrol sRatingControl = {
 	kCurrentREALControlVersion,
 	"RatingControl",
 	sizeof(RatingControlData),
-	0, // flags
+	REALdesktopControl, // flags
 	0, 0, // toolbar icons
 	65, 13, // width/height
 	sRatingControlProps, _countof(sRatingControlProps),

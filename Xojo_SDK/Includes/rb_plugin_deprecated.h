@@ -400,22 +400,6 @@ REAL_DEPRECATED REALstring REALpathFromFolderItem(REALfolderItem item);
 REAL_DEPRECATED HDC REALGraphicsDC(REALgraphics context);
 #endif
 
-#if TARGET_CARBON || TARGET_COCOA
-REAL_DEPRECATED REALfolderItem REALFolderItemFromParentFSRef(const FSRef *parent, const HFSUniStr255 *fileName) RB_WARN_UNUSED_RESULT;
-#endif
-
-#if TARGET_CARBON || TARGET_COCOA
-REAL_DEPRECATED Boolean REALFSRefFromFolderItem(REALfolderItem f, FSRef*outRef, HFSUniStr255*outName) RB_WARN_UNUSED_RESULT;
-#endif
-
-#if (TARGET_CARBON || TARGET_COCOA) && !TARGET_64BIT
-REAL_DEPRECATED REALfolderItem REALFolderItemFromFSSpec(const FSSpec *spec);
-#endif
-
-#if (TARGET_CARBON || TARGET_COCOA) && !TARGET_64BIT
-REAL_DEPRECATED Boolean REALFSSpecFromFolderItem(FSSpec *spec, REALfolderItem item);
-#endif
-
 REAL_DEPRECATED_("Use REALBuildStringWithEncoding") REALstring REALBuildString(const char *contents, int length) RB_WARN_UNUSED_RESULT;
 
 REAL_DEPRECATED_("Use REALBuildStringWithEncoding") void REALSetStringEncoding(REALstring str, uint32_t encoding);
@@ -437,8 +421,6 @@ REAL_DEPRECATED void REALSetControlEnabled(REALcontrolInstance instance, RBInteg
 	REAL_DEPRECATED unsigned long REALGetControlHandle(REALcontrolInstance control);
 #endif
 
-REAL_DEPRECATED REALwindow REALGetControlWindow(REALcontrolInstance instance) RB_WARN_UNUSED_RESULT;
-
 REAL_DEPRECATED void REALSetControlPosition(REALcontrolInstance instance, RBInteger which, RBInteger value);
 REAL_DEPRECATED RBInteger REALGetControlPosition(REALcontrolInstance instance, RBInteger which);
 
@@ -451,10 +433,6 @@ REAL_DEPRECATED_("Use REALLoadObjectMethod with CopyHandle") CGImageRef REALCopy
 #endif
 
 #if defined(__cplusplus)
-
-#if TARGET_CARBON || TARGET_COCOA
-REAL_DEPRECATED REALobject REALFolderItemFromParentFSRef(const FSRef& parent, const HFSUniStr255& fileName) RB_WARN_UNUSED_RESULT;
-#endif
 
 #endif // defined(__cplusplus)
 

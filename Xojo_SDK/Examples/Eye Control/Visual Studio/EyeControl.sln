@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EyeControl", "EyeControl.vcxproj", "{48B9A958-A466-4F19-8B89-0308CDBEE5D2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EyeControlWinUI", "EyeControlWinUI.vcxproj", "{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,19 @@ Global
 		{48B9A958-A466-4F19-8B89-0308CDBEE5D2}.Release|Win32.Build.0 = Release|Win32
 		{48B9A958-A466-4F19-8B89-0308CDBEE5D2}.Release|x64.ActiveCfg = Release|x64
 		{48B9A958-A466-4F19-8B89-0308CDBEE5D2}.Release|x64.Build.0 = Release|x64
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Debug|Win32.Build.0 = Debug|Win32
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Debug|x64.ActiveCfg = Debug|x64
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Debug|x64.Build.0 = Debug|x64
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Release|Win32.ActiveCfg = Release|Win32
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Release|Win32.Build.0 = Release|Win32
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Release|x64.ActiveCfg = Release|x64
+		{8E7ACEC4-8DB7-43B2-8065-D331BF42FE68}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E494F11A-B9BD-4D9E-BBAF-0609A445CBC1}
 	EndGlobalSection
 EndGlobal

@@ -172,6 +172,15 @@ void REALRegisterControl(REALcontrol *defn)
 	if (pRuntimeRegisterControl) pRuntimeRegisterControl(defn);
 }
 
+void REALRegisterMobileControl(REALmobileControl *defn)
+{
+    static void (*pRuntimeRegisterControl)(REALmobileControl *defn);
+    if (!pRuntimeRegisterControl)
+        pRuntimeRegisterControl = (void (*)(REALmobileControl *)) CallResolver("PluginRegisterMobileControl");
+    
+    if (pRuntimeRegisterControl) pRuntimeRegisterControl(defn);
+}
+
 void REALRegisterDBEngine(REALdbEngineDefinition *defn)
 {
 	static void (*pRegisterDatabaseEngine)(REALdbEngineDefinition *defn);
@@ -466,27 +475,11 @@ void *REALGetClassData(REALobject instance, REALclassDefinition *defn)
 	return ((char *)instance) + defn->forSystemUse;
 }
 
-#if TARGET_CARBON && !TARGET_64BIT
-REALfolderItem REALFolderItemFromFSSpec(const FSSpec *spec)
+void *REALGetMobileControlData(REALcontrolInstance instance, REALmobileControl *defn)
 {
-	static REALfolderItem (*pFolderItemFromFSSpec)(const FSSpec *) = nil;
-	if (!pFolderItemFromFSSpec)
-		pFolderItemFromFSSpec = (REALfolderItem (*)(const FSSpec *)) CallResolver("FolderItemFromFSSpec");
-	if (pFolderItemFromFSSpec) return pFolderItemFromFSSpec(spec);
-	else return 0;
+	return ((char *)instance) + defn->forSystemUse;
 }
-#endif
 
-#if TARGET_CARBON && !TARGET_64BIT
-Boolean REALFSSpecFromFolderItem(FSSpec *spec, REALfolderItem item)
-{
-	static RBBoolean (*pFSSpecFromFolderItem)(FSSpec *, REALfolderItem) = nil;
-	if (!pFSSpecFromFolderItem)
-		pFSSpecFromFolderItem = (RBBoolean (*)(FSSpec *, REALfolderItem)) CallResolver("REALFSSpecFromFolderItem");
-	if (pFSSpecFromFolderItem) return pFSSpecFromFolderItem(spec, item);
-	else return false;
-}
-#endif
 
 #if TARGET_CARBON
 REALappleEvent REALBuildAppleEvent(const AppleEvent *event, bool bPassOwnership)
@@ -740,33 +733,6 @@ void REALConstructDBDatabase(REALdbDatabase db, dbDatabase *mydb, REALdbEngineDe
 	if (pConstructDBDatabase) pConstructDBDatabase(db, mydb, engine);
 }
 
-#if TARGET_CARBON || TARGET_COCOA
-Boolean REALFSRefFromFolderItem(REALfolderItem f, FSRef*outRef, HFSUniStr255*outName)
-{
-	static RBBoolean (*pFSRefFromFolderItem)(REALfolderItem, FSRef*, HFSUniStr255*) = nil;
-	if (!pFSRefFromFolderItem)
-		pFSRefFromFolderItem = (RBBoolean (*)(REALfolderItem, FSRef*, HFSUniStr255*)) CallResolver("REALFSRefFromFolderItem");
-	if (pFSRefFromFolderItem) return pFSRefFromFolderItem(f, outRef, outName);
-	else return 0;
-}
-#endif
-
-#if TARGET_CARBON || TARGET_COCOA
-REALfolderItem REALFolderItemFromParentFSRef(const FSRef *parent, const HFSUniStr255 *fileName)
-{
-	static REALfolderItem (*pFolderItemFromParentFSRef)(const FSRef*, const HFSUniStr255*) = nil;
-	if (!pFolderItemFromParentFSRef)
-		pFolderItemFromParentFSRef = (REALfolderItem (*)(const FSRef*, const HFSUniStr255*)) CallResolver("REALFolderItemFromParentFSRef");
-	if (pFolderItemFromParentFSRef) return pFolderItemFromParentFSRef(parent, fileName);
-	else return (REALfolderItem)0;
-}
-
-REALfolderItem REALFolderItemFromParentFSRef(const FSRef& parent, const HFSUniStr255& fileName)
-{
-	return REALFolderItemFromParentFSRef(&parent, &fileName);
-}
-#endif
-
 REALDBConnectionDialogRef REALDBConnectionDialogCreate(void)
 {
 	static REALDBConnectionDialogRef (*pDBConnectionDialogCreate)(void) = nil;
@@ -823,7 +789,6 @@ bool REALInDebugMode(void)
 }
 #endif
 
-#if TARGET_CARBON || TARGET_WIN32 || X_WINDOW || TARGET_COCOA
 void REALStripAmpersands(REALstring*  ioString)
 {
 	static void (*pStripAmpersands)(REALstring* ) = nil;
@@ -831,7 +796,6 @@ void REALStripAmpersands(REALstring*  ioString)
 		pStripAmpersands = (void (*)(REALstring* )) CallResolver("REALStripAmpersands");
 	if (pStripAmpersands) pStripAmpersands(ioString);
 }
-#endif
 
 REALobject REALGetProjectFolder(void)
 {
@@ -3677,6 +3641,66 @@ RBBoolean REALGetClassProperty(REALobject obj, uint32_t index, void **getter, vo
 
 		return pGetClassProperty(classPtr, index, getter, setter, param, declaration);
 	}
+	return false;
+}
+
+RBBoolean REALAddEventHandler(REALobject obj, REALstring eventName, void *handler)
+{
+	static RBBoolean(*pAddEventHandler)(REALobject, REALstring, void*);
+	if (!pAddEventHandler) {
+		pAddEventHandler = (RBBoolean(*)(REALobject, REALstring, void*))CallResolver("PluginAddEventHandler");
+	}
+	if (pAddEventHandler) return pAddEventHandler(obj, eventName, handler);
+	return false;
+}
+
+RBBoolean REALRemoveEventHandler(REALobject obj, REALstring eventName, void *handler)
+{
+	static RBBoolean(*pRemoveEventHandler)(REALobject, REALstring, void*);
+	if (!pRemoveEventHandler) {
+		pRemoveEventHandler = (RBBoolean(*)(REALobject, REALstring, void*))CallResolver("PluginRemoveEventHandler");
+	}
+	if (pRemoveEventHandler) return pRemoveEventHandler(obj, eventName, handler);
+	return false;
+}
+
+RBBoolean REALIsEventHandled(REALobject obj, REALstring eventName)
+{
+	static RBBoolean(*pIsEventHandled)(REALobject, REALstring);
+	if (!pIsEventHandled) {
+		pIsEventHandled = (RBBoolean(*)(REALobject, REALstring))CallResolver("PluginIsEventHandled");
+	}
+	if (pIsEventHandled) return pIsEventHandled(obj, eventName);
+	return false;
+}
+
+RBBoolean REALIsDarkMode()
+{
+	static RBBoolean(*pIsDarkMode)(void);
+	if (!pIsDarkMode) {
+		pIsDarkMode = (RBBoolean(*)(void))CallResolver("IsDarkMode");
+	}
+	if (pIsDarkMode) return pIsDarkMode();
+	return false;
+}
+
+RBBoolean REALIsXojoThread()
+{
+	static RBBoolean(*pIsXojoThread)(void);
+	if (!pIsXojoThread) {
+		pIsXojoThread = (RBBoolean(*)(void))CallResolver("IsXojoThread");
+	}
+	if (pIsXojoThread) return pIsXojoThread();
+	return false;
+}
+
+RBBoolean REALIsXojoMainThread()
+{
+	static RBBoolean(*pIsXojoMainThread)(void);
+	if (!pIsXojoMainThread) {
+		pIsXojoMainThread = (RBBoolean(*)(void))CallResolver("IsXojoMainThread");
+	}
+	if (pIsXojoMainThread) return pIsXojoMainThread();
 	return false;
 }
 

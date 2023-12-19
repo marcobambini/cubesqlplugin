@@ -7,34 +7,32 @@
 #
 # Revision History
 
-CC = g++
-BASEDIR = ../../..
-PLUGINSDKDIR = $(BASEDIR)/Plugins\ SDK
-SDKGLUECODEDIR = $(PLUGINSDKDIR)/GlueCode
-SDKINCLUDEDIR = $(PLUGINSDKDIR)/Includes
+BASEDIR = ../..
+SDKGLUECODEDIR = $(BASEDIR)/GlueCode
+SDKINCLUDEDIR = $(BASEDIR)/Includes
 
 INCLUDE =	-I$(SDKINCLUDEDIR)
 
 PREFIXHEADER = $(SDKINCLUDEDIR)/LinuxHeader.h
-CFLAGS = -s -O2 -DIGNOREQT -D__INTEL__ -DLINUX=1 -D__GCC__ $(INCLUDE) -include $(PREFIXHEADER)
-LIBS = 
+CXX = g++
+CXXFLAGS = -fPIC $(INCLUDE) -include $(PREFIXHEADER)
 BUILDOBJDIR = BuildLinux
 
 OBJS =	$(BUILDOBJDIR)/EyeControlPlugin.o \
 		$(BUILDOBJDIR)/PluginMain.o
 
 all: CreateBuildObjDir $(OBJS)
-	$(CC) $(CFLAGS) -shared -Wl,--no-undefined -o EyeControl.so $(OBJS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -shared -o EyeControl.so $(OBJS) $(LIBS)
 
 CreateBuildObjDir:
 	mkdir -p $(BUILDOBJDIR)
 
 $(BUILDOBJDIR)/EyeControlPlugin.o: EyeControlPlugin.cpp
-	$(CC) $(CFLAGS) EyeControlPlugin.cpp -c -o $@
+	$(CXX) $(CXXFLAGS) EyeControlPlugin.cpp -c -o $@
 
 $(BUILDOBJDIR)/PluginMain.o: $(SDKGLUECODEDIR)/PluginMain.cpp
-	$(CC) $(CFLAGS) $(SDKGLUECODEDIR)/PluginMain.cpp -c -o $@
+	$(CXX) $(CXXFLAGS) $(SDKGLUECODEDIR)/PluginMain.cpp -c -o $@
 
 clean:
-	rm $(BUILDOBJDIR)/*.o -f
+	rm -f $(BUILDOBJDIR)/*.o
 	rm EyeControl.so

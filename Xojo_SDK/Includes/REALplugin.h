@@ -1,40 +1,36 @@
-// REALplugin.h
-//
-//	This file is part of the REALbasic plugin API.  It's included automatically
-//	by "rb_plugin.h", so normally you'll just include the latter.
-//
-// (c) 2013 Xojo, Inc. -- All Rights Reserved
-// See file "Plug-in License SDK.txt" for details.
-//
-//	Jun 23 2006 -- AJB (1)	Added support for currency, structures, enumerations, 
-//							module properties, shared methods and shared properties
+/** @file REALplugin.h
+ *  @brief This file includes all the data structures that can be created and registereed.
+ *	It's included automatically by "rb_plugin.h", so normally you'll just include the latter.
+ *	@copyright Xojo, Inc. -- All Rights Reserved.
+ */
 
 #ifndef REALPLUGIN_H
 #define REALPLUGIN_H
 
 #if defined(__APPLE__)
-	#include <Carbon/Carbon.h>
+    #if !TARGET_OS_IPHONE
+	    #include <Carbon/Carbon.h>
+        #if !defined(CARBON) && !defined(COCOA)
+            #define COCOA 1
+        #endif
+        #if !defined(TARGET_CARBON)
+            #define TARGET_CARBON 1
+        #endif
 
-	#if !defined(CARBON) && !defined(COCOA)
-		#define COCOA 1
-	#endif
+        #if defined(COCOA) && COCOA
+            #if defined(__OBJC__)
+                #import <Cocoa/Cocoa.h>
+            #else
+                struct NSWindow;
+                struct NSView;
+            #endif
+            #define TARGET_COCOA 1
+        #endif
 
-	#if defined(COCOA) && COCOA
-		#if defined(__OBJC__)
-			#import <Cocoa/Cocoa.h>
-		#else
-			struct NSWindow;
-			struct NSView;
-		#endif
-		#define TARGET_COCOA 1
-	#endif
-
-	#if !defined(TARGET_CARBON)
-		#define TARGET_CARBON 1
-	#endif
-	#if !defined(TARGET_MACOS)
-		#define TARGET_MACOS 1
-	#endif
+        #if !defined(TARGET_MACOS)
+            #define TARGET_MACOS 1
+        #endif
+    #endif
 
 #elif defined(__MINGW32__) || defined(_MSC_VER)
 	#include <windows.h>
@@ -92,32 +88,32 @@ typedef uint32_t RBColor;
 	typedef struct Rect Rect;
 #endif
 
-// The Currency data type is a signed 64-bit integer value that
-// is expressed in "mils."  This means that if you would like to
-// convert from a currency value into a regular Int64 value, you 
-// would simply divide by 10000.  To convert an Int64 into a
-// currency value, you would multiply by 10000. -- Jun 23 2006 -- AJB (1)
+/// The Currency data type is a signed 64-bit integer value that
+/// is expressed in "mils."  This means that if you would like to
+/// convert from a currency value into a regular Int64 value, you 
+/// would simply divide by 10000.  To convert an Int64 into a
+/// currency value, you would multiply by 10000. -- Jun 23 2006 -- AJB (1)
 typedef RBInt64 REALcurrency;
 
 typedef enum REALArrayType {
-	kTypeSInt32 = 0,					// 32-bit integer, or color
-	kTypeFloat32 = 1,					// 32-bit float type (single)
-	kTypeFloat64 = 2,					// 64-bit float type (double)
-	kTypeString = 3,					// string (32 bit pointer, refcounted)
-	kTypeObject = 4,					// object (32 bit pointer, refcounted)
-	kTypeUInt8 = 5,						// 8-bit unsigned integer, or boolean
-	kTypeSInt8 = 6,						// 8-bit signed integer
-	kTypeUInt16 = 7,					// 16-bit unsigned integer
-	kTypeSInt16 = 8,					// 16-bit signed integer
-	kTypeUInt32 = 9,					// 32-bit unsigned integer
-	kTypeUInt64 = 10,					// 64-bit unsigned integer
-	kTypeSInt64 = 11,					// 64-bit signed integer, or Currency
-	kTypeStructure = 12,				// Arbitrary-sized structure
-	kTypePtr = 13,						// 32-bit signed integer
-	kTypeColor = 14,					// 32-bit signed integer
-	kTypeCurrency = 15,					// 64-bit currency integer
-	kTypeBoolean = 16,					// 8-bit signed integer
-	kTypeText = 17,						// Text (pointer, refcounted)
+	kTypeSInt32 = 0,					/// 32-bit integer, or color
+	kTypeFloat32 = 1,					/// 32-bit float type (single)
+	kTypeFloat64 = 2,					/// 64-bit float type (double)
+	kTypeString = 3,					/// string (32 bit pointer, refcounted)
+	kTypeObject = 4,					/// object (32 bit pointer, refcounted)
+	kTypeUInt8 = 5,						/// 8-bit unsigned integer, or boolean
+	kTypeSInt8 = 6,						/// 8-bit signed integer
+	kTypeUInt16 = 7,					/// 16-bit unsigned integer
+	kTypeSInt16 = 8,					/// 16-bit signed integer
+	kTypeUInt32 = 9,					/// 32-bit unsigned integer
+	kTypeUInt64 = 10,					/// 64-bit unsigned integer
+	kTypeSInt64 = 11,					/// 64-bit signed integer, or Currency
+	kTypeStructure = 12,				/// Arbitrary-sized structure
+	kTypePtr = 13,						/// 32-bit signed integer
+	kTypeColor = 14,					/// 32-bit signed integer
+	kTypeCurrency = 15,					/// 64-bit currency integer
+	kTypeBoolean = 16,					/// 8-bit signed integer
+	kTypeText = 17,						/// Text (pointer, refcounted)
 #if TARGET_64BIT
 	kTypeInteger = kTypeSInt64,
 #else
@@ -153,12 +149,21 @@ typedef unsigned long REALDBConnectionDialogRef;
 
 #define REALnoImplementation ((REALproc) nil)
 
-// You can use the following definitions when setting
-// the "flags" property for methods, properties, classes and controls
+// Deprecated target flags
 #define REALpropRuntimeOnly				(1 << 1U)
 #define	REALconsoleSafe					(1 << 2U)
 #define REALconsoleOnly					(1 << 3U)
 #define REALwebOnly						(1 << 8U)
+
+// New Target support flags
+// You can use the following definitions (in combination) when setting
+// the "flags" property for methods, properties, classes and controls
+#define REALTargetRuntimeOnly			(1 << 1U)
+#define REALTargetAll					(1 << 2U)
+#define REALTargetConsole				(1 << 3U)
+#define REALTargetWeb					(1 << 8U)
+#define REALTargetDesktop				(1 << 9U)
+#define REALTargetIOS					(1 << 10U)
 
 // You can use the following definitions when setting
 // the flags property for methods, properties, structures
@@ -228,20 +233,20 @@ typedef struct
 
 typedef struct REALstructure	// Jun 23 2006 -- AJB (1)
 {
-	// Specifies the name of the structure
+	/// Specifies the name of the structure
 	const char *name;
 	
-	// Flags for the structure, such as scope
+	/// Flags for the structure, such as scope
 	uint32_t mFlags;
 	
-	// The fields of the structure as 
-	// spelled out in REALbasic code
-	// eg) "Foobar as Integer"
+	/// The fields of the structure as 
+	/// spelled out in REALbasic code
+	/// eg) "Foobar as Integer"
 	const char **fields;
 	
-	// The number of fields in the 
-	// structure, as specified by 
-	// the fields member.
+	/// The number of fields in the 
+	/// structure, as specified by 
+	/// the fields member.
 	size_t numFields;
 
 	size_t attributeCount;
@@ -250,27 +255,27 @@ typedef struct REALstructure	// Jun 23 2006 -- AJB (1)
 
 typedef struct REALenum		// Jun 23 2006 -- AJB (1)
 {
-	// Specifies the name of the enumeration
+	/// Specifies the name of the enumeration
 	const char *name;
 	
-	// Specifies the type of the enumeration
-	// as an RB intrinsic datatype.
-	// eg) Integer or UInt8 (currently, integer
-	// types are the only types supported).  If
-	// you leave it blank, it means Integer
+	/// Specifies the type of the enumeration
+	/// as an RB intrinsic datatype.
+	/// eg) Integer or UInt8 (currently, integer
+	/// types are the only types supported).  If
+	/// you leave it blank, it means Integer
 	const char *type;
 	
-	// Flags for the enumeration, such as scope
+	/// Flags for the enumeration, such as scope
 	uint32_t mFlags;
 	
-	// The fields of the enumeration
-	// as spelled out in REALbasic code
-	// eg) "Apple" or "Pear = 12"
+	/// The fields of the enumeration
+	/// as spelled out in REALbasic code
+	/// eg) "Apple" or "Pear = 12"
 	const char **fields;
 	
-	// The number of fields in the
-	// enumeration, as specified by
-	// the fields member.
+	/// The number of fields in the
+	/// enumeration, as specified by
+	/// the fields member.
 	size_t numFields;
 
 	size_t attributeCount;
@@ -316,17 +321,17 @@ typedef struct
 	RBBoolean(*controlAcceptFocus)(REALcontrolInstance);
 	RBBoolean(*keyUpFunction)(REALcontrolInstance, int charCode, int keyCode, int modifiers);
 	
-	// This function is preferred to the original redrawFunction because it exposes
-	// the array of rectangles that need to be redrawn. If there are no rectangles
-	// passed, the control must redraw all of its contents.
-	//
-	// In Real Studio 2012r2 and later, this function is invoked if it is available
-	// instead of redrawFuntion. If this function is not present, or the plugin
-	// is loaded into an older version of Real Studio, redrawFunction will be
-	// invoked.
+	/// This function is preferred to the original redrawFunction because it exposes
+	/// the array of rectangles that need to be redrawn. If there are no rectangles
+	/// passed, the control must redraw all of its contents.
+	///
+	/// In Real Studio 2012r2 and later, this function is invoked if it is available
+	/// instead of redrawFuntion. If this function is not present, or the plugin
+	/// is loaded into an older version of Real Studio, redrawFunction will be
+	/// invoked.
 	void(*redrawWithRectsFunction)(REALcontrolInstance, REALobject context, const Rect *dirtyRects, int dirtyRectCount);
 
-	// In Xojo 2013r3 and later, this function is invoked before any key translation takes place
+	/// In Xojo 2013r3 and later, this function is invoked before any key translation takes place
 	RBBoolean (*unfilteredKeyDownFunction)(REALcontrolInstance, int keyCode, int modifiers);
 
 	/// In Xojo 2016r1 and later, this function is invoked when the backing store scale factor has changed
@@ -335,6 +340,30 @@ typedef struct
 	void *reserved2;
 	void *reserved3;
 } REALcontrolBehaviour;
+
+typedef struct
+{
+    void (*constructorFunction)(REALcontrolInstance);
+    void (*destructorFunction)(REALcontrolInstance);
+	void *(*controlHandleGetter)(REALcontrolInstance);
+    void (*redrawFunction)(REALcontrolInstance, REALobject context);
+    /// PointerDown(position As Xojo.Point, pointerInfoArray() As PointerEvent)
+    RBBoolean (*pointerDownFunction)(REALcontrolInstance, REALobject position, REALobject pointerInfoArray);
+    /// PointerUp(position As Xojo.Point, pointerInfoArray() As PointerEvent)
+    RBBoolean (*pointerUpFunction)(REALcontrolInstance, REALobject position, REALobject pointerInfoArray);
+    /// PointerDrag(position As Xojo.Point, pointerInfoArray() As PointerEvent)
+    RBBoolean (*pointerDragFunction)(REALcontrolInstance, REALobject position, REALobject pointerInfoArray);
+    void *reserved1;
+    void *reserved2;
+    void *reserved3;
+    void *reserved4;
+    void *reserved5;
+    void *reserved6;
+    void *reserved7;
+    void *reserved8;
+    void *reserved9;
+    void *reserved10;
+} REALmobileControlBehaviour;
 
 #ifndef kCurrentREALControlVersion
 	#define kCurrentREALControlVersion 13
@@ -345,13 +374,15 @@ typedef struct
 #define REALinvisibleControl 			(1 << 2U)
 #define REALopaqueControl 				(1 << 3U)
 #define REALcontrolOwnsCursor 			(1 << 5U)
-#define REALdontEraseBackground			(1 << 8U)	 // Set this flag if you don't want REALbasic to automatically erase the control's background.
-													 // Note, this only affects Windows, use it to reduce flicker if your control already handles background painting.
-#define REALcontrolHandlesKeyboardNavigation uint32_t(1 << 10) // This flag is only used on Windows, use it to suppress the default keyboard navigation.
-											     // For example, pressing the arrow keys or pressing a keyboard mnemonic moves focus to another control, but this
-												 // is not always desirable, especially when writing your own edit control.
-#define REALcontrolHandlesTabKey		uint32_t(1 << 11)	// This flag specifies whether or not the control handles the tab key, especially useful if
-													// the control has subcontrols and you want to handle focus navigation yourself
+#define REALdontEraseBackground			(1 << 8U)	 /// Set this flag if you don't want REALbasic to automatically erase the control's background.
+													 /// Note, this only affects Windows, use it to reduce flicker if your control already handles background painting.
+#define REALcontrolHandlesKeyboardNavigation uint32_t(1 << 10) /// This flag is only used on Windows, use it to suppress the default keyboard navigation.
+											     /// For example, pressing the arrow keys or pressing a keyboard mnemonic moves focus to another control, but this
+												 /// is not always desirable, especially when writing your own edit control.
+#define REALcontrolHandlesTabKey		uint32_t(1 << 11)	/// This flag specifies whether or not the control handles the tab key, especially useful if
+															/// the control has subcontrols and you want to handle focus navigation yourself
+#define REALdesktopControl				uint32_t(1 << 12)	/// Use this flag to indicate that this control is a DesktopControl/DesktopUIControl
+#define REALxamlControl					uint32_t(1 << 13)	/// Use this flag to indicate that this control is a XAML based control.
 
 
 typedef struct
@@ -382,12 +413,46 @@ typedef struct
 	size_t sharedPropertyCount;
 	REALmethodDefinition *sharedMethods;
 	size_t sharedMethodCount;				// End RB2006r4 stuff
-	REALdelegate *delegates;			// 2013r1 (Control version 11 or later)
+	REALdelegate *delegates;			/// 2013r1 (Control version 11 or later)
 	size_t delegateCount;
-	REALenum *enums;					// 2013r1 (Control version 11 or later)
+	REALenum *enums;					/// 2013r1 (Control version 11 or later)
 	size_t enumCount;
 #endif
 } REALcontrol;
+
+// For ease of use this mimics the REALcontrol definition except for the behaviour
+typedef struct
+{
+    uint32_t version;
+    const char *name;
+    size_t dataSize;
+    uint32_t flags;
+    uint32_t toolbarPICT, toolbarDownPICT;
+    uint32_t defaultWidth, defaultHeight;
+    REALproperty *properties;
+    size_t propertyCount;
+    REALmethodDefinition *methods;
+    size_t methodCount;
+    REALevent *events;
+    size_t eventCount;
+    REALmobileControlBehaviour *behaviour;
+    RBInteger forSystemUse;
+    REALeventInstance *eventInstances;
+    size_t eventInstanceCount;
+    const char *interfaces;
+    REALattribute *attributes;
+    size_t attributeCount;
+    REALconstant *constants;
+    size_t constantCount;
+    REALproperty *sharedProperties;
+    size_t sharedPropertyCount;
+    REALmethodDefinition *sharedMethods;
+    size_t sharedMethodCount;
+    REALdelegate *delegates;
+    size_t delegateCount;
+    REALenum *enums;
+    size_t enumCount;
+} REALmobileControl;
 
 typedef struct
 {
@@ -417,9 +482,9 @@ typedef struct
 	REALmethodDefinition *sharedMethods;
 	size_t sharedMethodCount;				// End RB2006r4 stuff
 #if kCurrentREALControlVersion >= 11
-	REALdelegate *delegates;			// 2013r1 (Control version 11 or later)
+	REALdelegate *delegates;			/// 2013r1 (Control version 11 or later)
 	size_t delegateCount;
-	REALenum *enums;					// 2013r1 (Control version 11 or later)
+	REALenum *enums;					/// 2013r1 (Control version 11 or later)
 	size_t enumCount;
 #endif
 } REALclassDefinition;
@@ -429,31 +494,31 @@ void SetClassWebOnly( REALclassDefinition *def );
 
 typedef struct
 {
-	uint32_t version;						// just pass kCurrentREALControlVersion
-	const char* name;					// interface name
-	REALmethodDefinition *methods;		// list of methods the interface requires
-	size_t methodCount;					// how many methods there are
+	uint32_t version;					/// just pass kCurrentREALControlVersion
+	const char* name;					/// interface name
+	REALmethodDefinition *methods;		/// list of methods the interface requires
+	size_t methodCount;					/// how many methods there are
 	REALattribute *attributes;
 	size_t attributeCount;
 } REALinterfaceDefinition;
 
 struct REALmoduleDefinition {
-	uint32_t version;						// use kCurrentREALControlVersion
-	const char *name;					// name of the module
-	REALmethodDefinition *methods;		// list of public module methods
-	size_t methodCount;					// number of entries in the method list
-	REALconstant* constants;			// list of constants
-	size_t constantCount;					// number of constants in the list
+	uint32_t version;					/// use kCurrentREALControlVersion
+	const char *name;					/// name of the module
+	REALmethodDefinition *methods;		/// list of public module methods
+	size_t methodCount;					/// number of entries in the method list
+	REALconstant* constants;			/// list of constants
+	size_t constantCount;				/// number of constants in the list
 	REALproperty *properties;			// Begin Added in RB2006r4 (control version 9 and later) -- Jun 23 2006 -- AJB (1)
-	size_t propertyCount;					//
+	size_t propertyCount;				//
 	REALstructure *structures;			//
-	size_t structureCount;					// 
+	size_t structureCount;				// 
 	REALenum *enums;					//
-	size_t enumCount;						//
+	size_t enumCount;					//
 	REALattribute *attributes;
 	size_t attributeCount;
 #if kCurrentREALControlVersion >= 11
-	REALdelegate *delegates;			// 2013r1 (Control version 11 or later)
+	REALdelegate *delegates;			/// 2013r1 (Control version 11 or later)
 	size_t delegateCount;
 #endif
 #if kCurrentREALControlVersion >= 13	// 2013r4
@@ -465,6 +530,13 @@ struct REALmoduleDefinition {
 	size_t moduleCount;
 	REALcontrol **controls;				// Assumes this module's namespace
 	size_t controlCount;
+#endif
+#if kCurrentREALControlVersion >= 14
+	uint32_t flags;						/// Compatibility/target flags
+#endif
+#if kCurrentREALControlVersion >= 15
+    REALmobileControl **mobileControls;
+    size_t mobileControlCount;
 #endif
 };
 typedef struct REALmoduleDefinition REALmoduleDefinition;
@@ -505,31 +577,31 @@ typedef struct
 
 typedef enum dbFieldType
 {
-	dbTypeNull = 0,		//  0
-	dbTypeByte,			//  1	// also dbTypeUInt8
-	dbTypeShort,		//  2
-	dbTypeLong,			//  3	// Treated as a long type, which is variable depending on platform and architecture but it always converted to an int32
-	dbTypeChar,			//  4
-	dbTypeText,			//  5
-	dbTypeFloat,		//  6
-	dbTypeDouble,		//  7
-	dbTypeDate,			//  8
-	dbTypeTime,			//  9
-	dbTypeTimeStamp,	// 10
-	dbTypeCurrency,		// 11
-	dbTypeBoolean,		// 12
-	dbTypeDecimal,		// 13
-	dbTypeBinary,		// 14
-	dbTypeLongText,		// 15	// deprecated; use dbTypeText
-	dbTypeLongBinary,	// 16	// deprecated; use dbTypeBinary
-	dbTypeMacPICT,		// 17
-	dbTypeREALstring,	// 18
-	dbTypeInt64,		// 19
-	dbTypeUInt64,		// 20
-	dbTypeInt8,			// 21
-	dbTypeUInt16,		// 22
-	dbTypeInt32,		// 23
-	dbTypeUInt32,		// 24
+	dbTypeNull = 0,		///  0
+	dbTypeByte,			///  1	// also dbTypeUInt8
+	dbTypeShort,		///  2
+	dbTypeLong,			///  3	// Treated as a long type, which is variable depending on platform and architecture but it always converted to an int32
+	dbTypeChar,			///  4
+	dbTypeText,			///  5
+	dbTypeFloat,		///  6
+	dbTypeDouble,		///  7
+	dbTypeDate,			///  8
+	dbTypeTime,			///  9
+	dbTypeTimeStamp,	/// 10
+	dbTypeCurrency,		/// 11
+	dbTypeBoolean,		/// 12
+	dbTypeDecimal,		/// 13
+	dbTypeBinary,		/// 14
+	dbTypeLongText,		/// 15	// deprecated; use dbTypeText
+	dbTypeLongBinary,	/// 16	// deprecated; use dbTypeBinary
+	dbTypeMacPICT,		/// 17
+	dbTypeREALstring,	/// 18
+	dbTypeInt64,		/// 19
+	dbTypeUInt64,		/// 20
+	dbTypeInt8,			/// 21
+	dbTypeUInt16,		/// 22
+	dbTypeInt32,		/// 23
+	dbTypeUInt32,		/// 24
 	dbTypeUInt8 = 1,
 	dbTypeInt16 = 2,
 	dbTypeUnknown = 255
@@ -539,9 +611,9 @@ struct REALnewColumn
 {
 	struct REALnewColumn *nextColumn;
 	REALstring columnName;
-	RBInteger columnType;				// dbFieldType
-	RBInteger bAllowNULL;				// Specifies whether or not this column allow NULL values
-	REALstring columnTypeString;	// Since 6.0, so we can specify type constraints such as "Decimal(5,2)"
+	RBInteger columnType;				/// dbFieldType
+	RBInteger bAllowNULL;				/// Specifies whether or not this column allow NULL values
+	REALstring columnTypeString;	/// Since 6.0, so we can specify type constraints such as "Decimal(5,2)"
 };
 typedef struct REALnewColumn REALnewColumn;
 
@@ -646,47 +718,47 @@ typedef struct
 
 	void (*getSupportedTypes)(int32_t **dataTypes, char **dataNames, size_t *count);
 
-	// Drops a table
-	//  tableName -- the table to drop
+	/// Drops a table
+	///  tableName -- the table to drop
 	void (*dropTable)( dbDatabase *db, REALstring tableName );
 
-	// Drops a column
-	//  tableName -- table that the column exists in
-	//  columnName -- column to drop
+	/// Drops a column
+	///  tableName -- table that the column exists in
+	///  columnName -- column to drop
 	void (*dropColumn)( dbDatabase *db, REALstring tableName, REALstring columnName );
 
-	// Renames a table
-	//  oldTableName -- old name of the table
-	//  newTableName -- new name of the table
+	/// Renames a table
+	///  oldTableName -- old name of the table
+	///  newTableName -- new name of the table
 	void (*alterTableName)( dbDatabase *db, REALstring oldTableName, REALstring newTableName );
 
-	// Renames a column
-	//  tableName -- table that the column exists in
-	//  oldColumnName -- old name of column
-	//  newColumnName -- new name of column
+	/// Renames a column
+	///  tableName -- table that the column exists in
+	///  oldColumnName -- old name of column
+	///  newColumnName -- new name of column
 	void (*alterColumnName)( dbDatabase *db, REALstring tableName, REALstring oldColumnName, REALstring newColumnName );
 
-	// Changes column type
-	//  tableName -- table that the column exists in
-	//  columnName -- the column to modify
-	//  oldType -- old column type
-	//  newType -- new column type 
+	/// Changes column type
+	///  tableName -- table that the column exists in
+	///  columnName -- the column to modify
+	///  oldType -- old column type
+	///  newType -- new column type 
 	void (*alterColumnType)( dbDatabase *db, REALstring tableName, REALstring columnName, REALstring oldType, REALstring newType );
 
-	// Changes a column's constraint, such as Primary Key, Mandatory field, etc..
-	//  tableName -- table that column exists in
-	//  columnName -- the column to modify
-	//  whichConstraint -- "Primary Key", "Mandatory", etc... same text that displays in the
-	//                     properties listbox in the database schema editor
-	//  oldConstraint -- the old value (if boolean, this string will be either "True" or "False")
-	//  newConstraint -- the new value (if boolean, this string will be either "True" or "False")
+	/// Changes a column's constraint, such as Primary Key, Mandatory field, etc..
+	///  tableName -- table that column exists in
+	///  columnName -- the column to modify
+	///  whichConstraint -- "Primary Key", "Mandatory", etc... same text that displays in the
+	///                     properties listbox in the database schema editor
+	///  oldConstraint -- the old value (if boolean, this string will be either "True" or "False")
+	///  newConstraint -- the new value (if boolean, this string will be either "True" or "False")
 	void (*alterColumnConstraint)( dbDatabase *db, REALstring tableName, REALstring columnName, REALstring whichConstraint, REALstring oldConstraint, REALstring newConstraint );
 
 	REALobject (*PrepareStatement)( dbDatabase *db, REALstring statement );
 
-	// Executes the SQL statement with the supplied parameters
-	//  sql -- the sql statement to execute
-	//  params -- variant array of parameters, can be empty
+	/// Executes the SQL statement with the supplied parameters
+	///  sql -- the sql statement to execute
+	///  params -- variant array of parameters, can be empty
 	void (*ExecuteSQL)(dbDatabase *, REALstring sql, REALarray params);
 	REALproc unused4;
 } REALdbEngineDefinition;
@@ -754,17 +826,18 @@ enum {
 	pictureMacintoshCICN,
 	pictureMacintoshIconSuite,
 	pictureMacintoshGWorld,
-	pictureWin32DIB,		// a HDIB, use GlobalLock on it
+	pictureWin32DIB,		/// a HDIB, use GlobalLock on it
 	pictureGdkPixmap,
-	pictureWin32Bitmap,		// a HBITMAP, but really a DIBSECTION, use GetObject on it
+	pictureWin32Bitmap,		/// a HBITMAP, but really a DIBSECTION, use GetObject on it
 	pictureCGBitmapContext,
-	pictureGDPtr,			// Console Only: Pointer to a copy of GD data, which is 11 bytes meta data then pixels follow in ARGB format
-	pictureGDImagePtr,		// Console Only: Pointer to gdImageStruct
-	pictureGDIPlusBitmap,	// a GpBitmap handle
-	pictureCairoContext,	// a cairo_t ptr
-	pictureNSImage,			// an NSImage
-	pictureD2DPBGRAPtr,		// a raw pointer to the Direct2D Pre-multiplied BGRA bytes
-	pictureIWICBitmap		// an IWICBitmap ptr
+	pictureGDPtr,			/// Console Only: Pointer to a copy of GD data, which is 11 bytes meta data then pixels follow in ARGB format
+	pictureGDImagePtr,		/// Console Only: Pointer to gdImageStruct
+	pictureGDIPlusBitmap,	/// a GpBitmap handle
+	pictureCairoContext,	/// a cairo_t ptr
+	pictureNSImage,			/// an NSImage
+	pictureD2DPBGRAPtr,		/// a raw pointer to the Direct2D Pre-multiplied BGRA bytes
+	pictureIWICBitmap,		/// an IWICBitmap ptr
+	picturePremultipliedARGB,/// a raw pointer to pre-multiplied ARGB color values, currently only used by iOS
 };
 
 // Common text encoding values
@@ -793,14 +866,15 @@ typedef struct REALpictureDescription REALpictureDescription;
 // handy macros
 #define ControlData(defn, instance, typeName, data) typeName *data = (typeName *) REALGetControlData(instance, &defn)
 #define ClassData(defn, instance, typeName, data) typeName *data = (typeName *) REALGetClassData(instance, &defn)
+#define MobileControlData(defn, instance, typeName, data) typeName *data = (typeName *) REALGetMobileControlData(instance, &defn)
 
 // pixel types
 enum RBPixelType
 {
-	kRBPixelRGB24 = 1,			// 3 bytes/pixel: Red, Green, Blue
-	kRBPixelBGR24,				// 3 bytes/pixel: Blue, Green, Red
-	kRBPixelXRGB32,				// 4 bytes/pixel: Unused, Red, Green, Blue
-	kRBPixelBGRX32				// 4 bytes/pixel: Blue, Green, Red, Unused
+	kRBPixelRGB24 = 1,			/// 3 bytes/pixel: Red, Green, Blue
+	kRBPixelBGR24,				/// 3 bytes/pixel: Blue, Green, Red
+	kRBPixelXRGB32,				/// 4 bytes/pixel: Unused, Red, Green, Blue
+	kRBPixelBGRX32				/// 4 bytes/pixel: Blue, Green, Red, Unused
 };
 typedef enum RBPixelType RBPixelType;
 

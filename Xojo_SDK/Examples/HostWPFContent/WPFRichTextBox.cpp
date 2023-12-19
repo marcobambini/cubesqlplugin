@@ -92,7 +92,7 @@ namespace RichTextBoxControl {
 		kCurrentREALControlVersion,
 		"WPFRichTextBox",
 		sizeof(RichTextBoxControlData),
-		REALenabledControl,
+		REALenabledControl | REALdesktopControl,
 		0, 0,	// This is the BMP name, so the IDE will try and find 0.bmp in IDE Resources->Controls Palette folder in the RBX plugin
 		150, 150,
 		RichTextBoxProperties, sizeof(RichTextBoxProperties) / sizeof(REALproperty),

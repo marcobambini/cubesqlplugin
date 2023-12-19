@@ -10,31 +10,33 @@
 
 #include "REALplugin.h"
 
-// Per the standard we should only have to look at __cplusplus, but some vendors
-// don't set this correctly. On OS X it's also possible to have Clang set to
-// compile as C++11 but use libstdc++ (which isn't a C++11 stdlib).
-#if __cplusplus >= 201103L
-	#if defined(__clang__)
-		#include <ciso646>
-		#if defined(_LIBCPP_VERSION)
-			#define REAL_IS_CPP11 1
-		#else
-			#define REAL_IS_CPP11 0
-		#endif
-	#else
-		#define REAL_IS_CPP11 1
-	#endif
-#elif defined(_MSC_VER)
-	#define REAL_IS_CPP11 (_MSC_VER >= 1800)
-#elif defined(__GNUC__)
-	#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-		#define REAL_IS_CPP11 1
-	#else
-		#define REAL_IS_CPP11 0
-	#endif
-#else
-	#define REAL_IS_CPP11 0
-#endif
+#if !defined(REAL_IS_CPP11)
+    // Per the standard we should only have to look at __cplusplus, but some vendors
+    // don't set this correctly. On OS X it's also possible to have Clang set to
+    // compile as C++11 but use libstdc++ (which isn't a C++11 stdlib).
+    #if __cplusplus >= 201103L
+        #if defined(__clang__)
+            #include <memory>
+            #if defined(_LIBCPP_VERSION)
+                #define REAL_IS_CPP11 1
+            #else
+                #define REAL_IS_CPP11 0
+            #endif
+        #else
+            #define REAL_IS_CPP11 1
+        #endif
+    #elif defined(_MSC_VER)
+        #define REAL_IS_CPP11 (_MSC_VER >= 1800)
+    #elif defined(__GNUC__)
+        #if defined(__GXX_EXPERIMENTAL_CXX0X__)
+            #define REAL_IS_CPP11 1
+        #else
+            #define REAL_IS_CPP11 0
+        #endif
+    #else
+        #define REAL_IS_CPP11 0
+    #endif
+#endif // !defined(REAL_IS_CPP11)
 
 #if REAL_IS_CPP11
 	#include <memory>

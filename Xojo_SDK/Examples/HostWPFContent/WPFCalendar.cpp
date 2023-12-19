@@ -109,7 +109,7 @@ namespace CalendarControl {
 		kCurrentREALControlVersion,
 		"WPFCalendar",
 		sizeof(CalendarControlData),
-		REALenabledControl,
+		REALenabledControl | REALdesktopControl,
 		1, 1,	// This is the BMP name, so the IDE will try and find 1.bmp in IDE Resources->Controls Palette folder in the RBX plugin
 		250, 250,
 		CalendarProperties, sizeof(CalendarProperties) / sizeof(REALproperty),

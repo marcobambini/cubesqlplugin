@@ -26,7 +26,6 @@
 		D800B9DA17166B7100D8B933 /* rb_plugin_cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rb_plugin_cocoa.h; sourceTree = "<group>"; };
 		D800B9DC17166B7100D8B933 /* RBCocoaHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBCocoaHeaders.h; sourceTree = "<group>"; };
 		D800B9DD17166B7100D8B933 /* REALplugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REALplugin.h; sourceTree = "<group>"; };
-		D800B9DF17166B7100D8B933 /* Plug-In SDK License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Plug-In SDK License.txt"; sourceTree = "<group>"; };
 		D8DC288C1551E05100C13A85 /* libHostedPluginExample.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHostedPluginExample.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8DC28941551E09100C13A85 /* HostedPluginExample.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = HostedPluginExample.cpp; sourceTree = "<group>"; };
 		D8DC28A215530CDA00C13A85 /* REALExampleLevelIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REALExampleLevelIndicator.h; sourceTree = "<group>"; };
@@ -51,7 +50,6 @@
 			children = (
 				D800B9D217166B7100D8B933 /* Glue Code */,
 				D800B9D517166B7100D8B933 /* Includes */,
-				D800B9DF17166B7100D8B933 /* Plug-In SDK License.txt */,
 			);
 			name = "Plugins SDK";
 			path = ../..;
@@ -162,6 +160,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = D8DC28811551E05100C13A85;
@@ -271,7 +270,7 @@
 		D8DC28911551E05100C13A85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -281,7 +280,7 @@
 		D8DC28921551E05100C13A85 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";

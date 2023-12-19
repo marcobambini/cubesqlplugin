@@ -7,31 +7,24 @@ File list:
 	- 0.bmp -- This is the icon that appears in the IDE's Control Palette list
 	- EyeControlPlugin.cpp -- complete source of Eye Control Plugin
 	- Makefile_Linux -- Linux makefile
-	- Makefile_OSX -- OSX makefile (Intel only)
-	- Makefile_Windows -- Windows makefile
-	- Visual Studio -- folder with VS 2010 solution
+	- Visual Studio -- folder with VS 2015 solution
+	- Xcode -- folder with Xcode solution
 	- Read Me.txt -- the file you're reading
 
 
-How to build on OSX:
-1. Launch Terminal and cd into the Eye Control directory
-2. @prompt> make -fMakefile_OSX all
-3. EyeControl.dylib should be created (note this is Intel only)
-
-How to build on Windows (with MinGW):
-1. Make sure you have MinGW installed and configured (www.mingw.org)
-2. Launch Command Prompt and cd into the Eye Control directory
-3. @prompt> mingw32-make -fMakefile_Windows all
-4. EyeControl.dll should be created
+How to build on macOS (10.15+):
+1. Open the EyeControl Xcode project
+2. Build
+3. Locate EyeControl.dylib
 
 How to build on Windows (with Visual Studio):
-1. Open the EyeControl.sln in Visual Studio 2010
+1. Open the EyeControl.sln in Visual Studio 2022
 2. Build solution
-3. EyeControl.dll should be created which dynamically links against the MSVCRT runtimes which is appropriate for 2012r1
+3. EyeControl.dll should be created which dynamically links against the MSVCRT runtimes which is appropriate for 2022r1
    since we include these runtimes with each build.  However, for older versions of RB you may want to consider statically linking
    these libraries instead, refer to the "Code Generation -> Runtime Library" section of the project settings
 
-How to build on Linux:
+How to build on Linux (with g++):
 1. Launch Terminal and cd into the Eye Control directory
 2. @prompt> make -fMakefile_Linux all
 3. EyeControl.so should be created
@@ -42,20 +35,26 @@ Include only the portions you need
 	EyeControl.xojo_plugin
 		EyeControl
 			Build Resources
-				Mac Carbon Mach-O
-					EyeControl.dylib  <<<<<<< this should be built for 32 bit if you need it
-				Mac Cocoa
+				Mac Universal
+					EyeControl.dylib  <<<<<<< this should be a universal dylib with 64-bit Intel/M1 parts
+				Mac x86-64
 					EyeControl.dylib  <<<<<<< this should be built for 64 bit
+				Mac arm64
+					EyeControl.dylib  <<<<<<< this should be built for 64 bit ARM
 				Windows
 					EyeControl.dll  <<<<<<< this should be built for 32 bit if you need it	
+				Windows arm64
+					EyeControl.dll  <<<<<<< this should be built for 64 bit ARM
 				Windows x86-64
 					EyeControl.dll  <<<<<<< this should be built for 64 bit
  				Linux x86
- 					libEyeControl.so  <<<<<<< this should be built for 32 bit if you need it
+ 					EyeControl.so  <<<<<<< this should be built for 32 bit if you need it
  				Linux x86-64
- 					libEyeControl.so  <<<<<<< this should be built for 64 bit
+ 					EyeControl.so  <<<<<<< this should be built for 64 bit
  				Linux ARM        
- 					libEyeControl.so  <<<<<<< this should be built for 32 bit ARM
+ 					EyeControl.so  <<<<<<< this should be built for 32 bit ARM
+ 				Linux arm64       
+ 					EyeControl.so  <<<<<<< this should be built for 64 bit ARM
 			IDE Resources
 				Controls Palette
 			  		0-library-small.tiff
@@ -69,4 +68,4 @@ Include only the portions you need
 
 
 -------------------------
-Last updated: Jun 04 2018
+Last updated: May 3 2022

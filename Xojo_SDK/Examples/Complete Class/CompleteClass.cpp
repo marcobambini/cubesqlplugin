@@ -4,9 +4,6 @@
 #if WIN32
 	#include "WinHeader++.h"
 #endif
-#if __APPLE__
-	#define GetTickCount TickCount
-#endif
 
 // Always include rb_plugin.h when you want to get access
 // to any of the SDK functionality.  This header will also
@@ -50,7 +47,8 @@ static unsigned long long PuppyValueGetter( void );
 static void PuppyValueSetter( unsigned long long val );
 static void DanceWithWolves( unsigned char numDances, REALstring msg );
 static REALstring MyGetString( REALobject instance );
-void MsgBox( REALstring msg ) ;
+static void MsgBox( REALstring msg ) ;
+static RBInteger Ticks();
 
 // Define the properties which our class is going to expose.
 // Some of the properties are going to be "automatic" in
@@ -250,6 +248,14 @@ void MsgBox( REALstring msg )
 	}
 }
 
+RBInteger Ticks()
+{
+    typedef RBInteger (*FuncTy)();
+    FuncTy fp = (FuncTy)REALLoadFrameworkMethod("Ticks() As Integer");
+    if (fp) return fp();
+    return 0;
+}
+
 static REALstring HumanNameGetter( REALobject instance )
 {
 	// We need to get our class instance data from the object
@@ -337,7 +343,7 @@ static REALstring PlayWithMoose( REALobject instance )
 	static bool bInited = false;
 	if (not bInited) {
 		bInited = true;
-		::srand( ::GetTickCount() );
+		::srand( (uint32_t)Ticks() );
 	}
 
 	// You have a 50/50 chance of making it.  But, the
