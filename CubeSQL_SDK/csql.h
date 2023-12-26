@@ -194,8 +194,6 @@ typedef unsigned long in_addr_t;
 typedef int SOCKET;
 #endif
 
-#if !CUBESQL_ENABLE_SSL_ENCRYPTION
-#else
 #ifndef HEADER_TLS_H
 #define TLS_WANT_POLLIN     -2
 #define TLS_WANT_POLLOUT    -3
@@ -215,7 +213,6 @@ ssize_t tls_write(struct tls *_ctx, const void *_buf, size_t _buflen);
 const char *tls_error(struct tls *_ctx);
 const char *tls_config_error(struct tls_config *_config);
 void tls_free(struct tls *_ctx);
-#endif
 #endif
     
 /* COMMANDS */
@@ -309,6 +306,7 @@ struct csqldb {
 	int				        errcode;					// last error code
 	int				        useOldProtocol;				// flag to set if you want to use the old REALSQLServer protocol
 	int				        verifyPeer;					// flag to check if peer verification must be performed
+    int                     family;
 	
 	char			        *token;						// optional token used in token connect
 	char			        *hostverification;			// optional host verification name to use in SSL peer verification
@@ -326,7 +324,7 @@ struct csqldb {
 	inhead			        request;                    // request header
 	outhead			        reply;                      // response header
 	
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
     struct tls              *tls_context;               // TLS context connection
     #endif
 	

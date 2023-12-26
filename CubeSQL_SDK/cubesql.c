@@ -35,7 +35,7 @@ int cubesql_connect_token (csqldb **db, const char *host, int port, const char *
 	else if (encryption == 256) encryption = CUBESQL_ENCRYPTION_AES256;
 	else if (is_ssl) useOldProtocol = kFALSE;
 	
-    #if !CUBESQL_ENABLE_SSL_ENCRYPTION
+    #if CUBESQL_DISABLE_SSL_ENCRYPTION
     if (is_ssl) return CUBESQL_SSL_DISABLED_ERROR;
     #endif
     
@@ -847,7 +847,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 	snprintf((char *) db->username, sizeof(db->username),  "%s", username);
 	snprintf((char *) db->password, sizeof(db->password),  "%s", password);
 	
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
     if (encryption_is_ssl(encryption) == kTRUE) {
         if (tls_init() < 0) {
             fprintf(stderr, "Error while initializing TLS library.");
@@ -901,7 +901,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
             goto load_ssl_abort;
         }
         
-        // ????
+        // unused
         if (ssl_chiper_list) {
         }
         
@@ -912,7 +912,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 
 	return db;
 	
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
 load_ssl_abort:
     // TODO: cleanup TLS
 	return NULL;
@@ -927,7 +927,7 @@ void csql_dbfree (csqldb *db) {
 void csql_socketclose (csqldb *db) {
 	if (db->sockfd <= 0) return;
 	
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
     if (db->tls_context) {
         tls_close(db->tls_context);
         tls_free(db->tls_context);
@@ -1120,7 +1120,7 @@ int csql_socketconnect (csqldb *db) {
 	ioctl(sockfd, FIONBIO, &ioctl_blocking);
 	
 	// socket is connected now check for SSL
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
     if (encryption_is_ssl(db->encryption)) {
         int rc = tls_connect_socket(db->tls_context, sockfd, db->host);
         if (rc < 0) {
@@ -1129,9 +1129,8 @@ int csql_socketconnect (csqldb *db) {
             closesocket(sockfd);
             return -1;
         }
+        db->encryption -= CUBESQL_ENCRYPTION_SSL;
     }
-    // TODO: is this really necessary
-    db->encryption -= CUBESQL_ENCRYPTION_SSL;
     #endif
     
 	return sockfd;
@@ -1885,7 +1884,7 @@ int csql_socketwrite (csqldb *db, const char *buffer, int nbuffer) {
 		if (FD_ISSET(fd, &write_fds)) {
 			FD_CLR(fd, &write_fds);
 			
-            #if CUBESQL_ENABLE_SSL_ENCRYPTION
+            #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
             nwritten = (db->tls_context) ? (int)tls_write(db->tls_context, ptr, nleft) : (int)sock_write(fd, ptr, nleft);
             #else
             nwritten = (int)sock_write(fd, ptr, nleft);
@@ -1953,7 +1952,7 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
 			return CUBESQL_ERR;
 		}
 		
-        #if CUBESQL_ENABLE_SSL_ENCRYPTION
+        #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
         nread = (db->tls_context) ? (int)tls_read(db->tls_context, ptr, nleft) : (int)sock_read(fd, ptr, nleft);
         #else
         nread = (int)sock_read(fd, ptr, nleft);
@@ -2071,7 +2070,7 @@ void csql_initrequest (csqldb *db, int packetsize, int nfields, char command, ch
 	request->signature = htonl(PROTOCOL_SIGNATURE);
 	
 	if ((packetsize != 0) && (db->encryption != CUBESQL_ENCRYPTION_NONE)) packetsize += BLOCK_LEN;
-	
+    
 	request->packetSize = htonl(packetsize);
 	request->command = command;
 	request->selector = selector;
@@ -2174,16 +2173,16 @@ int csql_cursor_close (csqlc *c) {
 // MARK: - SSL -
 
 const char *cubesql_sslversion (void) {
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
-    return "LibreSSL";
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
+    return "LibreSSL 3.8.2";
     #else
     return NULL;
     #endif
 }
 
 unsigned long cubesql_sslversion_num (void) {
-    #if CUBESQL_ENABLE_SSL_ENCRYPTION
-    return 1000;
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
+    return 0x3080200fL;
     #endif
     return 0;
 }
