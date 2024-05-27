@@ -878,6 +878,10 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
                 fprintf(stderr, "Error in tls_config_set_ca_file: %s.", tls_config_error(tls_conf));
                 goto load_ssl_abort;
             }
+        } else {
+            // if no root certificate is provided then disable certificate and name verification
+            tls_config_insecure_noverifycert(tls_conf);
+            tls_config_insecure_noverifyname(tls_conf);
         }
         
         if (ssl_certificate) {
@@ -885,6 +889,15 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
             if (rc < 0) {
                 fprintf(stderr, "Error in tls_config_set_cert_file: %s.", tls_config_error(tls_conf));
                 goto load_ssl_abort;
+            }
+        }
+        
+        // apply cipher list
+        if (ssl_chiper_list) {
+            int rc = tls_config_set_ciphers(tls_conf, ssl_chiper_list);
+            if (rc < 0) {
+                // report error but not abort
+                fprintf(stderr, "Error in tls_config_set_ciphers: %s.", tls_config_error(tls_conf));
             }
         }
         
@@ -899,10 +912,6 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
         if (rc < 0) {
             fprintf(stderr, "Error in tls_configure: %s.", tls_error(tls_context));
             goto load_ssl_abort;
-        }
-        
-        // unused
-        if (ssl_chiper_list) {
         }
         
         // save TLS context
