@@ -11,7 +11,21 @@ LINUX_ARM64_LIB = ../libs/linux-arm64
 LINUX_32BIT_LIB = ../libs/linux
 LINUX_64BIT_LIB = ../libs/linux-64
 
-LINUX_LIBPATH = $(LINUX_ARM32_LIB)
+UNAME_M := $(shell uname -m)
+
+ifeq ($(UNAME_M), x86_64)
+    LINUX_LIBPATH := $(LINUX_64BIT_LIB)
+else ifeq ($(UNAME_M), i386)
+    LINUX_LIBPATH := $(LINUX_32BIT_LIB)
+else ifeq ($(UNAME_M), i686)
+    LINUX_LIBPATH := $(LINUX_32BIT_LIB)
+else ifeq ($(UNAME_M), armv7l)
+    LINUX_LIBPATH := $(LINUX_ARM32_LIB)
+else ifeq ($(UNAME_M), aarch64)
+    LINUX_LIBPATH := $(LINUX_ARM64_LIB)
+else
+    $(error Unsupported architecture: $(UNAME_M))
+endif
 
 CC = g++
 LD = g++
