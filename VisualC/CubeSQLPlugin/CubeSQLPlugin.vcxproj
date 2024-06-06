@@ -75,12 +75,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>cubeSQL_32bit</TargetName>
-    <LibraryPath>C:\Users\marco\Documents\GitHub\cubesqlplugin\libs\win-32bit;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\win-32bit;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>cubeSQL_64bit</TargetName>
-    <LibraryPath>C:\Users\marco\Documents\GitHub\cubesqlplugin\libs\win-64bit;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\win-64bit;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -131,7 +131,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;CUBESQL_ENABLE_SSL_ENCRYPTION=1;CUBESQL_DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK;C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK\zlib;C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK\crypt;C:\Users\marco\Documents\GitHub\cubesqlplugin\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\CubeSQL_SDK;..\..\CubeSQL_SDK\zlib;..\..\CubeSQL_SDK\crypt;..\..\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
@@ -153,7 +153,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;_USRDLL;CUBESQLPLUGIN_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;IGNOREQT;TARGET_WIN;CUBESQL_ENABLE_SSL_ENCRYPTION=1;CUBESQL_DYNAMIC_SSL_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK;C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK\zlib;C:\Users\marco\Documents\GitHub\cubesqlplugin\CubeSQL_SDK\crypt;C:\Users\marco\Documents\GitHub\cubesqlplugin\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\CubeSQL_SDK;..\..\CubeSQL_SDK\zlib;..\..\CubeSQL_SDK\crypt;..\..\Xojo_SDK\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
