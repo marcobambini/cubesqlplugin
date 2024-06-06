@@ -13,7 +13,9 @@ LINUX_64BIT_LIB = ../libs/linux-64
 
 UNAME_M := $(shell uname -m)
 
-ifeq ($(UNAME_M), x86_64)
+ifdef LINUX_LIBPATH
+    $(info Linux Lib Path has been defined outside Makefile)
+else ifeq ($(UNAME_M), x86_64)
     LINUX_LIBPATH := $(LINUX_64BIT_LIB)
 else ifeq ($(UNAME_M), i386)
     LINUX_LIBPATH := $(LINUX_32BIT_LIB)
@@ -26,6 +28,8 @@ else ifeq ($(UNAME_M), aarch64)
 else
     $(error Unsupported architecture: $(UNAME_M))
 endif
+
+$(info Linux Lib Path: $(LINUX_LIBPATH))
 
 CC = g++
 LD = g++
