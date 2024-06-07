@@ -216,6 +216,7 @@ ssize_t tls_write(struct tls *_ctx, const void *_buf, size_t _buflen);
 const char *tls_error(struct tls *_ctx);
 const char *tls_config_error(struct tls_config *_config);
 void tls_free(struct tls *_ctx);
+const char* SSLeay_version(int t);
 #endif
     
 /* COMMANDS */

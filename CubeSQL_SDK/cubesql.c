@@ -2183,7 +2183,7 @@ int csql_cursor_close (csqlc *c) {
 
 const char *cubesql_sslversion (void) {
     #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
-    return "LibreSSL 3.8.2";
+    return SSLeay_version(0);
     #else
     return NULL;
     #endif

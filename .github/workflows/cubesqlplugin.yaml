@@ -1,0 +1,363 @@
+name: CubeSQLPlugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      do_commit_and_push:
+        description: Commit and Push
+        required: true
+        default: true
+        type: boolean
+
+env:
+  MSBUILD_EXE: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe
+
+jobs:
+  build-cubesqlplugin-linux-arm64:
+    name: Build CubeSQLPlugin Linux ARM64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker run \
+            --rm \
+            -v "$PWD":/usr/src/cubesqlplugin \
+            -w /usr/src/cubesqlplugin \
+            arm64v8/gcc:8.1 \
+            /bin/bash -c "cd gcc && export LINUX_LIBPATH=../libs/linux-arm64 && make"
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ arm64/
+          mkdir -p ./CubeSQLPlugin/Build\ Resources/Linux\ arm64/
+          cp ./gcc/CubeSQLPlugin.so ./CubeSQLPlugin/Build\ Resources/Linux\ arm64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-arm64
+          retention-days: 2
+          path: |
+            CubeSQLPlugin/Build Resources/Linux arm64/CubeSQLPlugin.so
+          if-no-files-found: error
+  build-cubesqlplugin-linux-arm32:
+    name: Build CubeSQLPlugin Linux ARM32
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker run \
+            --platform linux/arm/v7 \
+            --rm \
+            -v "$PWD":/usr/src/cubesqlplugin \
+            -w /usr/src/cubesqlplugin \
+            gcc:8.1 \
+            /bin/bash -c "cd gcc && export LINUX_LIBPATH=../libs/linux-arm && make"
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ arm/
+          mkdir -p ./CubeSQLPlugin/Build\ Resources/Linux\ arm/
+          cp ./gcc/CubeSQLPlugin.so ./CubeSQLPlugin/Build\ Resources/Linux\ ARM
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-arm
+          retention-days: 2
+          path: |
+            CubeSQLPlugin/Build Resources/Linux ARM/CubeSQLPlugin.so
+          if-no-files-found: error
+  build-cubesqlplugin-linux-i386:
+    name: Build CubeSQLPlugin Linux i386
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker run \
+            --rm \
+            -v "$PWD":/usr/src/cubesqlplugin \
+            -w /usr/src/cubesqlplugin \
+            i386/gcc:6.1 \
+            /bin/bash -c "cd gcc && export LINUX_LIBPATH=../libs/linux && make"
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ X86/
+          mkdir -p ./CubeSQLPlugin/Build\ Resources/Linux\ X86/
+          cp ./gcc/CubeSQLPlugin.so ./CubeSQLPlugin/Build\ Resources/Linux\ X86
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux
+          retention-days: 2
+          path: |
+            CubeSQLPlugin/Build Resources/Linux X86/CubeSQLPlugin.so
+          if-no-files-found: error
+  build-cubesqlplugin-linux-x86-64:
+    name: Build CubeSQLPlugin Linux x86-64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker run \
+            --platform linux/amd64 \
+            --rm \
+            -v "$PWD":/usr/src/cubesqlplugin \
+            -w /usr/src/cubesqlplugin \
+            gcc:8.1 \
+            /bin/bash -c "cd gcc && export LINUX_LIBPATH=../libs/linux-64 && make"
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ X86-64/
+          mkdir -p ./CubeSQLPlugin/Build\ Resources/Linux\ X86-64/
+          cp ./gcc/CubeSQLPlugin.so ./CubeSQLPlugin/Build\ Resources/Linux\ x86-64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-64
+          retention-days: 2
+          path: |
+            CubeSQLPlugin/Build Resources/Linux x86-64/CubeSQLPlugin.so
+          if-no-files-found: error
+  build-cubesqlplugin-windows-x64:
+    name: Build CubeSQLPlugin Windows x64
+    runs-on: windows-2019
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        shell: powershell
+        run: |
+          & '${{ env.MSBUILD_EXE }}' .\VisualC\CubeSQLPlugin\CubeSQLPlugin.sln /p:Configuration=Release /p:Platform=x64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-64bit
+          retention-days: 2
+          path: |
+            ./VisualC/CubeSQLPlugin/x64/Release/cubeSQL_64bit.dll
+          if-no-files-found: error
+  build-cubesqlplugin-windows-win32:
+    name: Build CubeSQLPlugin Windows Win32
+    runs-on: windows-2019
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        shell: powershell
+        run: |
+          & '${{ env.MSBUILD_EXE }}' .\VisualC\CubeSQLPlugin\CubeSQLPlugin.sln /p:Configuration=Release /p:Platform=Win32
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-32bit
+          retention-days: 2
+          path: |
+            ./VisualC/CubeSQLPlugin/Release/cubeSQL_32bit.dll
+          if-no-files-found: error
+  build-cubesqlplugin-macOS:
+    name: Build CubeSQLPlugin macOS
+    runs-on: macos-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Install CodeSign Certificate
+        env:
+          MACOS_CODESIGN_CERTIFICATE: ${{ secrets.MACOS_CODESIGN_CERTIFICATE }}
+          MACOS_CODESIGN_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CODESIGN_CERTIFICATE_PASSWORD }}
+          MACOS_CODESIGN_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_CODESIGN_KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$MACOS_CODESIGN_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$MACOS_CODESIGN_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$MACOS_CODESIGN_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$MACOS_CODESIGN_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$MACOS_CODESIGN_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+      - name: Build Universal
+        env:
+          MACOS_CODESIGN_DEVELOPMENT_TEAM: ${{ secrets.MACOS_CODESIGN_DEVELOPMENT_TEAM }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+        run: |
+          cd XCode
+          xcrun xcodebuild archive \
+            -project ./CubeSQLPlugin.xcodeproj \
+            -scheme CubeSQLPlugin \
+            -archivePath ./macOS-Universal.xcarchive \
+            MACOSX_DEPLOYMENT_TARGET=10.14 \
+            SKIP_INSTALL=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS="x86_64 arm64" \
+            CODE_SIGN_STYLE="Manual" \
+            DEVELOPMENT_TEAM="$MACOS_CODESIGN_DEVELOPMENT_TEAM" \
+            CODE_SIGN_IDENTITY="$MACOS_CODESIGN_IDENTITY" \
+            CODE_SIGNING_REQUIRED=YES
+      - name: Upload Artifact macOS Universal
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-Universal
+          retention-days: 2
+          path: |
+            XCode/macOS-Universal.xcarchive/Products/usr/local/lib/CubeSQLPlugin.dylib
+          if-no-files-found: error
+      - name: Build x86_64
+        env:
+          MACOS_CODESIGN_DEVELOPMENT_TEAM: ${{ secrets.MACOS_CODESIGN_DEVELOPMENT_TEAM }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+        run: |
+          cd XCode
+          xcrun xcodebuild archive \
+            -project ./CubeSQLPlugin.xcodeproj \
+            -scheme CubeSQLPlugin \
+            -archivePath ./macOS-x86_64.xcarchive \
+            MACOSX_DEPLOYMENT_TARGET=10.14 \
+            SKIP_INSTALL=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS="x86_64" \
+            CODE_SIGN_STYLE="Manual" \
+            DEVELOPMENT_TEAM="$MACOS_CODESIGN_DEVELOPMENT_TEAM" \
+            CODE_SIGN_IDENTITY="$MACOS_CODESIGN_IDENTITY" \
+            CODE_SIGNING_REQUIRED=YES
+      - name: Upload Artifact macOS x86_64
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-x86_64
+          retention-days: 2
+          path: |
+            XCode/macOS-x86_64.xcarchive/Products/usr/local/lib/CubeSQLPlugin.dylib
+          if-no-files-found: error
+      - name: Build arm64
+        env:
+          MACOS_CODESIGN_DEVELOPMENT_TEAM: ${{ secrets.MACOS_CODESIGN_DEVELOPMENT_TEAM }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+        run: |
+          cd XCode
+          xcrun xcodebuild archive \
+            -project ./CubeSQLPlugin.xcodeproj \
+            -scheme CubeSQLPlugin \
+            -archivePath ./macOS-arm64.xcarchive \
+            MACOSX_DEPLOYMENT_TARGET=10.14 \
+            SKIP_INSTALL=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS="arm64" \
+            CODE_SIGN_STYLE="Manual" \
+            DEVELOPMENT_TEAM="$MACOS_CODESIGN_DEVELOPMENT_TEAM" \
+            CODE_SIGN_IDENTITY="$MACOS_CODESIGN_IDENTITY" \
+            CODE_SIGNING_REQUIRED=YES
+      - name: Upload Artifact macOS arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-arm64
+          retention-days: 2
+          path: |
+            XCode/macOS-arm64.xcarchive/Products/usr/local/lib/CubeSQLPlugin.dylib
+          if-no-files-found: error
+  push-to-repository:
+    name: Push to Repository
+    runs-on: ubuntu-latest
+    needs: [build-cubesqlplugin-linux-arm64, build-cubesqlplugin-linux-arm32, build-cubesqlplugin-linux-i386, build-cubesqlplugin-linux-x86-64, build-cubesqlplugin-windows-x64, build-cubesqlplugin-windows-win32, build-cubesqlplugin-macOS]
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: CubeSQLPlugin Version
+        run: |
+          CUBESQLPLUGIN_VERSION=$(grep -o "#define PLUGIN_VERSION.*" sources/CubeSQLPlugin.h | awk -F'"' '{print $2}')
+          echo "CubeSQLPlugin Version: $CUBESQLPLUGIN_VERSION"
+          echo "CUBESQLPLUGIN_VERSION=$CUBESQLPLUGIN_VERSION" >> $GITHUB_ENV
+      - name: Remove old CubeSQLPlugin Builds
+        run: |
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ arm64
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ ARM
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ X86
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ x86-64
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Windows
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Windows x86-64
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ Universal
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ arm64
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ x86-64
+      - name: Download Artifacts linux
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux
+          path: CubeSQLPlugin/Build Resources/Linux X86
+      - name: Download Artifacts linux-64
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-64
+          path: CubeSQLPlugin/Build Resources/Linux x86-64
+      - name: Download Artifacts linux-arm
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-arm
+          path: CubeSQLPlugin/Build Resources/Linux ARM
+      - name: Download Artifacts linux-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-linux-arm64
+          path: CubeSQLPlugin/Build Resources/Linux arm64
+      - name: Download Artifacts win-64bit
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-64bit
+          path: CubeSQLPlugin/Build Resources/Windows x86-64
+      - name: Download Artifacts win-32bit
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-32bit
+          path: CubeSQLPlugin/Build Resources/Windows
+      - name: Download Artifacts macOS-Universal
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-Universal
+          path: CubeSQLPlugin/Build Resources/Mac Universal
+      - name: Download Artifacts macOS-x86_64
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-x86_64
+          path: CubeSQLPlugin/Build Resources/Mac x86-64
+      - name: Download Artifacts macOS-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-macOS-arm64
+          path: CubeSQLPlugin/Build Resources/Mac arm64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-Build-Resources
+          retention-days: 2
+          path: |
+            CubeSQLPlugin/Build Resources/
+          if-no-files-found: error
+      - name: Build CubeSQLPlugin.xojo_plugin
+        run: |
+          rm -r -f ./CubeSQLPlugin.xojo_plugin
+          zip -r ./CubeSQLPlugin.xojo_plugin ./CubeSQLPlugin
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin
+          retention-days: 7
+          path: |
+            CubeSQLPlugin.xojo_plugin
+          if-no-files-found: error
+      - name: Commit and Push
+        if: "${{ inputs.do_commit_and_push == true }}"
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@users.noreply.github.com"
+          git pull
+          git add ./CubeSQLPlugin
+          git add ./CubeSQLPlugin.xojo_plugin
+          git commit -m "CubeSQLPlugin ${{ env.CUBESQLPLUGIN_VERSION }}"
+          git push

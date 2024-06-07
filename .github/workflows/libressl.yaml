@@ -1,0 +1,419 @@
+name: LibreSSL
+
+on:
+  workflow_dispatch:
+    inputs:
+      libressl_version:
+        description: LibreSSL Version
+        required: true
+        default: '3.9.2'
+        type: string
+      do_commit_and_push:
+        description: Commit and Push
+        required: true
+        default: true
+        type: boolean
+
+env:
+  LIB_EXE: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\lib.exe
+
+jobs:
+  build-libressl-macos:
+    name: Build LibreSSL macOS
+    runs-on: macos-latest
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Download
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+      - name: Build x86_64
+        run: |
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          mv libressl-${{ inputs.libressl_version }} libressl_x86_64
+          cd ./libressl_x86_64
+          export ARCH=x86_64
+          export SDK=macosx
+          export DEPLOYMENT_TARGET=10.14
+          export CFLAGS="-arch $ARCH -isysroot $(xcrun -sdk $SDK --show-sdk-path) -m$SDK-version-min=$DEPLOYMENT_TARGET"
+          ./configure --host=$ARCH-apple-darwin --enable-libtls-only --with-pic
+          make -j8
+          rm -r -f ../libs/macOS-x86_64
+          mkdir -p ../libs/macOS-x86_64
+          cp ./tls/.libs/libtls.a ../libs/macOS-x86_64/
+          cd ..
+      - name: Build arm64
+        run: |
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          mv libressl-${{ inputs.libressl_version }} libressl_arm64
+          cd ./libressl_arm64
+          export ARCH=arm64
+          export SDK=macosx
+          export DEPLOYMENT_TARGET=10.14
+          export CFLAGS="-arch $ARCH -isysroot $(xcrun -sdk $SDK --show-sdk-path) -m$SDK-version-min=$DEPLOYMENT_TARGET"
+          ./configure --host=$ARCH-apple-darwin --enable-libtls-only --with-pic
+          make -j8
+          rm -r -f ../libs/macOS-arm64
+          mkdir -p ../libs/macOS-arm64
+          cp ./tls/.libs/libtls.a ../libs/macOS-arm64/
+          cd ..
+      - name: Build Universal
+        run: |
+          lipo -create ./libressl_arm64/tls/.libs/libtls.a ./libressl_x86_64/tls/.libs/libtls.a -output ./libtls.a
+          rm -r -f ./libs/macOS
+          mkdir -p ./libs/macOS
+          cp ./libtls.a ./libs/macOS/
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-macOS
+          retention-days: 2
+          path: |
+            ./libs/macOS-x86_64/libtls.a
+            ./libs/macOS-arm64/libtls.a
+            ./libs/macOS/libtls.a
+          if-no-files-found: error
+  build-libressl-linux-arm64:
+    name: Build LibreSSL Linux ARM64
+    runs-on: ubuntu-latest
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Build
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          cd ./libressl-${{ inputs.libressl_version }}
+          docker run \
+            --rm \
+            -v "$PWD":/usr/src/libressl \
+            -w /usr/src/libressl \
+            arm64v8/gcc:8.1 \
+            /bin/bash -c "./configure --enable-libtls-only --with-pic && make -j4"
+          cd ..
+          mkdir -p ./libs/linux-arm64
+          cp ./libressl-${{ inputs.libressl_version }}/tls/.libs/libtls.a ./libs/linux-arm64/
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-linux-arm64
+          retention-days: 2
+          path: |
+            ./libs/linux-arm64/libtls.a
+          if-no-files-found: error
+  build-libressl-linux-arm32:
+    name: Build LibreSSL Linux ARM32
+    runs-on: ubuntu-latest
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Build
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          cd ./libressl-${{ inputs.libressl_version }}
+          docker run \
+            --platform linux/arm/v7 \
+            --rm \
+            -v "$PWD":/usr/src/libressl \
+            -w /usr/src/libressl \
+            gcc:8.1 \
+            /bin/bash -c "./configure --enable-libtls-only --with-pic && make -j4"
+          cd ..
+          mkdir -p ./libs/linux-arm
+          cp ./libressl-${{ inputs.libressl_version }}/tls/.libs/libtls.a ./libs/linux-arm/
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-linux-arm
+          retention-days: 2
+          path: |
+            ./libs/linux-arm/libtls.a
+          if-no-files-found: error
+  build-libressl-linux-i386:
+    name: Build LibreSSL Linux i386
+    runs-on: ubuntu-latest
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Install Build Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-multilib
+      - name: Build
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          cd ./libressl-${{ inputs.libressl_version }}
+          docker run \
+            --rm \
+            -v "$PWD":/usr/src/libressl \
+            -w /usr/src/libressl \
+            i386/gcc:6.1 \
+            /bin/bash -c "./configure --enable-libtls-only --with-pic && make -j4"
+          cd ..
+          mkdir -p ./libs/linux
+          cp ./libressl-${{ inputs.libressl_version }}/tls/.libs/libtls.a ./libs/linux/
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-linux
+          retention-days: 2
+          path: |
+            ./libs/linux/libtls.a
+          if-no-files-found: error
+  build-libressl-linux-x86-64:
+    name: Build LibreSSL Linux x86-64
+    runs-on: ubuntu-latest
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Build
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          cd ./libressl-${{ inputs.libressl_version }}
+          docker run \
+            --platform linux/amd64 \
+            --rm \
+            -v "$PWD":/usr/src/libressl \
+            -w /usr/src/libressl \
+            gcc:8.1 \
+            /bin/bash -c "./configure --enable-libtls-only --with-pic && make -j4"
+          cd ..
+          mkdir -p ./libs/linux-64
+          cp ./libressl-${{ inputs.libressl_version }}/tls/.libs/libtls.a ./libs/linux-64/
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-linux-64
+          retention-days: 2
+          path: |
+            ./libs/linux-64/libtls.a
+          if-no-files-found: error
+  build-libressl-windows-x64:
+    name: Build LibreSSL Windows x64
+    runs-on: windows-2019
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            curl
+            gcc
+            tar
+      - name: Download
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          ren libressl-${{ inputs.libressl_version }} libressl_x64
+          cd libressl_x64
+      - name: Configure CMake
+        shell: cmd
+        run: |
+          cd libressl_x64
+          cmake -Bbuild -G "Visual Studio 16 2019" -A x64 -DLIBRESSL_SKIP_INSTALL=ON -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF -DUSE_STATIC_MSVC_RUNTIMES=ON
+      - name: Build
+        shell: cmd
+        run: |
+          cd libressl_x64
+          cmake --build build --config Release
+      - name: Build tls.lib
+        shell: powershell
+        run: |
+          cd libressl_x64
+          mkdir final-tls-lib
+          Get-ChildItem '.\build\ssl' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\crypto' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\tls' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          cd final-tls-lib
+          & '${{ env.LIB_EXE }}' /OUT:tls.lib *.obj
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-win-64bit
+          retention-days: 2
+          path: |
+            ./libressl_x64/final-tls-lib/tls.lib
+          if-no-files-found: error
+  build-libressl-windows-win32:
+    name: Build LibreSSL Windows Win32
+    runs-on: windows-2019
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            curl
+            gcc
+            tar
+      - name: Download
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          ren libressl-${{ inputs.libressl_version }} libressl_Win32
+          cd libressl_Win32
+      - name: Configure CMake
+        shell: cmd
+        run: |
+          cd libressl_Win32
+          cmake -Bbuild -G "Visual Studio 16 2019" -A Win32 -DLIBRESSL_SKIP_INSTALL=ON -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF -DUSE_STATIC_MSVC_RUNTIMES=ON
+      - name: Build
+        shell: cmd
+        run: |
+          cd libressl_Win32
+          cmake --build build --config Release
+      - name: Build tls.lib
+        shell: powershell
+        run: |
+          cd libressl_Win32
+          mkdir final-tls-lib
+          Get-ChildItem '.\build\ssl' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\crypto' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\tls' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          cd final-tls-lib
+          & '${{ env.LIB_EXE }}' /OUT:tls.lib *.obj
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-win-32bit
+          retention-days: 2
+          path: |
+            ./libressl_Win32/final-tls-lib/tls.lib
+          if-no-files-found: error
+  build-libressl-windows-arm64:
+    name: Build LibreSSL Windows ARM64
+    runs-on: windows-2019
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            curl
+            gcc
+            tar
+      - name: Download
+        run: |
+          curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
+          tar xvfz ./libressl-${{ inputs.libressl_version }}.tar.gz
+          ren libressl-${{ inputs.libressl_version }} libressl_ARM64
+          cd libressl_ARM64
+      - name: Configure CMake
+        shell: cmd
+        run: |
+          cd libressl_ARM64
+          cmake -Bbuild -G "Visual Studio 16 2019" -A ARM64 -DLIBRESSL_SKIP_INSTALL=ON -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF -DUSE_STATIC_MSVC_RUNTIMES=ON
+      - name: Build
+        shell: cmd
+        run: |
+          cd libressl_ARM64
+          cmake --build build --config Release
+      - name: Build tls.lib
+        shell: powershell
+        run: |
+          cd libressl_ARM64
+          mkdir final-tls-lib
+          Get-ChildItem '.\build\ssl' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\crypto' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          Get-ChildItem '.\build\tls' -Filter *.obj -Recurse | % { Copy-Item -Path $_.FullName -Destination '.\final-tls-lib\' -Force -Container }
+          cd final-tls-lib
+          & '${{ env.LIB_EXE }}' /OUT:tls.lib *.obj
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-win-arm64
+          retention-days: 2
+          path: |
+            ./libressl_ARM64/final-tls-lib/tls.lib
+          if-no-files-found: error
+  artifacts:
+    name: Artifacts
+    runs-on: ubuntu-latest
+    needs: [build-libressl-macos, build-libressl-linux-arm64, build-libressl-linux-arm32, build-libressl-linux-i386, build-libressl-linux-x86-64, build-libressl-windows-x64, build-libressl-windows-win32, build-libressl-windows-arm64]
+    steps:
+      - name: LibreSSL Version
+        run: echo Build LibreSSL ${{ inputs.libressl_version }}
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Remove old LibreSSL Libs
+        run: |
+          rm -r -f ./libs/linux
+          rm -r -f ./libs/linux-64
+          rm -r -f ./libs/linux-arm
+          rm -r -f ./libs/linux-arm64
+          rm -r -f ./libs/macOS-x86_64
+          rm -r -f ./libs/macOS-arm64
+          rm -r -f ./libs/macOS
+          rm -r -f ./libs/win-32bit
+          rm -r -f ./libs/win-64bit
+          rm -r -f ./libs/win-arm64
+      - name: Download Artifacts macOS
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-macOS
+          path: ./libs
+      - name: Download Artifacts linux
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-linux
+          path: ./libs/linux
+      - name: Download Artifacts linux-64
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-linux-64
+          path: ./libs/linux-64
+      - name: Download Artifacts linux-arm
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-linux-arm
+          path: ./libs/linux-arm
+      - name: Download Artifacts linux-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-linux-arm64
+          path: ./libs/linux-arm64
+      - name: Download Artifacts LibreSSL-win-32bit
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-win-32bit
+          path: ./libs/win-32bit
+      - name: Download Artifacts LibreSSL-win-64bit
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-win-64bit
+          path: ./libs/win-64bit
+      - name: Download Artifacts LibreSSL-win-arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: LibreSSL-win-arm64
+          path: ./libs/win-arm64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreSSL-Libs
+          retention-days: 2
+          path: |
+            ./libs
+          if-no-files-found: error
+      - name: Commit and Push
+        if: "${{ inputs.do_commit_and_push == true }}"
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@users.noreply.github.com"
+          git pull
+          git add ./libs
+          git commit -m "Libs: LibreSSL ${{ inputs.libressl_version }}"
+          git push
