@@ -119,6 +119,24 @@ jobs:
           path: |
             CubeSQLPlugin/Build Resources/Linux x86-64/CubeSQLPlugin.so
           if-no-files-found: error
+  build-cubesqlplugin-windows-ARM64:
+    name: Build CubeSQLPlugin Windows ARM64
+    runs-on: windows-2019
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+      - name: Build
+        shell: powershell
+        run: |
+          & '${{ env.MSBUILD_EXE }}' .\VisualC\CubeSQLPlugin\CubeSQLPlugin.sln /p:Configuration=Release /p:Platform=ARM64
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-ARM64
+          retention-days: 2
+          path: |
+            ./VisualC/CubeSQLPlugin/ARM64/Release/cubeSQL_ARM64.dll
+          if-no-files-found: error
   build-cubesqlplugin-windows-x64:
     name: Build CubeSQLPlugin Windows x64
     runs-on: windows-2019
@@ -266,7 +284,7 @@ jobs:
   push-to-repository:
     name: Push to Repository
     runs-on: ubuntu-latest
-    needs: [build-cubesqlplugin-linux-arm64, build-cubesqlplugin-linux-arm32, build-cubesqlplugin-linux-i386, build-cubesqlplugin-linux-x86-64, build-cubesqlplugin-windows-x64, build-cubesqlplugin-windows-win32, build-cubesqlplugin-macOS]
+    needs: [build-cubesqlplugin-linux-arm64, build-cubesqlplugin-linux-arm32, build-cubesqlplugin-linux-i386, build-cubesqlplugin-linux-x86-64, build-cubesqlplugin-windows-ARM64, build-cubesqlplugin-windows-x64, build-cubesqlplugin-windows-win32, build-cubesqlplugin-macOS]
     steps:
       - name: Check out Repository
         uses: actions/checkout@v4
@@ -283,6 +301,7 @@ jobs:
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Linux\ x86-64
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Windows
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Windows x86-64
+          rm -r -f ./CubeSQLPlugin/Build\ Resources/Windows arm64
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ Universal
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ arm64
           rm -r -f ./CubeSQLPlugin/Build\ Resources/Mac\ x86-64
@@ -306,6 +325,11 @@ jobs:
         with:
           name: CubeSQLPlugin-linux-arm64
           path: CubeSQLPlugin/Build Resources/Linux arm64
+      - name: Download Artifacts win-ARM64
+        uses: actions/download-artifact@v4
+        with:
+          name: CubeSQLPlugin-win-ARM64
+          path: CubeSQLPlugin/Build Resources/Windows arm64
       - name: Download Artifacts win-64bit
         uses: actions/download-artifact@v4
         with:
