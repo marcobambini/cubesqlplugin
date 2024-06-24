@@ -175,7 +175,7 @@ typedef unsigned long in_addr_t;
 #define kMAXCHUNK						100*1024
 #define NO_TIMEOUT						0
 #define CONNECT_TIMEOUT					5
-    
+	
 #if defined(HAVE_BZERO) || defined(bzero)
 // do nothing
 #else
@@ -218,7 +218,7 @@ const char *tls_config_error(struct tls_config *_config);
 void tls_free(struct tls *_ctx);
 const char* SSLeay_version(int t);
 #endif
-    
+	
 /* COMMANDS */
 #define	kCOMMAND_CONNECT				1
 #define	kCOMMAND_SELECT					2
@@ -310,14 +310,14 @@ struct csqldb {
 	int				        errcode;					// last error code
 	int				        useOldProtocol;				// flag to set if you want to use the old REALSQLServer protocol
 	int				        verifyPeer;					// flag to check if peer verification must be performed
-    int                     family;
+	int                     family;
 	
 	char			        *token;						// optional token used in token connect
 	char			        *hostverification;			// optional host verification name to use in SSL peer verification
 	void			        *userptr;					// optional pointer saved by the user
 	int				        encryption;					// CUBESQL_ENCRYPTION_NONE - CUBESQL_ENCRYPTION_AES128
-                                                        // CUBESQL_ENCRYPTION_AES192 - CUBESQL_ENCRYPTION_AES256
-    
+														// CUBESQL_ENCRYPTION_AES192 - CUBESQL_ENCRYPTION_AES256
+	
 	csql_aes_encrypt_ctx    encryptkey[1];              // session key used to encrypt data
 	csql_aes_decrypt_ctx    decryptkey[1];              // session key used to decrypt data
 
@@ -328,9 +328,9 @@ struct csqldb {
 	inhead			        request;                    // request header
 	outhead			        reply;                      // response header
 	
-    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
-    struct tls              *tls_context;               // TLS context connection
-    #endif
+	#ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
+	struct tls              *tls_context;               // TLS context connection
+	#endif
 	
 	void (*trace) (const char*, void*);                 // trace callback
 	void                    *data;                      // user argument to be passed to the callbacks function
