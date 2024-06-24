@@ -1,7 +1,7 @@
 /*
  *  cubesql.c
  *
- *  (c) 2006-2018 SQLabs srl -- All Rights Reserved
+ *  (c) 2006-2024 SQLabs srl -- All Rights Reserved
  *  Author: Marco Bambini (MB)
  *
  */
@@ -9,8 +9,9 @@
 #include "cubesql.h"
 #include "csql.h"
 
-#define MAX_SOCK_LIST       6                           // maximum number of socket descriptor to try to connect to
-														// this change is required to support IPv4/IPv6 connections
+// maximum number of socket descriptor to try to connect to
+// this change is required to support IPv4/IPv6 connections
+#define	MAX_SOCK_LIST	6
 
 // MARK: cubeSQL -
 const char *cubesql_version (void) {
@@ -988,17 +989,22 @@ int csql_socketconnect (csqldb *db) {
 		return -1;
 	}
 	
+	const char *lastConnectionErrorMessage = NULL;
 	int sock_index = 0;
 	int sock_current = 0;
 	int sock_list[MAX_SOCK_LIST] = {0};
 	for (addr = addr_list; addr != NULL; addr = addr->ai_next, ++sock_index) {
 		if (sock_index >= MAX_SOCK_LIST) break;
+
+		// placeholder; successfully instantiated sockets will have > 0
+		sock_list[sock_index] = -1;
 		
 		// display protocol specific formatted address
-		// char szHost[256], szPort[16];
-		// getnameinfo(addr->ai_addr, addr->ai_addrlen, szHost, sizeof(szHost), szPort, sizeof(szPort), NI_NUMERICHOST | NI_NUMERICSERV);
-		// printf("getnameinfo(): host=%s, port=%s, family=%d\n", szHost, szPort, addr->ai_family);
-		
+		/*
+		char szHost[256], szPort[16];
+		getnameinfo(addr->ai_addr, addr->ai_addrlen, szHost, sizeof(szHost), szPort, sizeof(szPort), NI_NUMERICHOST | NI_NUMERICSERV);
+		printf("getnameinfo(): host=%s, port=%s, family=%d\n", szHost, szPort, addr->ai_family);
+		*/
 		sock_current = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
 		if (sock_current < 0) continue;
 		
@@ -1028,7 +1034,19 @@ int csql_socketconnect (csqldb *db) {
 		ioctl(sock_current, FIONBIO, &ioctl_blocking);
 		
 		// initiate non-blocking connect ignoring return code
-		connect(sock_current, addr->ai_addr, addr->ai_addrlen);
+		rc = connect(sock_current, addr->ai_addr, addr->ai_addrlen);
+		if (rc < 0) {
+			if (errno != 0 && errno != EINTR && errno != EAGAIN & errno != EINPROGRESS)
+			{
+				// obvious error (e.g. network not reachable) - don't use this socket
+				lastConnectionErrorMessage = strerror(errno);
+				/*
+				printf("connect error: %s (%i)\n", strerror(errno), errno);
+				*/
+				closesocket(sock_current);
+				continue;
+			}
+		}
 		
 		// add sock_current to internal list of trying to connect sockets
 		sock_list[sock_index] = sock_current;
@@ -1043,78 +1061,114 @@ int csql_socketconnect (csqldb *db) {
 	time_t now = start;
 	rc = 0;
 	
-	int socket_err = 0;
 	int sockfd = 0;
 	fd_set write_fds;
 	fd_set except_fds;
 	struct timeval tv;
-	
-	while (rc == 0 && ((now - start) < connect_timeout)) {
+
+	while ((now - start) < connect_timeout) {
 		FD_ZERO(&write_fds);
 		FD_ZERO(&except_fds);
 		
-		int nfds = 0;
-		for (int i=0; i<MAX_SOCK_LIST; ++i) {
-			if (sock_list[i]) {
-				FD_SET(sock_list[i], &write_fds);
-				FD_SET(sock_list[i], &except_fds);
-				if (nfds < sock_list[i]) nfds = sock_list[i];
-			}
-		}
-		
 		tv.tv_sec = connect_timeout;
 		tv.tv_usec = 0;
-		
-		rc = bsd_select(nfds + 1, NULL, &write_fds, &except_fds, &tv);
-		
-		if (rc == 0) break;     // timeout
-		else if (rc == -1) {
-			if (errno == EINTR || errno == EAGAIN || errno == EINPROGRESS) continue;
-			break; // handle error
-		}
-		
-		// check for error first
+
 		for (int i=0; i<MAX_SOCK_LIST; ++i) {
 			if (sock_list[i] > 0) {
-				if (FD_ISSET(sock_list[i], &except_fds)) {
+				FD_SET(sock_list[i], &write_fds);
+				FD_SET(sock_list[i], &except_fds);
+
+				rc = bsd_select(sock_list[i] + 1, NULL, &write_fds, &except_fds, &tv);
+				
+				if (rc == 0) {
+					// timeout - we can't use this socket
 					closesocket(sock_list[i]);
-					sock_list[i] = 0;
+					sock_list[i] = -1;
+					continue;
+				}
+
+				if (rc < 0) {
+					if (errno == 0 || errno == EINTR || errno == EAGAIN || errno == EINPROGRESS) {
+						// socket is still connecting
+						continue;
+					}
+					
+					// socket bsd_select error - don't use this socket
+					/*
+					printf("socket bsd_select error: %s (%i)\n", strerror(errno), errno);
+					*/
+					lastConnectionErrorMessage = strerror(errno);
+					closesocket(sock_list[i]);
+					sock_list[i] = -1;
+					continue;
 				}
 			}
 		}
 		
-		// check which file descriptor is ready (need to check for socket error also)
+		// check for error
+		for (int i=0; i<MAX_SOCK_LIST; ++i) {
+			if (sock_list[i] > 0) {
+				if (FD_ISSET(sock_list[i], &except_fds)) {
+					int err = csql_socketerror(sock_list[i]);
+					if (err > 0) {
+						lastConnectionErrorMessage = strerror(err);
+					}
+
+					closesocket(sock_list[i]);
+					sock_list[i] = -1;
+				}
+			}
+		}
+		
+		// check which file descriptor is ready for writing (need to check for socket error also)
 		for (int i=0; i<MAX_SOCK_LIST; ++i) {
 			if (sock_list[i] > 0) {
 				if (FD_ISSET(sock_list[i], &write_fds)) {
 					int err = csql_socketerror(sock_list[i]);
 					if (err > 0) {
+						lastConnectionErrorMessage = strerror(err);
+
 						closesocket(sock_list[i]);
-						sock_list[i] = 0;
+						sock_list[i] = -1;
 					} else {
+						//use this socket - break loop (use first one, don't overwrite sockfd with next possible one)
 						sockfd = sock_list[i];
 						break;
 					}
 				}
 			}
 		}
+
 		// check if a valid descriptor has been found
 		if (sockfd != 0) break;
+
+		// are there still unclosed sockets trying to connect?
+		int remainingSocketCount = 0;
+		for (int i=0; i<MAX_SOCK_LIST; ++i) {
+			if (sock_list[i] > 0) {
+				remainingSocketCount++;
+			}
+		}
+
+		// no sockets remaining - break loop
+		if (remainingSocketCount < 1) break;
 		
 		// no socket ready yet
 		now = time(NULL);
-		rc = 0;
 	}
 	
-	// close still opened sockets
+	// cleanup: close unneeded, still opened sockets
 	for (int i=0; i<MAX_SOCK_LIST; ++i) {
 		if ((sock_list[i] > 0) && (sock_list[i] != sockfd)) closesocket(sock_list[i]);
 	}
 	
-	// bail if there was an error
-	if (rc < 0) {
-		const char *s = strerror(errno);
-		csql_seterror(db, socket_err, (s) ? (s) : "An error occurred while trying to connect");
+	// bail if no socket has been connected because of an error
+	if ((sockfd <= 0) && lastConnectionErrorMessage && (strstr(lastConnectionErrorMessage, "Unknown") == NULL)) {
+		char errorConnectMessage[1024];
+
+		// set error message
+		snprintf(errorConnectMessage, sizeof(errorConnectMessage), "An error occurred while trying to connect: %s", lastConnectionErrorMessage);
+		csql_seterror(db, ERR_SOCKET, errorConnectMessage);
 		return -1;
 	}
 	
@@ -1124,11 +1178,18 @@ int csql_socketconnect (csqldb *db) {
 		return -1;
 	}
 	
+	// bail if no socket has been connected (but we didn't catch an error message to be shown)
+	if (sockfd <= 0) {
+		// set error message
+		csql_seterror(db, ERR_SOCKET, "An error occurred while trying to connect");
+		return -1;
+	}
+
 	// turn off non-blocking
 	int ioctl_blocking = 0;	/* ~0; //TRUE; */
 	ioctl(sockfd, FIONBIO, &ioctl_blocking);
 	
-	// socket is connected now check for SSL
+	// socket is connected - now check for SSL
 	#ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
 	if (encryption_is_ssl(db->encryption)) {
 		int rc = tls_connect_socket(db->tls_context, sockfd, db->host);
