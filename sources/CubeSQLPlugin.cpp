@@ -1810,21 +1810,14 @@ REALstring CheckFixEscapedStringPath (REALstring s) {
 }
 
 REALstring REALbasicPathFromFolderItem (REALfolderItem value) {
-	REALstring path = NULL;
 	DEBUG_WRITE("REALbasicPathFromFolderItem");
-    
-    double v = REALGetRBVersion();
-    if (v <= 2012.021) { // 2012R2.1 is the latest Real Studio edition
-        #if WIN32
-        if (REALGetPropValueString((REALobject)value, "AbsolutePath", &path) == false) return NULL;
-        #else
-        if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return NULL;
-        path = CheckFixEscapedStringPath(path);
-        #endif
-    } else {
-        // NativePath property is supported only on Xojo and it is the recommended way to get path from FolderItem
-        if (REALGetPropValueString((REALobject)value, "NativePath", &path) == false) return NULL;
-    }
+	REALstring path = NULL;
+
+#if WIN32
+	if (REALGetPropValueString((REALobject)value, "ShellPath", &path) == false) return NULL;
+#else
+	if (REALGetPropValueString((REALobject)value, "NativePath", &path) == false) return NULL;
+#endif
 	
 	REALLockString(path);
 	return path;
