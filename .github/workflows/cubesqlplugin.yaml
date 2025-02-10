@@ -15,10 +15,8 @@ env:
 jobs:
   build-cubesqlplugin-linux-arm64:
     name: Build CubeSQLPlugin Linux ARM64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Check out Repository
         uses: actions/checkout@v4
       - name: Build
@@ -42,10 +40,8 @@ jobs:
           if-no-files-found: error
   build-cubesqlplugin-linux-arm32:
     name: Build CubeSQLPlugin Linux ARM32
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Check out Repository
         uses: actions/checkout@v4
       - name: Build
