@@ -8,6 +8,9 @@ In order to be able to use these Workflows, the repository needs to be set up:
 - Repository secrets:
   - `MACOS_CODESIGN_CERTIFICATE`  
     Exported "Developer ID Application" Certificate as a .p12 file, Base64 Encoded
+    - Export "Developer ID Application" Certificate as a .p12 file *(and set a password for the .p12 file)*
+    - Use the following command to convert the .p12 certificate to Base64 and copy it to the clipboard:  
+      `base64 -i BUILD_CERTIFICATE.p12 | pbcopy`
   - `MACOS_CODESIGN_CERTIFICATE_PASSWORD`  
       Password for the exported "Developer ID Application" certificate
   - `MACOS_CODESIGN_KEYCHAIN_PASSWORD`  

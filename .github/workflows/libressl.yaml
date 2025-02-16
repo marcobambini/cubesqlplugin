@@ -6,7 +6,7 @@ on:
       libressl_version:
         description: LibreSSL Version
         required: true
-        default: '3.9.2'
+        default: '4.0.0'
         type: string
       do_commit_and_push:
         description: Commit and Push
@@ -75,12 +75,10 @@ jobs:
           if-no-files-found: error
   build-libressl-linux-arm64:
     name: Build LibreSSL Linux ARM64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: LibreSSL Version
         run: echo Build LibreSSL ${{ inputs.libressl_version }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Build
         run: |
           curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
@@ -105,12 +103,10 @@ jobs:
           if-no-files-found: error
   build-libressl-linux-arm32:
     name: Build LibreSSL Linux ARM32
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: LibreSSL Version
         run: echo Build LibreSSL ${{ inputs.libressl_version }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Build
         run: |
           curl -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${{ inputs.libressl_version }}.tar.gz"
