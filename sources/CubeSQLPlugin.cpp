@@ -202,6 +202,7 @@ void DatabaseLock(dbDatabase *database) {
 }
 
 void DatabaseUnlock(dbDatabase *database) {
+	if (database->referenceCount <= 0) return;
 	database->referenceCount--;
 	if (database->referenceCount > 0) return;
 	
@@ -345,7 +346,12 @@ void DatabaseAddTableRecord(dbDatabase *database, REALstring tableName, REALcolu
 	colvalue = (char **) malloc(sizeof(char*)*ncols);
 	colsize = (int *) malloc(sizeof(int)*ncols);
 	coltype = (int *) malloc(sizeof(int)*ncols);
-	if ((colvalue == NULL) || (colsize == NULL) || (coltype == NULL)) return;
+    if ((colvalue == NULL) || (colsize == NULL) || (coltype == NULL)) {
+        if (colvalue) free((void *)colvalue);
+        if (colsize) free((void *)colsize);
+        if (coltype) free((void *)coltype);
+        return;
+    }
 	
 	index = 0;
 	for (REALcolumnValue *value = values; value != NULL; value = value->nextColumn) {
@@ -799,7 +805,7 @@ void CubeSQLPrepareBindValue (REALobject instance, int index, REALobject value) 
     ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
     
     int type = CUBESQL_BIND_TEXT; // default CUBESQL_TEXT
-    if (index < MAX_TYPES_COUNT && data->types[index] != 0) type = data->types[index];
+    if (index >= 0 && index < MAX_TYPES_COUNT && data->types[index] != 0) type = data->types[index];
     CubeSQLPrepareBindValueType(instance, index, value, type);
 }
 
@@ -843,7 +849,10 @@ void CubeSQLPrepareBindValueType (REALobject instance, int index, REALobject obj
             if (!svalue) cubesql_vmbind_null(vm, index);
             else {
                 REALstringData sdata;
-                if (!REALGetStringData(svalue, kREALTextEncodingUnknown, &sdata)) return;
+                if (!REALGetStringData(svalue, kREALTextEncodingUnknown, &sdata)) {
+                    cubesql_vmbind_null(vm, index);
+                    return;
+                }
                 cubesql_vmbind_blob(vm, index, (void*)sdata.data, (int)sdata.length);
                 REALDisposeStringData(&sdata);
             }
@@ -874,7 +883,10 @@ void CubeSQLPrepareBindValueType (REALobject instance, int index, REALobject obj
             if (!REALGetPropValueString(object, "StringValue", &value)) cubesql_vmbind_null(vm, index);
             else {
                 REALstringData sdata;
-                if (!REALGetStringData(value, kREALTextEncodingUTF8, &sdata)) return;
+                if (!REALGetStringData(value, kREALTextEncodingUTF8, &sdata)) {
+                    cubesql_vmbind_null(vm, index);
+                    return;
+                }
                 cubesql_vmbind_text(vm, index, (char *)sdata.data, (int)sdata.length);
                 REALDisposeStringData(&sdata);
             }
@@ -899,7 +911,7 @@ void CubeSQLPrepareBindValues (REALobject instance, REALarray values) {
 void CubeSQLPrepareBindType (REALobject instance, int index, int type) {
     DEBUG_WRITE("CubeSQLPrepareBindType");
     ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
-    if (index < MAX_TYPES_COUNT) data->types[index] = type;
+    if (index >= 0 && index < MAX_TYPES_COUNT) data->types[index] = type;
 }
 
 void CubeSQLPrepareBindTypes (REALobject instance, REALarray types) {
@@ -1154,7 +1166,12 @@ void CursorUpdate(dbCursor *cursor, REALcursorUpdate *updates) {
 	colvalue = (char **) malloc(sizeof(char*)*ncols);
 	colsize = (int *) malloc(sizeof(int)*ncols);
 	coltype = (int *) malloc(sizeof(int)*ncols);
-	if ((colvalue == NULL) || (colsize == NULL) || (coltype == NULL)) return;
+	if ((colvalue == NULL) || (colsize == NULL) || (coltype == NULL)) {
+		if (colvalue) free((void *)colvalue);
+		if (colsize) free((void *)colsize);
+		if (coltype) free((void *)coltype);
+		return;
+	}
 	
 	index = 0;
 	for (REALcursorUpdate *update = updates; update; update = update->next) {
@@ -1340,11 +1357,14 @@ void CubeSQLVMDestructor (REALobject instance) {
 void CubeSQLVMBindBlob (REALobject instance, int index, REALstring blob) {
 	DEBUG_WRITE("SQLite3VMBindBlob");
 	ClassData(CubeSQLVMClass, instance, cubeSQLVM, data);
-	
+
 	REALstringData sdata;
-	if (!REALGetStringData(blob, kREALTextEncodingUnknown, &sdata)) return;
+	if (!REALGetStringData(blob, kREALTextEncodingUnknown, &sdata)) {
+		cubesql_vmbind_null(data->vm, index);
+		return;
+	}
 	cubesql_vmbind_blob(data->vm, index, (void*)sdata.data, (int)sdata.length);
-    REALDisposeStringData(&sdata);
+	REALDisposeStringData(&sdata);
 }
 
 void CubeSQLVMBindDouble (REALobject instance, int index, double n) {
@@ -1380,11 +1400,14 @@ void CubeSQLVMBindZeroBlob (REALobject instance, int index, int len) {
 void CubeSQLVMBindText (REALobject instance, int index, REALstring str) {
 	DEBUG_WRITE("CubeSQLVMBindText");
 	ClassData(CubeSQLVMClass, instance, cubeSQLVM, data);
-	
+
 	REALstringData sdata;
-	if (!REALGetStringData(str, kREALTextEncodingUTF8, &sdata)) return;
+	if (!REALGetStringData(str, kREALTextEncodingUTF8, &sdata)) {
+		cubesql_vmbind_null(data->vm, index);
+		return;
+	}
 	cubesql_vmbind_text(data->vm, index, (char *)sdata.data, (int)sdata.length);
-    REALDisposeStringData(&sdata);
+	REALDisposeStringData(&sdata);
 }
 
 void CubeSQLVMExecute (REALobject instance) {
@@ -1694,7 +1717,7 @@ void SSLLibrarySetter(REALfolderItem value) {
 }
 
 void CryptoLibrarySetter(REALfolderItem value) {
-	DEBUG_WRITE("SSLLibrarySetter");
+	DEBUG_WRITE("CryptoLibrarySetter");
 }
 
 Boolean BooleanAsIntegerGetter(void) {
@@ -1837,14 +1860,16 @@ void debug_write (const char *format, ...) {
 
 void debug_fileopen (REALfolderItem value) {
 	REALstring path = REALbasicPathFromFolderItem(value);
-    if (!path) return;
-	
+	if (!path) return;
+
 	debugFile = fopen (REALGetCString(path), "ab+");
+	REALUnlockString(path);
+
 	if (debugFile == NULL) {
 		printf("Unable to open debug file!");
 		return;
 	}
-	
+
 	// disable I/O buffer
 	setbuf(debugFile, NULL);
 }

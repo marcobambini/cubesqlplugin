@@ -201,6 +201,7 @@ struct tls;
 struct tls_config;
 struct tls *tls_client(void);
 struct tls_config *tls_config_new(void);
+void   tls_config_free(struct tls_config *config);
 int tls_init(void);
 int tls_configure(struct tls *_ctx, struct tls_config *_config);
 int tls_connect_socket(struct tls *_ctx, int _s, const char *_servername);

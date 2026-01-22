@@ -540,13 +540,15 @@ void cubesql_cursor_free (csqlc *c) {
 		return;
 	}
 	
-	// check case
+	// chunk case
 	free(c->rowcount);
 	for (i=0; i<c->nbuffer; i++) {
 		free (c->buffer[i]);
 		free (c->rowsum[i]);
 	}
-	
+	free(c->buffer);
+	free(c->rowsum);
+
 	free(c);
 }
 
@@ -767,13 +769,13 @@ int cubesql_cursor_addrow (csqlc *cursor, char **row, int *len) {
 	index = cursor->nrows * cursor->ncols;
 	if (cursor->nalloc < index + cursor->ncols) {
 		int newsize = cursor->nalloc + (kDEFAULT_ALLOC_ROWS * 2);
-		
-		cursor->buffer = (char**) realloc(cursor->data, sizeof(char*) * cursor->ncols * newsize);
+
+		cursor->buffer = (char**) realloc(cursor->buffer, sizeof(char*) * cursor->ncols * newsize);
 		if (cursor->buffer == NULL) return kFALSE;
-		
-		cursor->size0 = (int*) realloc(cursor->size, sizeof(int) * cursor->ncols * newsize);
+
+		cursor->size0 = (int*) realloc(cursor->size0, sizeof(int) * cursor->ncols * newsize);
 		if (cursor->size0 == NULL) return kFALSE;
-		
+
 		cursor->nalloc = newsize;
 	}
 	
@@ -848,6 +850,10 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 	snprintf((char *) db->username, sizeof(db->username),  "%s", username);
 	snprintf((char *) db->password, sizeof(db->password),  "%s", password);
 	
+    #ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
+    struct tls_config *tls_conf = NULL;
+    #endif
+    
 	#ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
 	if (encryption_is_ssl(encryption) == kTRUE) {
 		if (tls_init() < 0) {
@@ -855,7 +861,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 			goto load_ssl_abort;
 		}
 		
-		struct tls_config *tls_conf = tls_config_new();
+		tls_conf = tls_config_new();
 		if (!tls_conf) {
 			fprintf(stderr, "Error while initializing a new TLS configuration.");
 			goto load_ssl_abort;
@@ -870,7 +876,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 		}
 		
 		#ifdef TLS_DEFAULT_CA_FILE
-		if (!root_certificate) root_certificate = TLS_DEFAULT_CA_FILE
+        if (!root_certificate) root_certificate = TLS_DEFAULT_CA_FILE;
 		#endif
 		
 		if (root_certificate) {
@@ -912,9 +918,14 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 		int rc = tls_configure(tls_context, tls_conf);
 		if (rc < 0) {
 			fprintf(stderr, "Error in tls_configure: %s.", tls_error(tls_context));
+			tls_free(tls_context);
 			goto load_ssl_abort;
 		}
-		
+
+		// free TLS config after successful configuration
+		tls_config_free(tls_conf);
+		tls_conf = NULL;
+
 		// save TLS context
 		db->tls_context = tls_context;
 	}
@@ -924,7 +935,7 @@ csqldb *csql_dbinit (const char *host, int port, const char *username, const cha
 	
 	#ifndef CUBESQL_DISABLE_SSL_ENCRYPTION
 load_ssl_abort:
-	// TODO: cleanup TLS
+	if (tls_conf) tls_config_free(tls_conf);
 	return NULL;
 	#endif
 }
@@ -1034,19 +1045,17 @@ int csql_socketconnect (csqldb *db) {
 		ioctl(sock_current, FIONBIO, &ioctl_blocking);
 		
 		// initiate non-blocking connect ignoring return code
-		rc = connect(sock_current, addr->ai_addr, addr->ai_addrlen);
-		if (rc < 0) {
-			if (errno != 0 && errno != EINTR && errno != EAGAIN & errno != EINPROGRESS)
-			{
-				// obvious error (e.g. network not reachable) - don't use this socket
-				lastConnectionErrorMessage = strerror(errno);
-				/*
-				printf("connect error: %s (%i)\n", strerror(errno), errno);
-				*/
-				closesocket(sock_current);
-				continue;
-			}
-		}
+        rc = connect(sock_current, addr->ai_addr, addr->ai_addrlen);
+        if (rc < 0) {
+            if (errno != 0 && errno != EINTR && errno != EAGAIN && errno != EINPROGRESS)
+            {
+                // obvious error (e.g. network not reachable) - don't use this socket
+                lastConnectionErrorMessage = strerror(errno);
+                // printf("connect error: %s (%i)\n", strerror(errno), errno);
+                closesocket(sock_current);
+                continue;
+            }
+        }
 		
 		// add sock_current to internal list of trying to connect sockets
 		sock_list[sock_index] = sock_current;
@@ -1479,7 +1488,7 @@ abort_memory:
 	csql_seterror(db, CUBESQL_MEMORY_ERROR, "Not enought memory to allocate buffer required to build the cursor");
 	
 abort:
-	if ((c) && (existing_c != NULL)) cubesql_cursor_free(c);
+	if ((c) && (existing_c == NULL)) cubesql_cursor_free(c);
 	return NULL;
 }
 
@@ -2012,10 +2021,11 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
 		if (ret == -1) {
 			int err = csql_socketerror(fd);
 			if (err == 0) continue;
-			
+
 			csql_seterror(db, err, "An error occurred while executing csql_socketread");
+			return CUBESQL_ERR;
 		}
-		
+
 		// ret = 0 means timeout
 		if (ret <= 0) {
 			csql_seterror(db, ERR_SOCKET_TIMEOUT, "A timeout error occurred inside csql_socketread");
@@ -2045,7 +2055,8 @@ int csql_socketread (csqldb *db, int is_header, int timeout) {
 
 void csql_seterror(csqldb *db, int errcode, const char *errmsg) {
 	db->errcode = errcode;
-	strncpy(db->errmsg, errmsg, sizeof(db->errmsg));
+	strncpy(db->errmsg, errmsg, sizeof(db->errmsg) - 1);
+	db->errmsg[sizeof(db->errmsg) - 1] = '\0';
 }
 
 int csql_socketerror (int fd) {
@@ -2178,39 +2189,61 @@ int csql_cursor_reallocate (csqlc *c) {
 	if (c->nalloc == 0) {
 		c->buffer = (char**) malloc(sizeof(char*) * kNUMBUFFER);
 		if (c->buffer == NULL) return kFALSE;
-		
+
 		c->rowsum = (int**) malloc(sizeof(int*) * kNUMBUFFER);
-		if (c->rowsum == NULL) return kFALSE;
-		
+		if (c->rowsum == NULL) {
+			free(c->buffer);
+			c->buffer = NULL;
+			return kFALSE;
+		}
+
 		c->rowcount = (int*) malloc(sizeof(int) * kNUMBUFFER);
-		if (c->rowcount == NULL) return kFALSE;
-		
+		if (c->rowcount == NULL) {
+			free(c->buffer);
+			free(c->rowsum);
+			c->buffer = NULL;
+			c->rowsum = NULL;
+			return kFALSE;
+		}
+
 		c->nalloc = kNUMBUFFER;
 	} else {
-		
+
 		char **tmp1;
 		int	 **tmp2;
 		int *tmp3;
 		int	 oldsize, newsize;
-		
+
+		// Try all reallocations first, only update pointers if all succeed
 		oldsize = sizeof(char*) * c->nalloc;
 		newsize = oldsize + (sizeof(char*) * kNUMBUFFER);
 		tmp1 = (char**) realloc(c->buffer, newsize);
 		if (tmp1 == NULL) return kFALSE;
-		c->buffer = tmp1;
-		
+
 		oldsize = sizeof(int*) * c->nalloc;
 		newsize = oldsize + (sizeof(int*) * kNUMBUFFER);
 		tmp2 = (int**) realloc(c->rowsum, newsize);
-		if (tmp2 == NULL) return kFALSE;
-		c->rowsum = tmp2;
-		
+		if (tmp2 == NULL) {
+			// tmp1 succeeded but tmp2 failed - tmp1 is the new buffer
+			c->buffer = tmp1;
+			return kFALSE;
+		}
+
 		oldsize = sizeof(int) * c->nalloc;
 		newsize = oldsize + (sizeof(int) * kNUMBUFFER);
 		tmp3 = (int*) realloc(c->rowcount, newsize);
-		if (tmp3 == NULL) return kFALSE;
+		if (tmp3 == NULL) {
+			// tmp1 and tmp2 succeeded but tmp3 failed
+			c->buffer = tmp1;
+			c->rowsum = tmp2;
+			return kFALSE;
+		}
+
+		// All reallocations succeeded, update all pointers
+		c->buffer = tmp1;
+		c->rowsum = tmp2;
 		c->rowcount = tmp3;
-		
+
 		c->nalloc += kNUMBUFFER;
 	}	
 	
@@ -2536,13 +2569,13 @@ int generate_session_key (csqldb *db, int encryption, char *password, char *rand
 		case CUBESQL_ENCRYPTION_AES192:
 			keyLen = 24;
 			memcpy(session_key, s1, 20);
-			memcpy(session_key, s2, 4);
+			memcpy(session_key + 20, s2, 4);
 			break;
-			
+
 		case CUBESQL_ENCRYPTION_AES256:
 			keyLen = 32;
 			memcpy(session_key, s1, 20);
-			memcpy(session_key, s2, 12);
+			memcpy(session_key + 20, s2, 12);
 			break;
 	}
 	
