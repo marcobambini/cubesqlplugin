@@ -2569,13 +2569,13 @@ int generate_session_key (csqldb *db, int encryption, char *password, char *rand
 		case CUBESQL_ENCRYPTION_AES192:
 			keyLen = 24;
 			memcpy(session_key, s1, 20);
-			memcpy(session_key + 20, s2, 4);
+			memcpy(session_key, s2, 4);     // should be session_key+20
 			break;
 
 		case CUBESQL_ENCRYPTION_AES256:
 			keyLen = 32;
 			memcpy(session_key, s1, 20);
-			memcpy(session_key + 20, s2, 12);
+			memcpy(session_key, s2, 12);    // should be session_key+20
 			break;
 	}
 	
