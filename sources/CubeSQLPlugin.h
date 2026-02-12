@@ -12,8 +12,8 @@
 #include "csql.h"
 
 #define	PING_FREQUENCY		300 // on the server it is specified as 300
-#define DEBUG_WRITE(...)	if (debugFile != NULL) debug_write(__VA_ARGS__)
-#define PLUGIN_VERSION		"3.3.3"
+#define DEBUG_WRITE(...)	do { if (debugFile != NULL) debug_write(__VA_ARGS__); } while(0)
+#define PLUGIN_VERSION		"3.4.0"
 #define SSL_NOVERSION		"N/A"
 #define MAX_TYPES_COUNT     512
 
@@ -53,7 +53,7 @@ struct dbDatabase {
 	Boolean				traceEnabled;
 	void*				traceEvent;
 }
-#ifdef __GCC__
+#ifdef __GNUC__
 __attribute__ ((packed));
 #elif _MSC_VER
 #pragma pack( pop )
@@ -114,8 +114,6 @@ void			CubeSQLVMBindText (REALobject instance, int index, REALstring str);
 void			CubeSQLVMExecute (REALobject instance);
 REALdbCursor	CubeSQLVMSelect (REALobject instance);
 REALdbCursor    CubeSQLVMSelectRowSet (REALobject instance);
-void			CubeSQLVMClose (REALobject instance);
-
 // prepare class
 void            CubeSQLPrepareConstructor (REALobject instance);
 void            CubeSQLPrepareDestructor (REALobject instance);
@@ -384,13 +382,13 @@ REALdbCursorDefinition CubeSQLFieldSchemaCursor = {
 	CursorColumnName,
 	CursorRowCount,
 	CursorFieldSchemaColumnValue,
-	nil,		// Releasevalue
+	NULL,		// Releasevalue
 	CursorNextRow,
-	nil,		// CursorDelete
-	nil,		// CursorDeleteAll,
-	nil,		// FieldKeyFunc
-	nil,		// CursorUpdate
-	nil,		// CursorEdit
+	NULL,		// CursorDelete
+	NULL,		// CursorDeleteAll,
+	NULL,		// FieldKeyFunc
+	NULL,		// CursorUpdate
+	NULL,		// CursorEdit
 	CursorPrevRow,
 	CursorFirstRow,
 	CursorLastRow,
@@ -409,11 +407,11 @@ REALdbEngineDefinition CubeSQLEngine = {
 	DatabaseFieldSchema,
 	DatabaseSQLSelect,
 	DatabaseSQLExecute,
-	nil,		// CreateTable
+	NULL,		// CreateTable
 	DatabaseAddTableRecord,
 	DatabaseSelectSQL,
-	nil,		// UpdateFields
-	nil,		// AddTableColumn
+	NULL,		// UpdateFields
+	NULL,		// AddTableColumn
 	DatabaseIndexSchema,
 	DatabaseLastErrorCode,
 	DatabaseLastErrorString,
@@ -440,11 +438,11 @@ REALdbCursorDefinition CubeSQLCursor = {
 	CursorColumnName,
 	CursorRowCount,
 	CursorColumnValue,
-	nil,		// ReleaseValue
+	NULL,		// ReleaseValue
 	CursorNextRow,
 	CursorDelete,
-	nil,		// CursorDeleteAll,
-	nil,		// FieldKeyFunc
+	NULL,		// CursorDeleteAll,
+	NULL,		// FieldKeyFunc
 	CursorUpdate,
 	CursorEdit,
 	CursorPrevRow,

@@ -27,7 +27,7 @@ using namespace std;
 #define REALGetCString(_s)              (const char *)REALGetStringContents(_s, NULL)
 
 // Data types and their names when running in versions of REALbasic 2006.04 or higher
-static long sDataTypes[]		= {	dbTypeText, dbTypeText, dbTypeLong, dbTypeInt64, dbTypeDouble, 
+static int32_t sDataTypes[]		= {	dbTypeText, dbTypeText, dbTypeLong, dbTypeInt64, dbTypeDouble,
 									dbTypeDouble, dbTypeBoolean, dbTypeDate, dbTypeTime,
 									dbTypeTimeStamp, dbTypeBinary, dbTypeBinary, dbTypeCurrency };
 
@@ -35,7 +35,7 @@ static char sDataTypeNames[]	= { "Text,Varchar,Smallint,Integer,Float,"
 									"Double,Boolean,Date,Time,"
 									"Timestamp,Binary,Blob,Currency"};
 
-static long sDataTypesCount		= sizeof(sDataTypes);
+static long sDataTypesCount		= sizeof(sDataTypes) / sizeof(sDataTypes[0]);
 
 static FILE	*debugFile			= NULL;
 
@@ -123,7 +123,7 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
 	REALstring path1 = NULL;
 	REALstring path2 = NULL;
 	
-	if (database->token != nil) token = (char *)REALGetCString(database->token);
+	if (database->token != NULL) token = (char *)REALGetCString(database->token);
 	if (database->useREALServerProtocol) useREALServerProtocol = kTRUE;
 	
 	if (database->sslCertificate != NULL) {
@@ -142,14 +142,18 @@ Boolean DatabaseConnect(REALdbDatabase instance) {
 	if (database->sslCipherList)
 		sslCipherList = REALGetCString(database->sslCipherList);
 	
-	// try to connecto to the server (sslCertificate can be NULL even if encryption is set to kSSL)
-	int err = cubesql_connect_token(&database->db, s1, database->port, s2, s3, database->timeout, database->encryption, token,
+	// try to connect to the server (sslCertificate can be NULL even if encryption is set to kSSL)
+	csqldb *db = NULL;
+	int err = cubesql_connect_token(&db, s1, database->port, s2, s3, database->timeout, database->encryption, token,
 									useREALServerProtocol, sslCertificate, rootCertificate, sslCertificatePassword, sslCipherList);
+	database->db = db;
 	if (err != CUBESQL_NOERR) {
 		if (err == CUBESQL_SSL_ERROR) DatabaseSetTempError(database, "SSL Library Not Found", kTempError4);
 		else if (err == CUBESQL_PARAMETER_ERROR) DatabaseSetTempError(database, "Parameters Error", kTempError3);
 		else if (err == CUBESQL_MEMORY_ERROR) DatabaseSetTempError(database, "Memory Error", kTempError5);
 		else if (err == CUBESQL_SSL_CERT_ERROR) DatabaseSetTempError(database, "SSL error while loading certificate file", kTempError7);
+		if (path1) REALUnlockString(path1);
+		if (path2) REALUnlockString(path2);
 		return false;
 	}
 		
@@ -209,9 +213,13 @@ void DatabaseUnlock(dbDatabase *database) {
 	PingTimerStop(database);
 	if ((database->db) && (database->isConnected))
 		cubesql_disconnect(database->db, kFALSE);
-	
+
 	if (database->token) REALUnlockString(database->token);
-	database->token = nil;
+	database->token = NULL;
+	if (database->sslCertificate) REALUnlockObject((REALobject)database->sslCertificate);
+	database->sslCertificate = NULL;
+	if (database->rootCertificate) REALUnlockObject((REALobject)database->rootCertificate);
+	database->rootCertificate = NULL;
 	database->db = NULL;
 	database->isConnected = false;
 }
@@ -552,10 +560,10 @@ void BindVariantObjectToVM(REALobject vm, int index, REALobject item) {
             
         case 7:
         case 38: { // TypeDate and TypeDateTime
-            REALobject value = nullptr;;
+            REALobject value = nullptr;
             if (!REALGetPropValueObject(item, "DateTimeValue", &value)) CubeSQLVMBindNull(vm, index);
             else {
-                REALstring svalue = nullptr;;
+                REALstring svalue = nullptr;
                 if (!REALGetPropValueString(value, "SQLDateTime", &svalue)) CubeSQLVMBindNull(vm, index);
                 else CubeSQLVMBindText(vm, index, svalue);
             }
@@ -568,7 +576,7 @@ void BindVariantObjectToVM(REALobject vm, int index, REALobject item) {
         case 20:
         case 21:
         case 37: { // TypeString, CString, WString, PString, CFStringRef and TypeText
-            REALstring value = nullptr;;
+            REALstring value = nullptr;
             if (!REALGetPropValueString(item, "StringValue", &value)) CubeSQLVMBindNull(vm, index);
             else CubeSQLVMBindText(vm, index, value);
         } break;
@@ -712,10 +720,11 @@ REALdbCursor DatabaseSelectSQL(dbDatabase *instance, REALstring sql, REALarray p
     if (!_vm) return NULL;
     
     REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLVM"));
+    if (!result) { cubesql_vmclose(_vm); return NULL; }
     ClassData(CubeSQLVMClass, result, cubeSQLVM, vm);
-    if (!vm || !_vm) return NULL;
+    if (!vm) { cubesql_vmclose(_vm); return NULL; }
     vm->vm = _vm;
-    
+
     BindVariantArrayToVM(result, params);
     return CubeSQLVMSelectRowSet(result);
 }
@@ -729,22 +738,23 @@ void DatabaseExecuteSQL(dbDatabase *instance, REALstring sql, REALarray params) 
     instance->endChunkReceived = false;
     
     RBInteger count = REALGetArrayUBound(params); // COUNT ARRAY
-    Boolean isParamsEmpty = (params == nil || count == -1);
-    
+    Boolean isParamsEmpty = (params == NULL || count == -1);
+
     if (isParamsEmpty) {
         cubesql_execute(instance->db, REALGetCString(sql));
         return;
     }
-    
+
     // more complex case with params so a VM is required
     csqlvm *_vm = cubesql_vmprepare(instance->db, REALGetCString(sql));
     if (!_vm) return;
-    
+
     REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLVM"));
+    if (!result) { cubesql_vmclose(_vm); return; }
     ClassData(CubeSQLVMClass, result, cubeSQLVM, vm);
-    if (!vm || !_vm) return;
+    if (!vm) { cubesql_vmclose(_vm); return; }
     vm->vm = _vm;
-    
+
     BindVariantArrayToVM(result, params);
     CubeSQLVMExecute(result);
 }
@@ -774,9 +784,10 @@ REALobject DatabasePrepareStatement(dbDatabase *database, REALstring statement) 
     if (cvm == NULL) return NULL;
     
     REALobject result = REALnewInstanceWithClass(REALGetClassRef("CubeSQLPreparedStatement"));
+    if (result == NULL) { cubesql_vmclose(cvm); return NULL; }
     ClassData(CubeSQLPrepareClass, result, cubeSQLPrepare, vm);
     vm->vm = cvm;
-    
+
     // return a PreparedSQLStatement
     return result;
 }
@@ -897,7 +908,7 @@ void CubeSQLPrepareBindValueType (REALobject instance, int index, REALobject obj
 
 void CubeSQLPrepareBindValues (REALobject instance, REALarray values) {
     DEBUG_WRITE("CubeSQLPrepareBindValues");
-    if (values == nil) return;
+    if (values == NULL) return;
     
     RBInteger count = REALGetArrayUBound(values);
     for (int i=0; i<=count; ++i) {
@@ -919,7 +930,7 @@ void CubeSQLPrepareBindTypes (REALobject instance, REALarray types) {
     ClassData(CubeSQLPrepareClass, instance, cubeSQLPrepare, data);
     
     RBInteger count = REALGetArrayUBound(types); // COUNT ARRAY
-    Boolean isTypesEmpty = (types == nil || count == -1);
+    Boolean isTypesEmpty = (types == NULL || count == -1);
     if (!isTypesEmpty) {
         for (RBInteger i=0; i<=count; ++i) {
             if (i >= MAX_TYPES_COUNT) break;
@@ -1521,7 +1532,7 @@ int EncryptionGetter(REALobject instance, long param) {
 }
 
 void EncryptionSetter(REALobject instance, long param, int value) {
-	DEBUG_WRITE("AutoCommitSetter %d", value);
+	DEBUG_WRITE("EncryptionSetter %d", value);
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
 	if (data == NULL) return;
 	data->encryption = value;
@@ -1638,9 +1649,9 @@ void SSLCertificateSetter(REALobject instance, long param, REALfolderItem value)
 	DEBUG_WRITE("SSLCertificateSetter");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
 	if (data == NULL) return;
-	
+
 	if (data->sslCertificate) REALUnlockObject((REALobject)data->sslCertificate);
-	REALLockObject((REALobject)value);
+	if (value) REALLockObject((REALobject)value);
 	data->sslCertificate = value;
 }
 
@@ -1648,9 +1659,9 @@ void SSLRootCertificateSetter(REALobject instance, long param, REALfolderItem va
 	DEBUG_WRITE("SSLRootCertificateSetter");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
 	if (data == NULL) return;
-	
+
 	if (data->rootCertificate) REALUnlockObject((REALobject)data->rootCertificate);
-	REALLockObject((REALobject)value);
+	if (value) REALLockObject((REALobject)value);
 	data->rootCertificate = value;
 }
 
@@ -1658,17 +1669,17 @@ void TokenSetter(REALobject instance, long param, REALstring value) {
 	DEBUG_WRITE("TokenSetter");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
 	if (data == NULL) return;
-	
+
 	if (data->token) REALUnlockString(data->token);
-	REALLockString(value);
+	if (value) REALLockString(value);
 	data->token = value;
 }
 
 REALstring TokenGetter(REALobject instance, long param) {
 	DEBUG_WRITE("TokenGetter");
 	ClassData(CubeSQLDatabaseClass, instance, dbDatabase, data);
-	if (data == NULL) return nil;
-	return data->token;	
+	if (data == NULL) return NULL;
+	return data->token;
 }
 
 // MARK: - Plugin Module API -
@@ -1800,36 +1811,6 @@ int REALbasic2CubeSQLColumnType (int rbtype) {
 		return CUBESQL_BIND_BLOB;
 	
 	return CUBESQL_BIND_TEXT; // default
-}
-
-REALstring CheckFixEscapedStringPath (REALstring s) {
-	const char *path = REALGetCString(s);
-	int len = (int)strlen(path);
-	int flag = 0;
-	
-	// check if the path has been escaped
-	for (int i=0; i<len; i++) if (path[i]=='\\') ++flag;
-	
-	// return original path because it was not escaped
-	if (flag == 0) return s;
-	
-	// build fixed path
-	char *fixed_path = (char *)malloc(len+1);
-	if (fixed_path == NULL) return s; // not return NULL in order to avoid a memory leak
-	
-	memset((void *)fixed_path, 0, len+1);
-	for (int i=0, j=0; i<len; i++) {
-		if (i+1<len) if ((path[i] == '\\') && (path[i+1] == '\\')) fixed_path[j++] = '\\';
-		if (path[i] == '\\') continue;
-		fixed_path[j++] = path[i];
-	}
-	
-	REALstring res = REALBuildStringWithEncoding(fixed_path, (int)strlen(fixed_path), kREALTextEncodingUTF8);
-	if (res == NULL) return s;
-	free((void *)fixed_path);
-	
-	REALUnlockString(s);
-	return res;
 }
 
 REALstring REALbasicPathFromFolderItem (REALfolderItem value) {
